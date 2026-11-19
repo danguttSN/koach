@@ -1,0 +1,1463 @@
+<!doctype html>
+<html lang="he" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14171C">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="כוח">
+<meta name="robots" content="noindex, nofollow">
+<title>כוח</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap">
+<style>
+:root{
+  --a-back:#3E8BF0; --a-biceps:#D6409F; --a-chest:#E5484D; --a-triceps:#8E4EC6;
+  --a-shoulders:#F76B15; --a-legs:#30A46C; --a-abs:#12A594;
+  --primary:#F5C842; --on-primary:#1B1A10;
+  --radius:16px; --nav-h:64px;
+  --sb:env(safe-area-inset-bottom,0px); --st:env(safe-area-inset-top,0px);
+}
+:root,[data-theme="dark"]{
+  --bg:#14171C; --surface:#1E232A; --surface2:#2A303A; --line:#363E4A;
+  --text:#F2F0EA; --muted:#A7AFBC; --link:#F5C842;
+  --ok:#3DD68C; --ok-bg:#173A2A; --warn:#FFA066; --warn-bg:#3D2617; --danger:#FF7A7A;
+  --note-bg:#3A3220; --note:#F3DFA2;
+  color-scheme:dark;
+}
+[data-theme="light"]{
+  --bg:#F2F3F5; --surface:#FFFFFF; --surface2:#E8EBEF; --line:#D3D8DF;
+  --text:#15181D; --muted:#525B68; --link:#7A5B00;
+  --ok:#15803D; --ok-bg:#DCFCE7; --warn:#B4460B; --warn-bg:#FFEDD5; --danger:#C62828;
+  --note-bg:#FEF3C7; --note:#713F12;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: light){
+  [data-theme="auto"]{
+    --bg:#F2F3F5; --surface:#FFFFFF; --surface2:#E8EBEF; --line:#D3D8DF;
+    --text:#15181D; --muted:#525B68; --link:#7A5B00;
+    --ok:#15803D; --ok-bg:#DCFCE7; --warn:#B4460B; --warn-bg:#FFEDD5; --danger:#C62828;
+    --note-bg:#FEF3C7; --note:#713F12;
+    color-scheme:light;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Rubik,"Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.4;padding-top:var(--st);-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+#app{max-width:560px;margin:0 auto;padding:0 16px calc(var(--nav-h) + 132px + var(--sb))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--link)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.num{font-variant-numeric:tabular-nums}
+.sub{color:var(--muted);font-size:14px}
+.sm{font-size:13px}
+.grow{flex:1;min-width:0}
+.row{display:flex;align-items:center;gap:10px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.stack-sm{display:flex;flex-direction:column;gap:8px}
+.hidden{display:none!important}
+
+.top{display:flex;align-items:center;gap:6px;min-height:60px;padding-top:12px;margin-bottom:6px}
+.top h1{margin:0;font-size:27px;font-weight:800;line-height:1.15}
+.top h1.sm{font-size:22px}
+.iconbtn{width:48px;height:48px;border-radius:12px;border:0;background:transparent;display:grid;place-items:center;color:var(--text);flex-shrink:0;text-decoration:none;margin-inline-start:-10px}
+.h2{font-size:26px;font-weight:800;line-height:1.15}
+.h3{font-size:17px;font-weight:700}
+.section-title{font-size:15px;font-weight:700;margin:22px 0 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.section-title a,.link{font-size:15px;font-weight:500;color:var(--link);background:none;border:0;padding:8px 4px;min-height:44px;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.card + .card{margin-top:12px}
+.stack > .card + .card,.stack-sm > .card + .card{margin-top:0}
+.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+label.btn{position:relative}
+.btn{min-height:52px;border-radius:14px;border:0;padding:0 18px;font-size:17px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;white-space:nowrap}
+.btn-primary{background:var(--primary);color:var(--on-primary)}
+.btn-ghost{background:transparent;border:2px solid var(--line);color:var(--text)}
+.btn-danger{background:transparent;border:2px solid var(--line);color:var(--danger)}
+.btn-block{width:100%}
+.btn-big{min-height:60px;font-size:19px}
+.btn[disabled]{opacity:.6}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.neutral{background:var(--surface2);color:var(--muted)}
+.note{background:var(--note-bg);color:var(--note);border-radius:12px;padding:10px 12px;font-size:15px}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none;margin:0 -16px;padding-inline:16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--line);background:var(--surface);white-space:nowrap;display:inline-flex;align-items:center;gap:6px;font-size:15px;text-decoration:none;color:var(--text);flex-shrink:0}
+.chip.on{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}
+.chip .ltr{opacity:.8}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block}
+.bar{height:10px;border-radius:5px;background:var(--surface2);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:5px;transition:width .3s}
+
+.nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--sb));padding-bottom:var(--sb);background:var(--surface);border-top:1px solid var(--line);display:flex;z-index:20}
+.nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--muted);text-decoration:none;font-size:12px}
+.nav a.on{color:var(--text);font-weight:700}
+
+/* week strip */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:4px 0 16px}
+.wd{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--muted);font-size:12px;min-height:44px}
+.wd .c{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;border:1px dashed var(--line);color:var(--muted)}
+.wd.done .c{background:var(--text);color:var(--bg);border:0}
+.wd.plan .c{border:1.5px solid var(--line);border-style:solid;color:var(--text)}
+.wd.today{color:var(--text);font-weight:700}
+.wd.today .c{border:2.5px solid var(--primary);color:var(--text)}
+.wd.today.done .c{background:var(--text);color:var(--bg);box-shadow:0 0 0 3px var(--primary)}
+.wd .rd{height:6px;width:6px;border-radius:50%;background:transparent}
+.wd .rd.on{background:var(--primary)}
+
+/* area progress */
+.ap{display:grid;grid-template-columns:96px 1fr 58px;align-items:center;gap:10px;font-size:15px}
+.ap .v{text-align:left;font-weight:700}
+.ap .v.ok{color:var(--ok)}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--text);min-height:112px}
+.tile .big{font-size:30px;font-weight:800;line-height:1}
+.tile.met{border-color:var(--ok)}
+
+/* list rows */
+.list{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.lrow{display:flex;align-items:center;gap:12px;padding:10px 12px;min-height:64px;text-decoration:none;color:var(--text);border:0;background:transparent;width:100%;text-align:right}
+.list .lrow + .lrow{border-top:1px solid var(--line)}
+.lrow .t{font-size:16px;font-weight:700}
+.thumb{width:48px;height:48px;border-radius:10px;background:var(--surface2);flex-shrink:0;overflow:hidden;display:grid;place-items:center;color:var(--muted)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.chev{color:var(--muted);flex-shrink:0}
+
+/* machine grid */
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;text-decoration:none;color:var(--text);display:flex;flex-direction:column}
+.mcard.done{opacity:.62}
+.mphoto{position:relative;aspect-ratio:4/3;background:var(--surface2);display:grid;place-items:center;color:var(--muted)}
+.mphoto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mphoto .badge{position:absolute;top:8px;right:8px;background:var(--ok-bg);color:var(--ok);font-size:12px;font-weight:700;padding:3px 8px;border-radius:10px}
+.mbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px}
+.mname{font-size:16px;font-weight:700;line-height:1.25}
+
+/* machine logging */
+.hero{width:100%;height:170px;border-radius:var(--radius);overflow:hidden;background:var(--surface2);margin-bottom:12px}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.setrow{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);width:100%;text-align:right;color:var(--text)}
+.setrow .n{width:44px;color:var(--muted);font-size:15px}
+.setrow .w{flex:1;font-size:22px;font-weight:700}
+.setrow .ck{width:30px;height:30px;border-radius:50%;background:var(--ok);color:var(--bg);display:grid;place-items:center}
+.active{border:2px solid var(--primary)}
+.stepper{display:flex;flex-direction:column;gap:6px}
+.slabel{font-size:14px;color:var(--muted);text-align:center}
+.srow{display:flex;align-items:center;gap:10px}
+.sbtn{width:60px;height:60px;border-radius:50%;border:0;background:var(--surface2);color:var(--text);display:grid;place-items:center;flex-shrink:0}
+.sbtn:active{transform:scale(.94)}
+.sinput{flex:1;min-width:0;height:60px;text-align:center;font-size:42px;font-weight:800;background:transparent;border:0;border-bottom:2px solid var(--line);border-radius:0;padding:0}
+.sinput:focus{outline:none;border-bottom-color:var(--primary)}
+
+/* forms */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.flabel{font-size:14px;font-weight:500;color:var(--muted)}
+.input{height:52px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:0 14px;font-size:17px;width:100%}
+.input:focus{outline:none;border-color:var(--primary)}
+.input::placeholder{color:var(--muted);opacity:.75}
+.big-input{height:64px;font-size:30px;font-weight:700;text-align:left}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.photobox{height:180px;border-radius:var(--radius);background:var(--surface2);overflow:hidden;display:grid;place-items:center;color:var(--muted)}
+.photobox img{width:100%;height:100%;object-fit:cover;display:block}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;min-height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:16px}
+.seg button.on{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}
+.mini{display:flex;align-items:center;gap:6px}
+.mini button{width:44px;height:44px;border-radius:50%;border:0;background:var(--surface2);display:grid;place-items:center}
+.mini .val{min-width:58px;text-align:center;font-size:19px;font-weight:700}
+.srow2{display:flex;align-items:center;gap:10px;min-height:60px;padding:6px 12px}
+.list .srow2 + .srow2{border-top:1px solid var(--line)}
+select.input{appearance:none;-webkit-appearance:none;height:44px;width:auto;min-width:120px;font-size:16px;padding:0 12px}
+.toggle{position:relative;width:52px;height:32px;flex-shrink:0}
+.toggle input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.toggle span{position:absolute;inset:0;border-radius:16px;background:var(--surface2);border:1px solid var(--line);transition:background .2s}
+.toggle span::after{content:"";position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:50%;background:var(--muted);transition:transform .2s,background .2s}
+.toggle input:checked + span{background:var(--primary)}
+.toggle input:checked + span::after{transform:translateX(-20px);background:var(--on-primary)}
+.toggle input:focus-visible + span{outline:3px solid var(--primary);outline-offset:2px}
+
+/* fab */
+.fab{position:fixed;bottom:calc(var(--nav-h) + var(--sb) + 14px);left:max(16px, calc(50% - 264px));z-index:15;min-height:56px;padding:0 20px;border-radius:28px;background:var(--primary);color:var(--on-primary);font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+body.has-timer .fab{bottom:calc(var(--nav-h) + var(--sb) + 100px)}
+
+/* timer */
+.tb{position:fixed;z-index:30;bottom:calc(var(--nav-h) + var(--sb) + 10px);left:50%;transform:translateX(-50%);width:min(536px, calc(100% - 24px));height:76px;border-radius:20px;background:var(--text);color:var(--bg);display:flex;align-items:center;gap:8px;padding:0 10px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.tb[hidden]{display:none}
+.tb-main{flex:1;display:flex;align-items:center;gap:10px;border:0;background:transparent;color:inherit;min-height:60px;text-align:right;padding:0}
+.ring .trk{fill:none;stroke:currentColor;opacity:.2}
+.ring .prg{fill:none;stroke:currentColor;stroke-linecap:round;transition:stroke-dashoffset .25s linear}
+.tb-txt{display:flex;flex-direction:column;line-height:1.05}
+.tb-lbl{font-size:13px;opacity:.75}
+.tb-time{font-size:30px;font-weight:800}
+.tb-btn{min-width:50px;height:50px;border-radius:12px;border:0;background:rgba(127,127,127,.22);color:inherit;font-size:15px;font-weight:700;padding:0 10px}
+.tb.done{background:var(--primary);color:var(--on-primary)}
+.tf{position:fixed;inset:0;z-index:60;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;padding:calc(var(--st) + 16px) 20px calc(var(--sb) + 24px)}
+.tf[hidden]{display:none}
+.tf-top{align-self:stretch;display:flex;justify-content:space-between;align-items:center}
+.tf-ring{position:relative;width:min(300px,78vw);aspect-ratio:1;margin-top:5vh;display:grid;place-items:center}
+.tf-ring svg{position:absolute;inset:0;width:100%;height:100%}
+.tf-ring .prg{stroke:var(--primary)}
+.tf-time{font-size:min(96px,24vw);font-weight:800;line-height:1}
+.tf-btns{display:flex;gap:14px;margin-top:32px}
+.tf-btns button{width:100px;height:64px;border-radius:16px;border:0;background:var(--surface2);font-size:22px;font-weight:700}
+.tf.done .tf-time{color:var(--primary)}
+
+/* modal, toast, sync */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}
+.modal[hidden]{display:none}
+.sheet{background:var(--surface);width:100%;max-width:560px;border-radius:22px 22px 0 0;padding:20px 16px calc(var(--sb) + 20px);max-height:88vh;overflow:auto}
+.sheet h2{margin:0 0 14px;font-size:21px}
+.toast{position:fixed;z-index:70;top:calc(var(--st) + 12px);left:50%;transform:translateX(-50%) translateY(-20px);background:var(--text);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:15px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sync{position:fixed;z-index:25;top:calc(var(--st) + 8px);left:12px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--warn-bg);color:var(--warn)}
+.sync[hidden]{display:none}
+
+.login{min-height:calc(100vh - 40px);display:flex;flex-direction:column;justify-content:center;gap:8px;padding-bottom:40px}
+.brand{font-size:64px;font-weight:800;letter-spacing:-1px;line-height:1}
+.err{color:var(--danger);font-size:15px;min-height:22px}
+.empty{text-align:center;padding:28px 16px;color:var(--muted)}
+.empty .btn{margin-top:12px}
+.datebar{display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:4px}
+.datebar .mid{flex:1;text-align:center;position:relative}
+.datebar input[type=date]{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.stats3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.stat{background:var(--surface2);border-radius:10px;padding:8px 10px}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-size:21px;font-weight:800}
+details.more summary{list-style:none;min-height:48px;display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer}
+details.more summary::-webkit-details-marker{display:none}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"><div class="empty" style="padding-top:40vh">טוען</div></div>
+
+<div id="sync" class="sync" hidden role="status"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="modal" class="modal" hidden></div>
+
+<div id="tb" class="tb" hidden>
+  <button type="button" class="tb-main" data-a="tFull" aria-label="הצג טיימר במסך מלא">
+    <svg class="ring" width="52" height="52" viewBox="0 0 52 52" aria-hidden="true"><circle class="trk" cx="26" cy="26" r="22" stroke-width="5"/><circle id="tbRing" class="prg" cx="26" cy="26" r="22" stroke-width="5" transform="rotate(-90 26 26)" stroke-dasharray="138.23" stroke-dashoffset="0"/></svg>
+    <span class="tb-txt"><span class="tb-lbl" id="tbLbl">מנוחה</span><span class="tb-time num ltr" id="tbTime">2:00</span></span>
+  </button>
+  <button type="button" class="tb-btn" data-a="tAdd" data-d="15"><span class="ltr">+15</span></button>
+  <button type="button" class="tb-btn" data-a="tAdd" data-d="-15"><span class="ltr">-15</span></button>
+  <button type="button" class="tb-btn" data-a="tSkip">דלג</button>
+</div>
+
+<div id="tf" class="tf" hidden role="dialog" aria-label="טיימר מנוחה">
+  <div class="tf-top">
+    <div class="sub" id="tfName"></div>
+    <button type="button" class="iconbtn" data-a="tClose" aria-label="סגור מסך מלא"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+  </div>
+  <div class="sub" style="font-size:20px;margin-top:4vh" id="tfLbl">מנוחה</div>
+  <div class="tf-ring">
+    <svg class="ring" viewBox="0 0 300 300" aria-hidden="true"><circle class="trk" cx="150" cy="150" r="134" stroke-width="16"/><circle id="tfRing" class="prg" cx="150" cy="150" r="134" stroke-width="16" transform="rotate(-90 150 150)" stroke-dasharray="841.95" stroke-dashoffset="0"/></svg>
+    <div class="tf-time num ltr" id="tfTime">2:00</div>
+  </div>
+  <div class="tf-btns">
+    <button type="button" data-a="tAdd" data-d="15"><span class="ltr">+15</span></button>
+    <button type="button" data-a="tAdd" data-d="-15"><span class="ltr">-15</span></button>
+  </div>
+  <div style="flex:1"></div>
+  <button type="button" class="btn btn-primary btn-big btn-block" style="max-width:520px" data-a="tSkip">דלג על המנוחה</button>
+</div>
+
+<noscript>כדי להשתמש באפליקציה צריך לאפשר JavaScript בדפדפן.</noscript>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js"></script>
+<script>
+/* =====================================================================
+   כוח: יומן אימונים אישי
+   ההגדרה היחידה שצריך לשנות: שני הערכים כאן למטה, מתוך Supabase.
+   ===================================================================== */
+const CONFIG = {
+  SUPABASE_URL: 'https://nbkwxghwfhiaeoyixvgu.supabase.co/rest/v1/',
+  SUPABASE_KEY: 'sb_publishable_1IGU2ZkPCIdPKN6GxiGNSg_exDbUMGs'
+};
+/* ===================================================================== */
+
+const BUCKET = 'machine-photos';
+const CK = 'koach-cache-v1', QK = 'koach-queue-v1', TK = 'koach-timer-v1';
+
+const AREAS = [
+  { k:'back',      n:'גב',        c:'var(--a-back)' },
+  { k:'biceps',    n:'יד קדמית',  c:'var(--a-biceps)' },
+  { k:'chest',     n:'חזה',       c:'var(--a-chest)' },
+  { k:'triceps',   n:'יד אחורית', c:'var(--a-triceps)' },
+  { k:'shoulders', n:'כתפיים',    c:'var(--a-shoulders)' },
+  { k:'legs',      n:'רגליים',    c:'var(--a-legs)' },
+  { k:'abs',       n:'בטן',       c:'var(--a-abs)' }
+];
+const AREA = Object.fromEntries(AREAS.map(a => [a.k, a]));
+const TEMPLATES = { A:['back','biceps','abs'], B:['chest','triceps','shoulders','abs'], C:['legs','abs'] };
+const TPL_NAME = { A:'א', B:'ב', C:'ג' };
+const DAY_NAMES = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+const DAY_LETTERS = ['א','ב','ג','ד','ה','ו','ש'];
+const DEFAULT_SETTINGS = {
+  rest: 120,
+  minSets: { back:9, biceps:9, chest:9, triceps:9, shoulders:9, legs:12, abs:9 },
+  split: { '0':'A', '1':'B', '2':'A', '3':'B', '4':'C', '5':null, '6':null },
+  wakeLock: true, sound: true, theme: 'dark'
+};
+const CONFLICT = { sets:'id', machines:'id', rides:'id', workout_days:'user_id,workout_date', settings:'user_id' };
+
+/* ---------- icons ---------- */
+const I = {
+  back:'<path d="M9 6l6 6-6 6"/>', fwd:'<path d="M15 6l-6 6 6 6"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>', minus:'<path d="M5 12h14"/>', check:'<path d="M5 12l5 5 9-10"/>',
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  history:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  dumbbell:'<path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/>',
+  settings:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+  bike:'<circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l4-7h5l3 7M10 9l3 7"/>',
+  camera:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  image:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-8 8"/>',
+  trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  watch:'<rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6V3h6v3M9 18v3h6v-3"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4M10 2h4"/>',
+  down:'<path d="M6 9l6 6 6-6"/>'
+};
+function svg(p, s = 24, w = 2) {
+  return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+}
+
+/* ---------- helpers ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => ymd(new Date());
+const parseYmd = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); };
+const isDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '');
+const fmtDate = s => { const d = parseYmd(s); return `יום ${DAY_NAMES[d.getDay()]}, ${d.getDate()}.${d.getMonth() + 1}`; };
+const shortDate = s => { const d = parseYmd(s); return `${d.getDate()}.${d.getMonth() + 1}`; };
+const num = v => { if (v === null || v === undefined) return null; const s = String(v).trim().replace(',', '.'); if (s === '') return null; const n = parseFloat(s); return isFinite(n) ? n : null; };
+const round2 = n => Math.round(n * 100) / 100;
+const fmtW = w => { const n = Number(w) || 0; return Number.isInteger(n) ? String(n) : String(round2(n)); };
+const ltr = s => `<span class="ltr num">${s}</span>`;
+const fmtDur = sec => { sec = Math.max(0, Math.round(sec)); const m = Math.floor(sec / 60), s = sec % 60; return `${m}:${pad(s)}`; };
+const fmtClock = ms => { const t = Math.max(0, Math.floor(ms / 1000)); const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60; return h ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`; };
+const setsTxt = n => n === 1 ? 'סט אחד' : `${n} סטים`;
+const missTxt = n => n === 1 ? 'חסר סט אחד' : `חסרים ${n} סטים`;
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }));
+const areaName = k => AREA[k]?.n || k;
+const areaColor = k => AREA[k]?.c || 'var(--muted)';
+const setStr = s => `${fmtW(s.weight)}×${s.reps}`;
+
+/* ---------- state ---------- */
+const configured = !CONFIG.SUPABASE_URL.includes('YOUR-PROJECT') && !CONFIG.SUPABASE_KEY.includes('YOUR_KEY');
+let sb = null;
+const S = {
+  user: null, loaded: false,
+  machines: [], sets: [], days: {}, rides: [], settings: mergeSettings({}),
+  maxByMachine: {}, photoUrls: {}, rangeStart: addDays(today(), -120),
+  daySets: {}, dayLoading: {},
+  queue: [], draft: {}, edit: null, mfilter: 'all', showArchived: false,
+  timer: null, route: { name: 'today' }, prevHash: '', curHash: location.hash
+};
+
+function mergeSettings(d) {
+  d = d || {};
+  return { ...DEFAULT_SETTINGS, ...d,
+    minSets: { ...DEFAULT_SETTINGS.minSets, ...(d.minSets || {}) },
+    split: { ...DEFAULT_SETTINGS.split, ...(d.split || {}) } };
+}
+const normSet = s => ({ ...s, weight: Number(s.weight) || 0, reps: Number(s.reps) || 0 });
+const normMachine = m => ({ ...m, min_weight: Number(m.min_weight) || 0, weight_step: Number(m.weight_step) || 5, default_sets: Number(m.default_sets) || 3 });
+const normRide = r => ({ ...r, distance_km: r.distance_km == null ? null : Number(r.distance_km) });
+
+/* ---------- derived data ---------- */
+function setsOn(date) {
+  if (date >= S.rangeStart) return S.sets.filter(s => s.workout_date === date);
+  return S.daySets[date] || [];
+}
+const machineById = id => S.machines.find(m => m.id === id);
+function sortSets(a) { return a.slice().sort((x, y) => String(x.created_at || '').localeCompare(String(y.created_at || ''))); }
+function areaCountsOn(date) {
+  const c = {}; AREAS.forEach(a => c[a.k] = 0);
+  for (const s of setsOn(date)) { const m = machineById(s.machine_id); if (m) c[m.area]++; }
+  return c;
+}
+function templateFor(date) {
+  const t = S.days[date]?.template;
+  if (t === 'R') return null;
+  if (t && TEMPLATES[t]) return t;
+  return S.settings.split[String(parseYmd(date).getDay())] || null;
+}
+function minFor(area, date) {
+  const t = templateFor(date);
+  return t && TEMPLATES[t].includes(area) ? S.settings.minSets[area] : null;
+}
+function prevSession(mid, before) {
+  let best = null;
+  for (const s of S.sets) if (s.machine_id === mid && s.workout_date < before && (!best || s.workout_date > best)) best = s.workout_date;
+  if (!best) return null;
+  return { date: best, sets: sortSets(S.sets.filter(s => s.machine_id === mid && s.workout_date === best)) };
+}
+function machineMax(mid, excludeId) {
+  let mx = S.maxByMachine[mid] ?? 0;
+  for (const s of S.sets) if (s.machine_id === mid && s.id !== excludeId && s.weight > mx) mx = s.weight;
+  return mx;
+}
+function hasHistory(mid) { return S.maxByMachine[mid] != null || S.sets.some(s => s.machine_id === mid); }
+const rideOn = date => S.rides.find(r => r.ride_date === date) || null;
+function daysForArea(a) {
+  const l = [];
+  for (let i = 0; i < 7; i++) { const t = S.settings.split[String(i)]; if (t && TEMPLATES[t].includes(a)) l.push(DAY_LETTERS[i]); }
+  return l.length ? `ימים ${l.join(', ')}` : 'לא בחלוקה';
+}
+function lastDateForArea(a, before) {
+  let best = null;
+  for (const s of S.sets) { if (s.workout_date >= before) continue; const m = machineById(s.machine_id); if (m && m.area === a && (!best || s.workout_date > best)) best = s.workout_date; }
+  return best;
+}
+function photoUrl(m) { return m && m.photo_path ? S.photoUrls[m.photo_path]?.url || null : null; }
+function photoHtml(m, size = 22) {
+  const u = photoUrl(m);
+  return u ? `<img src="${esc(u)}" alt="" loading="lazy" decoding="async">` : svg(I.image, size, 1.7);
+}
+
+/* ---------- persistence: cache, queue ---------- */
+let cacheT = null;
+function saveCache() {
+  clearTimeout(cacheT);
+  cacheT = setTimeout(() => {
+    try {
+      localStorage.setItem(CK, JSON.stringify({ uid: S.user?.id, machines: S.machines, sets: S.sets, days: S.days, rides: S.rides,
+        settings: S.settings, maxByMachine: S.maxByMachine, photoUrls: S.photoUrls, rangeStart: S.rangeStart }));
+    } catch (e) {}
+  }, 250);
+}
+function loadCache() {
+  try {
+    const c = JSON.parse(localStorage.getItem(CK) || 'null');
+    if (c && c.uid === S.user?.id) {
+      Object.assign(S, { machines: c.machines || [], sets: c.sets || [], days: c.days || {}, rides: c.rides || [],
+        settings: mergeSettings(c.settings?.minSets ? c.settings : {}), maxByMachine: c.maxByMachine || {}, photoUrls: c.photoUrls || {},
+        rangeStart: c.rangeStart || S.rangeStart });
+      S.loaded = true;
+    }
+    const q = JSON.parse(localStorage.getItem(QK) || '[]');
+    S.queue = q.filter(o => o.uid === S.user?.id);
+    S.queue.forEach(applyLocal);
+    const t = JSON.parse(localStorage.getItem(TK) || 'null');
+    if (t && t.end > Date.now() - 6000) S.timer = t;
+  } catch (e) {}
+  applyTheme();
+}
+function saveQueue() { try { localStorage.setItem(QK, JSON.stringify(S.queue)); } catch (e) {} }
+
+function applyLocal(op) {
+  const t = op.table;
+  if (t === 'settings') { S.settings = mergeSettings(op.row.data); return; }
+  if (t === 'workout_days') {
+    if (op.op === 'upsert') S.days[op.row.workout_date] = { ...(S.days[op.row.workout_date] || {}), ...op.row };
+    return;
+  }
+  const arr = t === 'sets' ? S.sets : t === 'machines' ? S.machines : t === 'rides' ? S.rides : null;
+  if (!arr) return;
+  const id = op.op === 'delete' ? op.id : op.row.id;
+  const i = arr.findIndex(x => x.id === id);
+  if (op.op === 'delete') { if (i >= 0) arr.splice(i, 1); }
+  else {
+    const row = t === 'sets' ? normSet(op.row) : t === 'machines' ? normMachine(op.row) : t === 'rides' ? normRide(op.row) : op.row;
+    if (i >= 0) arr[i] = { ...arr[i], ...row }; else arr.push(row);
+  }
+}
+function enqueue(op) {
+  op.qid = uuid(); op.uid = S.user.id;
+  if (op.table === 'settings') S.queue = S.queue.filter(o => o.table !== 'settings');
+  applyLocal(op);
+  S.queue.push(op);
+  saveQueue(); saveCache(); flushSoon(); updateSync();
+}
+let flushing = false, flushT = null;
+function flushSoon(ms = 150) { clearTimeout(flushT); flushT = setTimeout(flush, ms); }
+async function flush() {
+  if (flushing || !S.user || !S.queue.length) { updateSync(); return; }
+  flushing = true;
+  try {
+    while (S.queue.length) {
+      const op = S.queue[0];
+      let res;
+      try {
+        res = op.op === 'delete'
+          ? await sb.from(op.table).delete().eq('id', op.id)
+          : await sb.from(op.table).upsert(op.row, { onConflict: CONFLICT[op.table] });
+      } catch (e) { break; }
+      if (res.error) {
+        if (!res.error.code) break;           /* בעיית רשת: ננסה שוב אחר כך */
+        console.error(res.error);
+        toast('השמירה בשרת נכשלה: ' + res.error.message, 5000);
+      }
+      S.queue.shift(); saveQueue();
+    }
+  } finally { flushing = false; updateSync(); }
+}
+function updateSync() {
+  const el = $('#sync'); if (!el) return;
+  const n = S.queue.length;
+  if (!S.user) { el.hidden = true; return; }
+  if (!navigator.onLine) { el.hidden = false; el.textContent = n ? `לא מחובר, ${n} ממתינים` : 'לא מחובר'; }
+  else if (n) { el.hidden = false; el.textContent = `שומר ${n}`; }
+  else el.hidden = true;
+}
+
+/* ---------- server fetch ---------- */
+async function fetchPaged(table, build, order) {
+  let all = [], from = 0; const size = 1000;
+  for (;;) {
+    let q = build(sb.from(table).select('*'));
+    order.forEach(o => { q = q.order(o); });
+    const { data, error } = await q.range(from, from + size - 1);
+    if (error) throw error;
+    all = all.concat(data);
+    if (data.length < size) break;
+    from += size;
+  }
+  return all;
+}
+async function fetchAll() {
+  if (!S.user) return;
+  const since = addDays(today(), -120);
+  try {
+    const [m, d, r, st, mx, sets] = await Promise.all([
+      sb.from('machines').select('*').order('sort_order').order('name'),
+      sb.from('workout_days').select('*').gte('workout_date', since),
+      sb.from('rides').select('*').gte('ride_date', addDays(today(), -400)).order('ride_date'),
+      sb.from('settings').select('*').maybeSingle(),
+      sb.from('machine_max').select('*'),
+      fetchPaged('sets', q => q.gte('workout_date', since), ['workout_date', 'created_at'])
+    ]);
+    for (const x of [m, d, r, st, mx]) if (x.error) throw x.error;
+    S.machines = m.data.map(normMachine);
+    S.days = {}; d.data.forEach(x => { S.days[x.workout_date] = x; });
+    S.rides = r.data.map(normRide);
+    S.settings = mergeSettings(st.data?.data);
+    S.maxByMachine = {}; mx.data.forEach(x => { S.maxByMachine[x.machine_id] = Number(x.max_weight) || 0; });
+    S.sets = sets.map(normSet);
+    S.rangeStart = since;
+    S.queue.forEach(applyLocal);
+    S.loaded = true;
+    applyTheme(); saveCache(); render();
+    refreshPhotos();
+  } catch (e) {
+    console.error(e);
+    if (navigator.onLine) toast(e.code === '42501' ? 'אין הרשאה לטבלאות. צריך להריץ שוב את קובץ ה SQL' : 'טעינת הנתונים מהשרת נכשלה', 5000);
+    if (!S.loaded) { S.loaded = true; render(); }
+  }
+}
+async function refreshPhotos() {
+  const now = Date.now();
+  const need = [...new Set(S.machines.filter(m => m.photo_path && (!S.photoUrls[m.photo_path] || S.photoUrls[m.photo_path].exp < now + 36e5)).map(m => m.photo_path))];
+  if (!need.length) return;
+  const { data, error } = await sb.storage.from(BUCKET).createSignedUrls(need, 60 * 60 * 24 * 7);
+  if (error || !data) return;
+  data.forEach(x => { if (x.signedUrl && x.path) S.photoUrls[x.path] = { url: x.signedUrl, exp: now + 7 * 864e5 }; });
+  saveCache(); render();
+}
+async function fetchDay(date) {
+  if (S.dayLoading[date]) return;
+  S.dayLoading[date] = true;
+  const [a, b] = await Promise.all([
+    sb.from('sets').select('*').eq('workout_date', date).order('created_at'),
+    sb.from('workout_days').select('*').eq('workout_date', date).maybeSingle()
+  ]);
+  S.daySets[date] = a.error ? [] : a.data.map(normSet);
+  if (!b.error && b.data) S.days[date] = b.data;
+  S.dayLoading[date] = false;
+  render();
+}
+
+/* ---------- ui primitives ---------- */
+let toastT = null;
+function toast(msg, ms = 2600) {
+  const el = $('#toast'); el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), ms);
+}
+function openModal(html) { const m = $('#modal'); m.innerHTML = `<div class="sheet" role="dialog" aria-modal="true">${html}</div>`; m.hidden = false; const f = m.querySelector('input,button'); if (f) setTimeout(() => f.focus({ preventScroll: true }), 50); }
+function closeModal() { const m = $('#modal'); m.hidden = true; m.innerHTML = ''; }
+function go(h) { if (location.hash === h) render(); else location.hash = h; }
+function nav(active) {
+  const items = [['today', '#/', I.home, 'היום'], ['history', '#/history/' + today(), I.history, 'היסטוריה'], ['machines', '#/machines', I.dumbbell, 'מכשירים'], ['settings', '#/settings', I.settings, 'הגדרות']];
+  return `<nav class="nav" aria-label="ניווט ראשי">${items.map(([k, h, ic, l]) => `<a href="${h}" class="${k === active ? 'on' : ''}" ${k === active ? 'aria-current="page"' : ''}>${svg(ic)}<span>${l}</span></a>`).join('')}</nav>`;
+}
+function pageHead(title, opts = {}) {
+  const back = opts.back ? `<a class="iconbtn" href="${opts.back}" aria-label="חזרה">${svg(I.back, 26, 2.2)}</a>` : '';
+  return `<header class="top">${back}<div class="grow">${opts.sub ? `<div class="sub">${opts.sub}</div>` : ''}<h1 class="${opts.small ? 'sm' : ''}">${title}</h1></div>${opts.end || ''}</header>`;
+}
+function stepper(id, label, val, st, opts = {}) {
+  return `<div class="stepper"><label class="slabel" for="${id}">${label}</label><div class="srow">
+    <button type="button" class="sbtn" data-a="step" data-t="${id}" data-st="${st}" data-d="1" aria-label="הוסף ל${label}">${svg(I.plus, 28, 2.6)}</button>
+    <input id="${id}" class="sinput num" dir="ltr" inputmode="${opts.int ? 'numeric' : 'decimal'}" value="${fmtW(val)}" ${opts.draft ? `data-draft="${opts.draft}"` : ''} autocomplete="off" enterkeyhint="done">
+    <button type="button" class="sbtn" data-a="step" data-t="${id}" data-st="${st}" data-d="-1" aria-label="הפחת מ${label}">${svg(I.minus, 28, 2.6)}</button>
+  </div></div>`;
+}
+function areaProgress(a, c, min) {
+  const pct = min ? Math.min(100, Math.round(c / min * 100)) : 0;
+  const met = min && c >= min;
+  return `<div class="ap"><span class="row" style="gap:8px"><span class="dot" style="background:${areaColor(a)}"></span>${areaName(a)}</span>
+    <div class="bar"><i style="width:${pct}%;background:${areaColor(a)}"></i></div>
+    <span class="v num ${met ? 'ok' : ''}"><span class="ltr">${c}/${min}</span></span></div>`;
+}
+function rideSummary(r) {
+  const parts = [ltr(fmtDur(r.duration_sec))];
+  if (r.distance_km != null) parts.push(`${ltr(fmtW(r.distance_km))} ק״מ`);
+  if (r.calories != null) parts.push(`${ltr(r.calories)} קלוריות`);
+  if (r.avg_watts != null) parts.push(`${ltr(r.avg_watts)} וואט${r.watts_estimated ? ' משוער' : ''}`);
+  return parts.join(', ');
+}
+
+/* ---------- views ---------- */
+function vSetup() {
+  return `<main class="login"><div class="brand">כוח</div>
+    <p>האפליקציה עוד לא מחוברת למסד הנתונים.</p>
+    <p class="sub">פותחים את index.html בעורך טקסט, ובראש הסקריפט ממלאים את SUPABASE_URL ואת SUPABASE_KEY מתוך לוח הבקרה של Supabase. ההוראות המלאות נמצאות בקובץ README.md.</p></main>`;
+}
+function vLogin() {
+  return `<main class="login">
+    <div class="brand">כוח</div><p class="sub" style="margin:0 0 20px">יומן אימונים אישי</p>
+    <form id="loginForm" class="stack" novalidate>
+      <div class="field"><label for="lemail">אימייל</label><input class="input" type="email" id="lemail" autocomplete="username" inputmode="email" dir="ltr" required></div>
+      <div class="field"><label for="lpass">סיסמה</label><input class="input" type="password" id="lpass" autocomplete="current-password" dir="ltr" required></div>
+      <button class="btn btn-primary btn-big btn-block" type="submit" id="lbtn">כניסה</button>
+      <div id="lerr" class="err" role="alert"></div>
+    </form></main>`;
+}
+
+function weekStrip(t) {
+  const start = addDays(t, -parseYmd(t).getDay());
+  let h = '<div class="week" role="list" aria-label="השבוע">';
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(start, i), has = setsOn(d).length > 0, isT = d === t, plan = templateFor(d);
+    const cls = ['wd', has ? 'done' : '', isT ? 'today' : '', !has && plan ? 'plan' : ''].join(' ');
+    const letter = has || plan ? TPL_NAME[(S.days[d]?.template && TEMPLATES[S.days[d].template]) ? S.days[d].template : plan] || '' : '';
+    const inner = `<span>${DAY_LETTERS[i]}</span><span class="c">${has && !letter ? svg(I.check, 16, 3) : letter}</span><span class="rd ${rideOn(d) ? 'on' : ''}"></span>`;
+    const label = `${fmtDate(d)}${has ? ', בוצע אימון' : ''}${rideOn(d) ? ', רכיבה' : ''}`;
+    h += d <= t ? `<a role="listitem" class="${cls}" href="#/history/${d}" aria-label="${label}">${inner}</a>` : `<div role="listitem" class="${cls}" aria-label="${label}">${inner}</div>`;
+  }
+  return h + '</div>';
+}
+
+function vToday() {
+  const t = today(), tpl = templateFor(t), counts = areaCountsOn(t), day = S.days[t] || {};
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  let h = pageHead('היום', { sub: fmtDate(t) });
+  h += weekStrip(t);
+  if (!S.loaded) return h + '<div class="empty">טוען נתונים</div>' + nav('today');
+  if (!S.machines.length) {
+    h += `<section class="card stack"><div class="h3">מתחילים: מוסיפים את המכשירים</div>
+      <div class="sub">צלם כל מכשיר, תן לו שם, בחר אזור בגוף וקבע משקל מינימום. אחרי זה האימון כבר מסודר.</div>
+      <a class="btn btn-primary btn-block" href="#/edit/new">הוסף מכשיר ראשון</a></section>`;
+  }
+  if (tpl) {
+    const going = total > 0 || (day.started_at && !day.finished_at);
+    h += `<section class="card stack" aria-label="אימון כוח">
+      <div class="row"><div class="grow"><div class="sub">אימון כוח</div><div class="h2">אימון ${TPL_NAME[tpl]}</div></div>
+      ${day.finished_at ? `<span class="pill ok">${svg(I.check, 14, 3)}הסתיים</span>` : ''}</div>
+      <div class="stack-sm">${TEMPLATES[tpl].map(a => areaProgress(a, counts[a], S.settings.minSets[a])).join('')}</div>
+      <button class="btn btn-primary btn-big btn-block" data-a="start">${going ? 'המשך אימון' : 'התחל אימון'}</button>
+      <button class="link" style="align-self:center" data-a="switchTpl">החלף אימון</button></section>`;
+  } else {
+    h += `<section class="card stack"><div class="sub">אימון כוח</div><div class="h2">היום יום מנוחה</div>
+      <div class="sub">רוצה בכל זאת להתאמן? בחר אימון:</div>
+      <div class="grid3">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost" data-a="start" data-t="${k}">אימון ${TPL_NAME[k]}</button>`).join('')}</div>
+      ${total ? `<a class="btn btn-ghost btn-block" href="#/workout">${setsTxt(total)} היום</a>` : ''}</section>`;
+  }
+  const r = rideOn(t);
+  h += `<section class="card row" style="margin-top:12px" aria-label="רכיבת ספינינג">
+    <div class="thumb">${svg(I.bike, 26, 1.8)}</div>
+    <div class="grow"><div class="h3">רכיבת ספינינג</div><div class="sub">${r ? rideSummary(r) : 'טרם נרשמה היום'}</div></div>
+    <a class="btn btn-ghost" href="#/ride/${t}">${r ? 'עריכה' : 'רשום'}</a></section>`;
+  return h + nav('today');
+}
+
+function vWorkout() {
+  const t = today(), tpl = templateFor(t);
+  if (!tpl) {
+    return pageHead('אימון', { back: '#/' }) + `<div class="card stack"><div>היום מוגדר כיום מנוחה. בחר איזה אימון לעשות:</div>
+      <div class="grid3">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost" data-a="start" data-t="${k}">אימון ${TPL_NAME[k]}</button>`).join('')}</div></div>` + nav('today');
+  }
+  const counts = areaCountsOn(t), sets = sortSets(setsOn(t));
+  const mids = [...new Set(sets.map(s => s.machine_id))];
+  let h = pageHead(`אימון ${TPL_NAME[tpl]}`, { back: '#/', sub: TEMPLATES[tpl].map(areaName).join(', '),
+    end: `<div class="row sub" style="gap:6px;font-size:18px;font-weight:700;color:var(--text)">${svg(I.timer, 20)}<span class="ltr num" id="elapsed"></span></div>` });
+  h += `<div class="section-title" style="margin-top:8px"><span>סטים היום מול המינימום</span><a href="#/sets">כל האזורים</a></div>`;
+  h += `<div class="tiles">${TEMPLATES[tpl].map(a => {
+    const c = counts[a], min = S.settings.minSets[a], met = c >= min, pct = Math.min(100, Math.round(c / min * 100));
+    return `<a class="tile ${met ? 'met' : ''}" href="#/pick/${a}"><div class="row" style="gap:8px"><span class="dot" style="background:${areaColor(a)}"></span><b>${areaName(a)}</b></div>
+      <div class="big num"><span class="ltr">${c} / ${min}</span></div>
+      <div class="bar"><i style="width:${pct}%;background:${areaColor(a)}"></i></div>
+      <div class="sub sm">${met ? 'עמדת ביעד' : missTxt(min - c)}</div></a>`;
+  }).join('')}</div>`;
+  h += `<div class="section-title"><span>המכשירים שעשיתי היום</span></div>`;
+  if (mids.length) {
+    h += `<div class="list">${mids.map(id => {
+      const m = machineById(id); if (!m) return '';
+      const ms = sets.filter(s => s.machine_id === id), top = Math.max(...ms.map(s => s.weight));
+      return `<a class="lrow" href="#/m/${id}"><div class="thumb">${photoHtml(m)}</div>
+        <div class="grow"><div class="t">${esc(m.name)}</div><div class="sub sm"><span class="dot" style="background:${areaColor(m.area)};width:8px;height:8px"></span> ${areaName(m.area)}, ${setsTxt(ms.length)}, עד ${ltr(fmtW(top))} ק״ג</div></div>
+        <span class="chev">${svg(I.fwd, 20)}</span></a>`;
+    }).join('')}</div>`;
+  } else h += `<div class="sub" style="padding:4px 2px 0">עוד לא בחרת מכשיר באימון הזה.</div>`;
+  h += `<a class="btn btn-primary btn-big btn-block" style="margin-top:14px" href="#/pick">${svg(I.plus, 22, 2.6)}בחר מכשיר</a>`;
+  h += `<button class="btn btn-ghost btn-block" style="margin-top:10px" data-a="finish">סיים אימון</button>`;
+  return h + nav('today');
+}
+
+function vPick(area) {
+  const t = today(), tpl = templateFor(t), counts = areaCountsOn(t);
+  const tAreas = tpl ? TEMPLATES[tpl] : [];
+  let sel = area || tAreas.find(a => counts[a] < S.settings.minSets[a]) || tAreas[0] || 'all';
+  const chipAreas = [...tAreas]; if (sel !== 'all' && !chipAreas.includes(sel)) chipAreas.push(sel);
+  let h = pageHead('בחר מכשיר', { back: '#/workout' });
+  h += `<div class="chips" role="tablist">${chipAreas.map(a => `<a role="tab" class="chip ${a === sel ? 'on' : ''}" href="#/pick/${a}" aria-selected="${a === sel}">${areaName(a)} <span class="ltr num">${counts[a]}/${S.settings.minSets[a]}</span></a>`).join('')}
+    <a role="tab" class="chip ${sel === 'all' ? 'on' : ''}" href="#/pick/all" aria-selected="${sel === 'all'}">כל המכשירים</a></div>`;
+  const todayCount = id => setsOn(t).filter(s => s.machine_id === id).length;
+  const list = S.machines.filter(m => !m.archived && (sel === 'all' || m.area === sel))
+    .sort((a, b) => ((todayCount(a.id) > 0) - (todayCount(b.id) > 0)) || (a.sort_order - b.sort_order) || a.name.localeCompare(b.name, 'he'));
+  if (!list.length) {
+    h += `<div class="empty"><div>אין עדיין מכשירים ${sel === 'all' ? '' : 'באזור ' + areaName(sel)}.</div>
+      <a class="btn btn-primary" href="#/edit/new/${sel === 'all' ? '' : sel}">הוסף מכשיר</a></div>`;
+    return h + nav('today');
+  }
+  h += `<div class="sub sm" style="margin:6px 0 10px">מכשירים שעוד לא עשית היום מופיעים ראשונים</div><div class="mgrid">`;
+  h += list.map(m => {
+    const tc = todayCount(m.id), prev = prevSession(m.id, t);
+    const best = prev ? prev.sets.reduce((a, b) => (b.weight > a.weight ? b : a)) : null;
+    return `<a class="mcard ${tc >= m.default_sets ? 'done' : ''}" href="#/m/${m.id}">
+      <div class="mphoto">${photoHtml(m, 30)}${tc ? `<span class="badge">${setsTxt(tc)} היום</span>` : ''}</div>
+      <div class="mbody"><div class="mname">${esc(m.name)}</div>
+      <div class="sub sm">${m.min_weight > 0 ? `מינימום ${ltr(fmtW(m.min_weight))} ק״ג` : areaName(m.area)}</div>
+      ${best ? `<div class="sub sm">קודם: ${ltr(setStr(best))}</div>` : ''}</div></a>`;
+  }).join('');
+  h += `</div><a class="btn btn-ghost btn-block" style="margin-top:14px" href="#/edit/new/${sel === 'all' ? '' : sel}">${svg(I.plus, 20, 2.4)}מכשיר חדש</a>`;
+  return h + nav('today');
+}
+
+function nextDefaults(m, ts, prev) {
+  const n = ts.length;
+  if (n === 0) {
+    const w = m.min_weight > 0 ? m.min_weight : (prev?.sets[0]?.weight ?? 0);
+    return { w, r: prev?.sets[0]?.reps ?? 10 };
+  }
+  const last = ts[n - 1];
+  return { w: last.weight, r: prev?.sets[n]?.reps ?? last.reps };
+}
+function vMachine(id) {
+  const m = machineById(id);
+  if (!m) return pageHead('מכשיר', { back: '#/workout' }) + `<div class="empty">${S.loaded ? 'המכשיר לא נמצא.' : 'טוען'}</div>` + nav('today');
+  const t = today(), ts = sortSets(setsOn(t).filter(s => s.machine_id === id)), prev = prevSession(id, t);
+  let d = S.draft[id];
+  if (!d || d.n !== ts.length) d = S.draft[id] = { ...nextDefaults(m, ts, prev), n: ts.length };
+  const c = areaCountsOn(t)[m.area], min = S.settings.minSets[m.area];
+  let h = pageHead(esc(m.name), { back: '#/workout', small: true,
+    end: `<span class="pill neutral"><span class="dot" style="background:${areaColor(m.area)}"></span>${areaName(m.area)} <span class="ltr num">${c}/${min}</span></span>` });
+  if (photoUrl(m)) h += `<div class="hero">${photoHtml(m)}</div>`;
+  h += '<div class="stack-sm">';
+  if (m.note) h += `<div class="note">${esc(m.note)}</div>`;
+  if (m.min_weight > 0) h += `<div class="sub">משקל מינימום: <b style="color:var(--text)">${ltr(fmtW(m.min_weight))} ק״ג</b>, ממנו מתחיל הסט הראשון</div>`;
+  h += prev ? `<div style="font-size:15px">פעם קודמת ${ltr('(' + shortDate(prev.date) + ')')}: <b>${ltr(prev.sets.map(setStr).join(', '))}</b></div>`
+            : `<div class="sub">פעם ראשונה על המכשיר הזה</div>`;
+  h += '</div><div class="stack-sm" style="margin-top:12px">';
+  ts.forEach((s, i) => {
+    h += `<button class="setrow" data-a="editSet" data-id="${s.id}" aria-label="ערוך סט ${i + 1}"><span class="n">סט ${i + 1}</span><span class="w">${ltr(fmtW(s.weight) + ' × ' + s.reps)}</span>
+      ${s.is_pr ? `<span class="pill warn">${svg(I.trophy, 14, 2)}שיא</span>` : ''}<span class="ck">${svg(I.check, 18, 3)}</span></button>`;
+  });
+  h += `<section class="card stack active" aria-label="סט ${ts.length + 1}">
+    <div class="row"><b style="font-size:17px">סט ${ts.length + 1}</b>${ts.length >= m.default_sets ? `<span class="sub sm">מעבר ל${setsTxt(m.default_sets)} הרגילים</span>` : ''}</div>
+    ${stepper('dw', 'משקל, ק״ג', d.w, m.weight_step, { draft: 'w' })}
+    ${stepper('dr', 'חזרות', d.r, 1, { int: true, draft: 'r' })}
+    <button class="btn btn-primary btn-big btn-block" data-a="saveSet" data-id="${id}">${svg(I.check, 24, 3)}בוצע</button></section>`;
+  h += `<a class="btn btn-ghost btn-block" href="#/pick/${m.area}">סיימתי, בחר מכשיר הבא</a>
+    <a class="link" style="align-self:center" href="#/edit/${id}">עריכת המכשיר</a></div>`;
+  return h + nav('today');
+}
+
+function vSets() {
+  const t = today(), tpl = templateFor(t), counts = areaCountsOn(t), sets = setsOn(t);
+  const total = sets.length, tAreas = tpl ? TEMPLATES[tpl] : [];
+  const met = tAreas.filter(a => counts[a] >= S.settings.minSets[a]).length;
+  let h = pageHead('סטים היום', { back: '#/workout', sub: fmtDate(t) });
+  h += `<section class="card row"><div class="grow"><div class="sub">סך הכל היום</div><div class="h2">${setsTxt(total)}</div></div>
+    ${tAreas.length ? `<span class="pill ${met === tAreas.length ? 'ok' : 'neutral'}">${met} מתוך ${tAreas.length} אזורים ביעד</span>` : ''}</section>`;
+  const breakdown = a => {
+    const byM = {};
+    sets.forEach(s => { const m = machineById(s.machine_id); if (m && m.area === a) byM[m.id] = (byM[m.id] || 0) + 1; });
+    const parts = Object.entries(byM).map(([id, n]) => `${esc(machineById(id).name)} ${n}`);
+    return parts.length ? parts.join(', ') : 'עוד לא בוצעו סטים';
+  };
+  if (tAreas.length) {
+    h += `<div class="section-title"><span>באימון של היום</span></div><div class="stack-sm">`;
+    h += tAreas.map(a => `<a class="card stack-sm" style="text-decoration:none;color:var(--text);${counts[a] >= S.settings.minSets[a] ? 'border-color:var(--ok)' : ''}" href="#/pick/${a}">
+      ${areaProgress(a, counts[a], S.settings.minSets[a])}<div class="sub sm">${breakdown(a)}</div></a>`).join('');
+    h += '</div>';
+  }
+  const others = AREAS.filter(a => !tAreas.includes(a.k));
+  h += `<div class="section-title"><span>שאר האזורים</span></div><div class="list">`;
+  h += others.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}<div class="sub sm">${daysForArea(a.k)}</div></div>
+    <span class="num ltr" style="font-weight:700">${counts[a.k]}</span></div>`).join('');
+  h += `</div><p class="sub sm">המינימום היומי חל בימים שבהם האזור נמצא באימון. אפשר לשנות אותו ב<a href="#/settings">הגדרות</a>.</p>`;
+  return h + nav('today');
+}
+
+function vMachines() {
+  const f = S.mfilter;
+  let h = pageHead('מכשירים', { end: `<span class="sub">${S.machines.filter(m => !m.archived).length} מכשירים</span>` });
+  h += `<div class="chips">${[['all', 'הכל'], ...AREAS.map(a => [a.k, a.n])].map(([k, n]) => `<button class="chip ${f === k ? 'on' : ''}" data-a="mfilter" data-k="${k}" aria-pressed="${f === k}">${n}</button>`).join('')}</div>`;
+  const active = S.machines.filter(m => !m.archived && (f === 'all' || m.area === f));
+  if (!active.length) {
+    h += `<div class="empty">${S.machines.length ? 'אין מכשירים באזור הזה.' : 'עוד אין מכשירים. מתחילים מהמכשיר הראשון.'}</div>`;
+  }
+  AREAS.forEach(a => {
+    const list = active.filter(m => m.area === a.k).sort((x, y) => x.sort_order - y.sort_order || x.name.localeCompare(y.name, 'he'));
+    if (!list.length) return;
+    h += `<div class="section-title"><span class="row" style="gap:8px"><span class="dot" style="background:${a.c}"></span>${a.n}</span><span class="sub">${list.length}</span></div><div class="list">`;
+    h += list.map(m => `<a class="lrow" href="#/edit/${m.id}"><div class="thumb">${photoHtml(m)}</div>
+      <div class="grow"><div class="t">${esc(m.name)}</div><div class="sub sm">מינימום ${ltr(fmtW(m.min_weight))} ק״ג, קפיצה ${ltr(fmtW(m.weight_step))}, ${setsTxt(m.default_sets)}</div></div>
+      <span class="chev">${svg(I.fwd, 20)}</span></a>`).join('') + '</div>';
+  });
+  const arch = S.machines.filter(m => m.archived);
+  if (arch.length) {
+    h += `<button class="link" style="margin-top:12px" data-a="toggleArch">${S.showArchived ? 'הסתר' : 'הצג'} מכשירים בארכיון ${ltr('(' + arch.length + ')')}</button>`;
+    if (S.showArchived) h += `<div class="list">${arch.map(m => `<a class="lrow" href="#/edit/${m.id}"><div class="thumb">${photoHtml(m)}</div><div class="grow"><div class="t">${esc(m.name)}</div><div class="sub sm">${areaName(m.area)}, בארכיון</div></div></a>`).join('')}</div>`;
+  }
+  h += `<a class="fab" href="#/edit/new/${f === 'all' ? '' : f}">${svg(I.plus, 22, 2.6)}הוסף מכשיר</a>`;
+  return h + nav('machines');
+}
+
+function tplHint(area) {
+  if (!area) return 'בחר אזור כדי לשייך את המכשיר לאימונים';
+  const tpls = Object.keys(TEMPLATES).filter(k => TEMPLATES[k].includes(area)).map(k => 'אימון ' + TPL_NAME[k]);
+  return `יופיע ב${tpls.join(' וב')}, ${daysForArea(area)}`;
+}
+function vEdit(id, prefArea) {
+  const isNew = id === 'new';
+  const key = location.hash;
+  if (!S.edit || S.edit.key !== key) {
+    const m0 = isNew ? null : machineById(id);
+    S.edit = { key, id: isNew ? uuid() : id, isNew, area: m0?.area || (AREA[prefArea] ? prefArea : null), step: m0?.weight_step || 5, blob: null, preview: null };
+  }
+  const E = S.edit;
+  const m = isNew ? { name: '', min_weight: 0, weight_step: 5, default_sets: 3, note: '' } : machineById(id);
+  if (!m) return pageHead('מכשיר', { back: '#/machines' }) + `<div class="empty">${S.loaded ? 'המכשיר לא נמצא.' : 'טוען'}</div>` + nav('machines');
+  const img = E.preview || photoUrl(m);
+  let h = pageHead(isNew ? 'מכשיר חדש' : 'עריכת מכשיר', { back: '#/machines' });
+  h += `<div class="stack">
+    <div class="photobox" id="fphoto">${img ? `<img src="${esc(img)}" alt="תמונת המכשיר">` : svg(I.image, 40, 1.5)}</div>
+    <div class="grid2">
+      <label class="btn btn-ghost">${svg(I.camera, 20)}צלם<input type="file" accept="image/*" capture="environment" data-photo class="vh"></label>
+      <label class="btn btn-ghost">${svg(I.image, 20)}מהגלריה<input type="file" accept="image/*" data-photo class="vh"></label>
+    </div>
+    <div class="field"><label for="fname">שם המכשיר</label><input class="input" id="fname" value="${esc(m.name)}" placeholder="לדוגמה: לחיצת רגליים" autocomplete="off" enterkeyhint="done"></div>
+    <div class="field"><span class="flabel">אזור בגוף</span>
+      <div class="row" style="flex-wrap:wrap;gap:8px" role="radiogroup" aria-label="אזור בגוף">${AREAS.map(a => `<button type="button" role="radio" class="chip ${E.area === a.k ? 'on' : ''}" data-a="farea" data-k="${a.k}" aria-checked="${E.area === a.k}"><span class="dot" style="background:${a.c}"></span>${a.n}</button>`).join('')}</div>
+      <div class="sub sm" id="fhint">${tplHint(E.area)}</div></div>
+    <section class="card stack" style="border:2px solid var(--primary)">
+      ${stepper('fmin', 'משקל מינימום, ק״ג', m.min_weight, E.step)}
+      <div class="sub sm" style="text-align:center">כל אימון על המכשיר מתחיל בסט הראשון במשקל הזה</div></section>
+    <div class="field"><span class="flabel">קפיצת משקל בכל לחיצה</span>
+      <div class="seg" role="radiogroup" aria-label="קפיצת משקל">${[1, 2.5, 5, 10].map(v => `<button type="button" role="radio" class="${E.step === v ? 'on' : ''}" data-a="fstep" data-v="${v}" aria-checked="${E.step === v}"><span class="ltr">${v}</span></button>`).join('')}</div></div>
+    <div class="field"><span class="flabel">מספר סטים רגיל</span>
+      <div class="mini" style="align-self:flex-start"><button type="button" data-a="step" data-t="fsets" data-st="1" data-d="1" aria-label="הוסף סט">${svg(I.plus, 20, 2.4)}</button>
+      <input id="fsets" class="input num" style="width:70px;text-align:center;font-size:20px;font-weight:700" inputmode="numeric" dir="ltr" value="${m.default_sets}">
+      <button type="button" data-a="step" data-t="fsets" data-st="1" data-d="-1" aria-label="הפחת סט">${svg(I.minus, 20, 2.4)}</button></div></div>
+    <div class="field"><label for="fnote">הערה קבועה</label><input class="input" id="fnote" value="${esc(m.note || '')}" placeholder="לדוגמה: מושב בחריץ 4" autocomplete="off"></div>
+    <button class="btn btn-primary btn-big btn-block" data-a="saveMachine" id="fsave">שמור מכשיר</button>
+    ${isNew ? '' : `<button class="btn ${m.archived ? 'btn-ghost' : 'btn-danger'} btn-block" data-a="archive">${m.archived ? 'החזר מהארכיון' : 'העבר לארכיון'}</button>
+      <p class="sub sm" style="text-align:center;margin:0">מכשיר בארכיון לא מופיע בבחירה, וההיסטוריה שלו נשמרת.</p>`}
+  </div>`;
+  return h + nav('machines');
+}
+
+function dataDates() {
+  const set = new Set(S.sets.map(s => s.workout_date));
+  S.rides.forEach(r => set.add(r.ride_date));
+  Object.entries(S.daySets).forEach(([d, l]) => { if (l && l.length) set.add(d); });
+  return [...set].sort();
+}
+function dateBar(date, area) {
+  const t = today(), ds = dataDates();
+  const prev = [...ds].reverse().find(d => d < date) || addDays(date, -1);
+  const nextData = ds.find(d => d > date && d <= t);
+  const next = nextData || (date < t ? addDays(date, 1) : null);
+  const suf = area ? '/' + area : '';
+  return `<div class="datebar">
+    <a class="iconbtn" style="margin:0" href="#/history/${prev}${suf}" aria-label="יום אימון קודם">${svg(I.back, 24, 2.2)}</a>
+    <div class="mid"><div style="font-weight:700;font-size:17px">${fmtDate(date)}</div><div class="sub sm">${svg(I.calendar, 13)} בחירת תאריך</div>
+      <input type="date" id="hdate" value="${date}" max="${t}" aria-label="בחירת תאריך" data-area="${area || ''}"></div>
+    ${next ? `<a class="iconbtn" style="margin:0" href="#/history/${next}${suf}" aria-label="יום אימון הבא">${svg(I.fwd, 24, 2.2)}</a>` : '<span class="iconbtn" style="margin:0"></span>'}
+  </div>`;
+}
+function vHistory(date, area) {
+  if (!isDate(date)) date = today();
+  if (area && !AREA[area]) area = null;
+  if (date < S.rangeStart && S.daySets[date] === undefined) { fetchDay(date); }
+  const loading = date < S.rangeStart && S.daySets[date] === undefined;
+  return area ? vHistoryArea(date, area, loading) : vHistoryDay(date, loading);
+}
+function vHistoryDay(date, loading) {
+  let h = pageHead('היסטוריה') + dateBar(date);
+  if (loading) return h + '<div class="empty">טוען</div>' + nav('history');
+  const sets = setsOn(date), counts = areaCountsOn(date), tpl = templateFor(date), day = S.days[date] || {}, r = rideOn(date);
+  const bits = [];
+  if (sets.length) bits.push(`${tpl ? 'אימון ' + TPL_NAME[tpl] + ', ' : ''}${setsTxt(sets.length)}`);
+  if (day.started_at && day.finished_at) bits.push(`משך ${ltr(fmtClock(Date.parse(day.finished_at) - Date.parse(day.started_at)))}`);
+  if (day.avg_hr) bits.push(`דופק ממוצע ${ltr(day.avg_hr)}`);
+  if (bits.length) h += `<div class="sub" style="margin:10px 2px 0">${bits.join(', ')}</div>`;
+  const trained = AREAS.filter(a => counts[a.k] > 0);
+  if (trained.length) {
+    h += `<div class="section-title"><span>אזורים שאומנו ביום הזה</span></div><div class="stack-sm">`;
+    h += trained.map(a => {
+      const c = counts[a.k], min = minFor(a.k, date);
+      const ms = new Set(sets.filter(s => machineById(s.machine_id)?.area === a.k).map(s => s.machine_id));
+      const mx = Math.max(...sets.filter(s => machineById(s.machine_id)?.area === a.k).map(s => s.weight));
+      const badge = min == null ? `<span class="pill neutral"><span class="ltr num">${c}</span></span>`
+        : c >= min ? `<span class="pill ok">${svg(I.check, 14, 3)}<span class="ltr num">${c} / ${min}</span></span>`
+        : `<span class="pill warn">${missTxt(min - c)}</span>`;
+      return `<a class="card row" style="text-decoration:none;color:var(--text);padding:12px 14px" href="#/history/${date}/${a.k}">
+        <span class="dot" style="background:${a.c}"></span><div class="grow"><div class="h3">${a.n}</div><div class="sub sm">${ms.size === 1 ? 'מכשיר אחד' : ms.size + ' מכשירים'}, עד ${ltr(fmtW(mx))} ק״ג</div></div>${badge}<span class="chev">${svg(I.fwd, 20)}</span></a>`;
+    }).join('') + '</div>';
+  }
+  if (r) {
+    h += `<div class="section-title"><span>ספינינג</span><a href="#/ride/${date}">עריכה</a></div>
+      <div class="card row"><div class="thumb">${svg(I.bike, 24, 1.8)}</div><div class="grow">${rideSummary(r)}${r.avg_hr ? `<div class="sub sm">דופק ממוצע ${ltr(r.avg_hr)}${r.max_hr ? `, מרבי ${ltr(r.max_hr)}` : ''}</div>` : ''}</div></div>`;
+  }
+  if (!trained.length && !r) h += `<div class="empty">לא נרשם אימון ביום הזה.${date === today() ? '' : `<br><a class="btn btn-ghost" href="#/ride/${date}">הוסף רכיבה ליום הזה</a>`}</div>`;
+  const rest = AREAS.filter(a => !counts[a.k]);
+  if (rest.length && (trained.length || r)) {
+    h += `<div class="section-title"><span>שאר האזורים</span></div><div class="list">`;
+    h += rest.map(a => { const l = lastDateForArea(a.k, date);
+      return `<a class="lrow" style="min-height:52px" href="#/history/${date}/${a.k}"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}</div><span class="sub sm">${l ? 'פעם קודמת: ' + ltr(shortDate(l)) : 'אין נתונים'}</span><span class="chev">${svg(I.fwd, 18)}</span></a>`; }).join('') + '</div>';
+  }
+  return h + nav('history');
+}
+function vHistoryArea(date, area, loading) {
+  let h = pageHead(`היסטוריה: ${areaName(area)}`, { back: `#/history/${date}`, small: true });
+  h += `<div class="chips">${AREAS.map(a => `<a class="chip ${a.k === area ? 'on' : ''}" href="#/history/${date}/${a.k}"><span class="dot" style="background:${a.c}"></span>${a.n}</a>`).join('')}</div>`;
+  h += dateBar(date, area);
+  if (loading) return h + '<div class="empty">טוען</div>' + nav('history');
+  const sets = sortSets(setsOn(date).filter(s => machineById(s.machine_id)?.area === area));
+  const min = minFor(area, date), c = sets.length;
+  h += `<div class="row" style="margin:14px 2px 8px"><div class="grow h3">${setsTxt(c)} ביום הזה</div>${min == null ? '<span class="pill neutral">לא באימון של היום הזה</span>'
+    : c >= min ? `<span class="pill ok">${svg(I.check, 14, 3)}${c} מתוך ${min}</span>` : `<span class="pill warn">${c} מתוך ${min}, ${missTxt(min - c)}</span>`}</div>`;
+  if (!c) {
+    const l = lastDateForArea(area, date);
+    h += `<div class="empty">לא בוצעו סטים של ${areaName(area)} ביום הזה.${l ? `<br><a class="btn btn-ghost" href="#/history/${l}/${area}">לפעם הקודמת, ${shortDate(l)}</a>` : ''}</div>`;
+  } else {
+    const mids = [...new Set(sets.map(s => s.machine_id))];
+    h += '<div class="stack-sm">' + mids.map(id => {
+      const m = machineById(id), ms = sets.filter(s => s.machine_id === id), cur = Math.max(...ms.map(s => s.weight));
+      return `<section class="card stack-sm" style="padding:12px 14px">
+        <div class="row"><div class="thumb" style="width:40px;height:40px">${photoHtml(m, 18)}</div><div class="grow h3">${esc(m.name)}</div>${ms.some(s => s.is_pr) ? `<span class="pill warn">${svg(I.trophy, 14, 2)}שיא חדש</span>` : ''}</div>
+        <div class="stats3"><div class="stat"><div class="k">משקל נוכחי</div><div class="v ltr num">${fmtW(cur)}</div></div>
+          <div class="stat"><div class="k">מקסימום</div><div class="v ltr num">${fmtW(Math.max(cur, machineMax(id)))}</div></div>
+          <div class="stat"><div class="k">סטים ביום</div><div class="v num">${ms.length}</div></div></div>
+        <div class="sub">${ltr(ms.map(setStr).join(', '))}</div></section>`;
+    }).join('') + '</div>';
+  }
+  const dates = [...new Set(S.sets.filter(s => s.workout_date !== date && machineById(s.machine_id)?.area === area).map(s => s.workout_date))].sort().reverse().slice(0, 10);
+  if (dates.length) {
+    h += `<div class="section-title"><span>ימים קודמים באזור</span></div><div class="list">`;
+    h += dates.map(d => { const n = S.sets.filter(s => s.workout_date === d && machineById(s.machine_id)?.area === area).length, mn = minFor(area, d);
+      const st = mn == null ? `<span class="sub">${setsTxt(n)}</span>` : n >= mn ? `<span class="pill ok">${svg(I.check, 14, 3)}${setsTxt(n)}</span>` : `<span class="pill warn">${setsTxt(n)}, ${missTxt(mn - n)}</span>`;
+      return `<a class="lrow" style="min-height:52px" href="#/history/${d}/${area}"><div class="grow">${fmtDate(d)}</div>${st}</a>`; }).join('') + '</div>';
+  }
+  return h + nav('history');
+}
+
+function lastRideBefore(date) {
+  const l = S.rides.filter(r => r.ride_date !== date).sort((a, b) => (a.ride_date < b.ride_date ? 1 : -1));
+  return l.find(r => r.ride_date < date) || l[0] || null;
+}
+function vRide(date) {
+  if (!isDate(date)) date = today();
+  const r = rideOn(date), p = lastRideBefore(date);
+  const ph = (v, d) => esc(v != null && v !== '' ? v : d);
+  const val = v => (v == null ? '' : esc(v));
+  const pm = p ? Math.floor(p.duration_sec / 60) : 30, ps = p ? p.duration_sec % 60 : 0;
+  let h = pageHead('רכיבת ספינינג', { back: '#/', sub: fmtDate(date) });
+  h += `<div class="stack">
+    ${r ? '' : `<div class="sub sm">${p ? 'הערכים באפור הם מהרכיבה הקודמת. ממלאים רק מה שהשתנה, שדה ריק יישמר כמו בפעם הקודמת.' : 'ממלאים את הנתונים מהצג של האופניים.'}</div>`}
+    <div class="field"><span class="flabel">זמן</span><div class="grid2">
+      <div class="field"><label for="rmin" class="sub sm">דקות</label><input class="input big-input num" id="rmin" inputmode="numeric" dir="ltr" value="${r ? Math.floor(r.duration_sec / 60) : ''}" placeholder="${pm}"></div>
+      <div class="field"><label for="rsec" class="sub sm">שניות</label><input class="input big-input num" id="rsec" inputmode="numeric" dir="ltr" value="${r ? pad(r.duration_sec % 60) : ''}" placeholder="${pad(ps)}"></div></div></div>
+    <div class="grid2">
+      <div class="field"><label for="rdist">מרחק, ק״מ</label><input class="input big-input num" id="rdist" inputmode="decimal" dir="ltr" value="${r ? val(r.distance_km) : ''}" placeholder="${ph(p?.distance_km, '0')}"></div>
+      <div class="field"><label for="rcal">קלוריות, לפי המכשיר</label><input class="input big-input num" id="rcal" inputmode="numeric" dir="ltr" value="${r ? val(r.calories) : ''}" placeholder="${ph(p?.calories, '0')}"></div></div>
+    <div class="grid2">
+      <div class="field"><label for="rwatt">וואט ממוצע, רשות</label><input class="input big-input num" id="rwatt" inputmode="numeric" dir="ltr" value="${r && !r.watts_estimated ? val(r.avg_watts) : ''}" placeholder="אוטומטי"><div class="sub sm" id="west"></div></div>
+      <div class="field"><label for="rbike">מספר מכשיר, רשות</label><input class="input big-input num" id="rbike" inputmode="numeric" dir="ltr" value="${r ? val(r.bike_no) : ''}" placeholder="${ph(p?.bike_no, '')}"></div></div>
+    <details class="more card" ${r && (r.avg_hr || r.max_hr || r.watch_kcal) ? 'open' : ''}><summary>${svg(I.watch, 22)}<span class="grow">נתוני שעון, רשות</span>${svg(I.down, 20)}</summary>
+      <div class="grid3" style="margin-top:6px">
+        <div class="field"><label for="rhr" class="sub sm">דופק ממוצע</label><input class="input num" id="rhr" inputmode="numeric" dir="ltr" value="${r ? val(r.avg_hr) : ''}"></div>
+        <div class="field"><label for="rhrm" class="sub sm">דופק מרבי</label><input class="input num" id="rhrm" inputmode="numeric" dir="ltr" value="${r ? val(r.max_hr) : ''}"></div>
+        <div class="field"><label for="rwk" class="sub sm">קלוריות שעון</label><input class="input num" id="rwk" inputmode="numeric" dir="ltr" value="${r ? val(r.watch_kcal) : ''}"></div></div>
+      <div class="sub sm" style="margin-top:8px">מהאימון באפליקציית Zepp</div></details>
+    <button class="btn btn-primary btn-big btn-block" data-a="saveRide" data-date="${date}">שמור רכיבה</button>
+    ${r ? `<button class="btn btn-danger btn-block" data-a="delRide" data-id="${r.id}">${svg(I.trash, 20)}מחק את הרכיבה</button>` : ''}
+  </div>`;
+  return h + nav('today');
+}
+function rideFieldVal(id, fallback) { const v = $('#' + id)?.value.trim(); return v ? num(v) : (fallback ?? null); }
+function rideDuration(date) {
+  const p = lastRideBefore(date);
+  const mi = $('#rmin').value.trim(), se = $('#rsec').value.trim();
+  if (!mi && !se) return p ? p.duration_sec : 0;
+  return Math.round((num(mi) || 0) * 60 + (num(se) || 0));
+}
+function updateWattEstimate() {
+  const el = $('#west'); if (!el) return;
+  const date = S.route.a && isDate(S.route.a) ? S.route.a : today(), p = lastRideBefore(date);
+  const sec = rideDuration(date), cal = rideFieldVal('rcal', p?.calories);
+  el.textContent = $('#rwatt').value.trim() ? '' : (sec > 0 && cal ? `משוער: ${Math.round(cal * 1000 / sec)} וואט` : '');
+}
+
+function vSettings() {
+  const st = S.settings;
+  const mini = (k, v, label) => `<div class="mini"><button type="button" data-a="sStep" data-k="${k}" data-d="1" aria-label="הוסף ל${label}">${svg(I.plus, 20, 2.4)}</button><span class="val num ltr">${v}</span><button type="button" data-a="sStep" data-k="${k}" data-d="-1" aria-label="הפחת מ${label}">${svg(I.minus, 20, 2.4)}</button></div>`;
+  let h = pageHead('הגדרות');
+  h += `<div class="section-title"><span>מנוחה בין סטים</span></div><div class="list"><div class="srow2"><div class="grow">זמן ברירת מחדל</div>${mini('rest', fmtDur(st.rest), 'זמן המנוחה')}</div>
+    <div class="srow2"><div class="grow">צליל בסוף המנוחה</div><label class="toggle"><input type="checkbox" data-s="sound" ${st.sound ? 'checked' : ''} aria-label="צליל בסוף המנוחה"><span></span></label></div></div>`;
+  h += `<div class="section-title"><span>מינימום סטים ביום</span></div><div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}</div>${mini('min.' + a.k, st.minSets[a.k], 'מינימום ' + a.n)}</div>`).join('')}</div>
+    <p class="sub sm">המינימום חל בימים שבהם האזור נמצא באימון.</p>`;
+  h += `<div class="section-title"><span>חלוקת האימונים בשבוע</span></div><div class="list">${DAY_NAMES.map((n, i) => `<div class="srow2"><label class="grow" for="sp${i}">יום ${n}</label>
+    <select class="input" id="sp${i}" data-s="split" data-dow="${i}">${[['A', 'אימון א'], ['B', 'אימון ב'], ['C', 'אימון ג'], ['', 'מנוחה']].map(([k, l]) => `<option value="${k}" ${(st.split[String(i)] || '') === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`).join('')}</div>
+    <p class="sub sm">אימון א: גב, יד קדמית, בטן. אימון ב: חזה, יד אחורית, כתפיים, בטן. אימון ג: רגליים, בטן.</p>`;
+  h += `<div class="section-title"><span>תצוגה</span></div><div class="list">
+    <div class="srow2"><label class="grow" for="stheme">ערכת צבעים</label><select class="input" id="stheme" data-s="theme">${[['dark', 'כהה'], ['light', 'בהירה'], ['auto', 'לפי הטלפון']].map(([k, l]) => `<option value="${k}" ${st.theme === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+    <div class="srow2"><div class="grow">המסך נשאר דלוק באימון<div class="sub sm">תלוי בתמיכת הדפדפן</div></div><label class="toggle"><input type="checkbox" data-s="wakeLock" ${st.wakeLock ? 'checked' : ''} aria-label="המסך נשאר דלוק באימון"><span></span></label></div></div>`;
+  h += `<div class="section-title"><span>נתונים</span></div><div class="stack-sm">
+    <div class="sub">${S.queue.length ? `${S.queue.length} פעולות ממתינות לשמירה בשרת` : 'כל הנתונים שמורים בשרת'}</div>
+    <button class="btn btn-ghost btn-block" data-a="exportJson">ייצוא גיבוי מלא, JSON</button>
+    <button class="btn btn-ghost btn-block" data-a="exportCsv">ייצוא סטים לאקסל, CSV</button>
+    <button class="btn btn-ghost btn-block" data-a="refresh">רענון נתונים מהשרת</button></div>`;
+  h += `<div class="section-title"><span>חשבון</span></div><div class="stack-sm"><div class="sub ltr" style="align-self:flex-end">${esc(S.user?.email || '')}</div>
+    <button class="btn btn-danger btn-block" data-a="signOut">התנתקות</button></div>`;
+  return h + nav('settings');
+}
+
+/* ---------- router & render ---------- */
+function parseRoute() {
+  const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent);
+  return { name: parts[0] || 'today', a: parts[1], b: parts[2] };
+}
+let lastRenderKey = '';
+function render() {
+  const app = $('#app');
+  if (!configured) { app.innerHTML = vSetup(); return; }
+  if (!S.user) { app.innerHTML = vLogin(); updateSync(); return; }
+  const r = S.route = parseRoute();
+  const key = location.hash;
+  const keep = {}; let focusId = null;
+  if (key === lastRenderKey) {
+    app.querySelectorAll('input[data-dirty="1"]').forEach(el => { if (el.id) keep[el.id] = el.value; });
+    if (document.activeElement && app.contains(document.activeElement)) focusId = document.activeElement.id;
+  }
+  let h;
+  switch (r.name) {
+    case 'workout': h = vWorkout(); break;
+    case 'pick': h = vPick(r.a); break;
+    case 'm': h = vMachine(r.a); break;
+    case 'sets': h = vSets(); break;
+    case 'machines': h = vMachines(); break;
+    case 'edit': h = vEdit(r.a || 'new', r.b); break;
+    case 'history': h = vHistory(r.a, r.b); break;
+    case 'ride': h = vRide(r.a); break;
+    case 'settings': h = vSettings(); break;
+    default: h = vToday();
+  }
+  app.innerHTML = h;
+  for (const [id, v] of Object.entries(keep)) { const el = document.getElementById(id); if (el) { el.value = v; el.dataset.dirty = '1'; } }
+  if (focusId) { const el = document.getElementById(focusId); if (el && el.tagName === 'INPUT') el.focus({ preventScroll: true }); }
+  lastRenderKey = key;
+  if (r.name !== 'edit') S.edit = null;
+  if (r.name === 'ride') updateWattEstimate();
+  updateSync(); updateWakeLock(); tick();
+}
+
+/* ---------- timer ---------- */
+let actx = null;
+function ensureAudio() {
+  try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch (e) {}
+}
+function beep() {
+  if (!S.settings.sound || !actx) return;
+  try {
+    [0, 0.25].forEach(off => { const o = actx.createOscillator(), g = actx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(actx.destination);
+      const t0 = actx.currentTime + off; g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.4, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18); o.start(t0); o.stop(t0 + 0.2); });
+  } catch (e) {}
+}
+function startTimer(sec, name) {
+  const s = sec ?? S.settings.rest;
+  S.timer = { end: Date.now() + s * 1000, total: s, notified: false, name: name || '' };
+  localStorage.setItem(TK, JSON.stringify(S.timer));
+  tick();
+}
+function stopTimer() { S.timer = null; localStorage.removeItem(TK); $('#tf').hidden = true; tick(); }
+function tick() {
+  const el = document.getElementById('elapsed');
+  if (el) { const st = S.days[today()]?.started_at; el.textContent = st ? fmtClock(Date.now() - Date.parse(st)) : ''; }
+  const tb = $('#tb'), tf = $('#tf');
+  if (!S.timer || !S.user) { tb.hidden = true; document.body.classList.remove('has-timer'); return; }
+  const rem = Math.max(0, S.timer.end - Date.now()), frac = S.timer.total ? rem / (S.timer.total * 1000) : 0;
+  const txt = fmtDur(Math.ceil(rem / 1000));
+  tb.hidden = false; document.body.classList.add('has-timer');
+  $('#tbTime').textContent = txt; $('#tfTime').textContent = txt;
+  $('#tbRing').setAttribute('stroke-dashoffset', String(138.23 * (1 - frac)));
+  $('#tfRing').setAttribute('stroke-dashoffset', String(841.95 * (1 - frac)));
+  $('#tfName').textContent = S.timer.name || '';
+  if (rem <= 0) {
+    tb.classList.add('done'); tf.classList.add('done');
+    $('#tbLbl').textContent = 'המנוחה נגמרה'; $('#tfLbl').textContent = 'המנוחה נגמרה';
+    if (!S.timer.notified) {
+      S.timer.notified = true; localStorage.setItem(TK, JSON.stringify(S.timer));
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      beep();
+      const end = S.timer.end;
+      setTimeout(() => { if (S.timer && S.timer.end === end) stopTimer(); }, 5000);
+    }
+  } else {
+    tb.classList.remove('done'); tf.classList.remove('done');
+    $('#tbLbl').textContent = 'מנוחה'; $('#tfLbl').textContent = 'מנוחה';
+  }
+}
+
+/* ---------- wake lock ---------- */
+let wl = null;
+async function updateWakeLock() {
+  const want = S.user && S.settings.wakeLock && ['workout', 'm', 'pick', 'sets'].includes(S.route.name) && document.visibilityState === 'visible';
+  try {
+    if (want && !wl && 'wakeLock' in navigator) { wl = await navigator.wakeLock.request('screen'); wl.addEventListener('release', () => { wl = null; }); }
+    else if (!want && wl) { await wl.release(); wl = null; }
+  } catch (e) { wl = null; }
+}
+
+/* ---------- photos ---------- */
+function compressImage(file, maxW = 900, q = 0.78) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.naturalWidth);
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.naturalWidth * scale); c.height = Math.round(img.naturalHeight * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      c.toBlob(b => (b ? resolve(b) : reject(new Error('compress'))), 'image/jpeg', q);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('load')); };
+    img.src = url;
+  });
+}
+
+/* ---------- export ---------- */
+function download(blob, name) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+async function fetchEverything() {
+  const all = (t, o) => fetchPaged(t, q => q, o);
+  const [machines, sets, workout_days, rides] = await Promise.all([all('machines', ['created_at']), all('sets', ['workout_date', 'created_at']), all('workout_days', ['workout_date']), all('rides', ['ride_date'])]);
+  return { machines, sets, workout_days, rides };
+}
+
+/* ---------- actions ---------- */
+const A = {
+  start(el) {
+    const t = today(), tpl = el.dataset.t || templateFor(t);
+    if (!tpl) return;
+    const day = S.days[t] || {};
+    const row = { user_id: S.user.id, workout_date: t, template: tpl };
+    if (!day.started_at) row.started_at = new Date().toISOString();
+    if (day.finished_at) row.finished_at = null;
+    enqueue({ table: 'workout_days', op: 'upsert', row });
+    go('#/workout');
+  },
+  switchTpl() {
+    const cur = templateFor(today());
+    openModal(`<h2>איזה אימון היום?</h2><div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn ${k === cur ? 'btn-primary' : 'btn-ghost'} btn-block" data-a="setTpl" data-t="${k}">אימון ${TPL_NAME[k]}: ${TEMPLATES[k].map(areaName).join(', ')}</button>`).join('')}
+      <button class="btn btn-ghost btn-block" data-a="setTpl" data-t="R">יום מנוחה</button><button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
+  },
+  setTpl(el) {
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: today(), template: el.dataset.t } });
+    closeModal(); render();
+  },
+  closeModal() { closeModal(); },
+  finish() {
+    const t = today(), tpl = templateFor(t), counts = areaCountsOn(t), sets = setsOn(t), day = S.days[t] || {};
+    const prs = sets.filter(s => s.is_pr).length;
+    const dur = day.started_at ? fmtClock(Date.now() - Date.parse(day.started_at)) : null;
+    openModal(`<h2>סיום אימון${tpl ? ' ' + TPL_NAME[tpl] : ''}</h2>
+      <div class="stats3" style="margin-bottom:12px"><div class="stat"><div class="k">סטים</div><div class="v num">${sets.length}</div></div>
+        <div class="stat"><div class="k">משך</div><div class="v ltr num" style="font-size:18px">${dur || '-'}</div></div>
+        <div class="stat"><div class="k">שיאים חדשים</div><div class="v num">${prs}</div></div></div>
+      ${tpl ? `<div class="stack-sm" style="margin-bottom:14px">${TEMPLATES[tpl].map(a => areaProgress(a, counts[a], S.settings.minSets[a])).join('')}</div>` : ''}
+      <div class="flabel" style="margin-bottom:6px">נתוני שעון, רשות</div>
+      <div class="grid3" style="margin-bottom:16px">
+        <div class="field"><label for="whr" class="sub sm">דופק ממוצע</label><input class="input num" id="whr" inputmode="numeric" dir="ltr" value="${day.avg_hr ?? ''}"></div>
+        <div class="field"><label for="whrm" class="sub sm">דופק מרבי</label><input class="input num" id="whrm" inputmode="numeric" dir="ltr" value="${day.max_hr ?? ''}"></div>
+        <div class="field"><label for="wkc" class="sub sm">קלוריות שעון</label><input class="input num" id="wkc" inputmode="numeric" dir="ltr" value="${day.watch_kcal ?? ''}"></div></div>
+      <button class="btn btn-primary btn-big btn-block" data-a="finishSave">שמור וסיים</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:10px" data-a="closeModal">חזרה לאימון</button>`);
+  },
+  finishSave() {
+    const t = today(), day = S.days[t] || {};
+    const iv = id => { const v = num($('#' + id).value); return v == null ? null : Math.round(v); };
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: templateFor(t), started_at: day.started_at || new Date().toISOString(), finished_at: new Date().toISOString(), avg_hr: iv('whr'), max_hr: iv('whrm'), watch_kcal: iv('wkc') } });
+    closeModal(); stopTimer(); toast('האימון נשמר'); go('#/');
+  },
+  step(el) {
+    const inp = document.getElementById(el.dataset.t); if (!inp) return;
+    const st = parseFloat(el.dataset.st) || 1, d = parseInt(el.dataset.d, 10);
+    const v = Math.max(0, round2((num(inp.value) || 0) + d * st));
+    inp.value = fmtW(v); inp.dataset.dirty = '1';
+    if (inp.dataset.draft && S.draft[S.route.a]) S.draft[S.route.a][inp.dataset.draft] = v;
+  },
+  saveSet(el) {
+    ensureAudio();
+    const id = el.dataset.id, m = machineById(id); if (!m) return;
+    const w = Math.max(0, num($('#dw').value) || 0), r = Math.round(num($('#dr').value) || 0);
+    if (r <= 0) { toast('הזן מספר חזרות'); $('#dr').focus(); return; }
+    const isPr = hasHistory(id) && w > machineMax(id);
+    const t = today(), day = S.days[t] || {};
+    enqueue({ table: 'sets', op: 'upsert', row: { id: uuid(), user_id: S.user.id, machine_id: id, workout_date: t, weight: w, reps: r, is_pr: isPr, created_at: new Date().toISOString() } });
+    if (!day.started_at || !day.template) enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: day.started_at || new Date().toISOString() } });
+    delete S.draft[id];
+    document.querySelectorAll('#app [data-dirty]').forEach(x => { delete x.dataset.dirty; });
+    startTimer(undefined, m.name);
+    if (isPr) toast(`שיא חדש ב${m.name}: ${fmtW(w)} ק״ג`, 3500);
+    const c = areaCountsOn(t)[m.area], min = S.settings.minSets[m.area];
+    if (c === min && minFor(m.area, t) != null) toast(`עמדת ביעד של ${areaName(m.area)}: ${min} סטים`, 3500);
+    render();
+  },
+  editSet(el) {
+    const s = S.sets.find(x => x.id === el.dataset.id); if (!s) return;
+    const m = machineById(s.machine_id);
+    openModal(`<h2>עריכת סט</h2><div class="stack">${stepper('ew', 'משקל, ק״ג', s.weight, m?.weight_step || 2.5)}${stepper('er', 'חזרות', s.reps, 1, { int: true })}
+      <button class="btn btn-primary btn-block" data-a="updSet" data-id="${s.id}">שמור שינוי</button>
+      <button class="btn btn-danger btn-block" data-a="delSet" data-id="${s.id}">${svg(I.trash, 20)}מחק את הסט</button>
+      <button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
+  },
+  updSet(el) {
+    const s = S.sets.find(x => x.id === el.dataset.id); if (!s) return;
+    const w = Math.max(0, num($('#ew').value) || 0), r = Math.round(num($('#er').value) || 0);
+    if (r <= 0) { toast('הזן מספר חזרות'); return; }
+    enqueue({ table: 'sets', op: 'upsert', row: { ...s, weight: w, reps: r } });
+    closeModal(); render();
+  },
+  delSet(el) { enqueue({ table: 'sets', op: 'delete', id: el.dataset.id }); closeModal(); toast('הסט נמחק'); render(); },
+  mfilter(el) { S.mfilter = el.dataset.k; render(); },
+  toggleArch() { S.showArchived = !S.showArchived; render(); },
+  farea(el) {
+    S.edit.area = el.dataset.k;
+    document.querySelectorAll('[data-a="farea"]').forEach(b => { const on = b.dataset.k === S.edit.area; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+    $('#fhint').textContent = tplHint(S.edit.area);
+  },
+  fstep(el) {
+    S.edit.step = parseFloat(el.dataset.v);
+    document.querySelectorAll('[data-a="fstep"]').forEach(b => { const on = parseFloat(b.dataset.v) === S.edit.step; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+    document.querySelectorAll('[data-t="fmin"]').forEach(b => { b.dataset.st = S.edit.step; });
+  },
+  async saveMachine(el) {
+    const E = S.edit; if (!E) return;
+    const name = $('#fname').value.trim();
+    if (!name) { toast('הזן שם למכשיר'); $('#fname').focus(); return; }
+    if (!E.area) { toast('בחר אזור בגוף'); return; }
+    const old = E.isNew ? null : machineById(E.id);
+    let photo_path = old?.photo_path || null;
+    if (E.blob) {
+      el.disabled = true; el.textContent = 'מעלה תמונה';
+      const path = `${S.user.id}/${E.id}-${Date.now()}.jpg`;
+      const { error } = await sb.storage.from(BUCKET).upload(path, E.blob, { contentType: 'image/jpeg', cacheControl: '31536000', upsert: true });
+      if (error) { toast('העלאת התמונה נכשלה, המכשיר נשמר בלי התמונה החדשה', 4500); }
+      else {
+        if (photo_path) sb.storage.from(BUCKET).remove([photo_path]);
+        photo_path = path;
+        S.photoUrls[path] = { url: E.preview, exp: 0 };
+      }
+    }
+    const row = { id: E.id, user_id: S.user.id, name, area: E.area, min_weight: Math.max(0, num($('#fmin').value) || 0), weight_step: E.step,
+      default_sets: Math.max(1, Math.round(num($('#fsets').value) || 3)), note: $('#fnote').value.trim() || null, photo_path,
+      sort_order: old?.sort_order ?? S.machines.length, archived: old?.archived ?? false };
+    enqueue({ table: 'machines', op: 'upsert', row });
+    S.edit = null; toast('המכשיר נשמר');
+    const back = S.prevHash && !S.prevHash.startsWith('#/edit') ? S.prevHash : '#/machines';
+    go(back);
+    refreshPhotos();
+  },
+  archive() {
+    const m = machineById(S.edit?.id); if (!m) return;
+    enqueue({ table: 'machines', op: 'upsert', row: { ...m, archived: !m.archived } });
+    toast(m.archived ? 'המכשיר הוחזר' : 'המכשיר הועבר לארכיון'); S.edit = null; go('#/machines');
+  },
+  saveRide(el) {
+    const date = el.dataset.date, r = rideOn(date), p = lastRideBefore(date);
+    const sec = rideDuration(date);
+    if (!sec) { toast('הזן את זמן הרכיבה'); $('#rmin').focus(); return; }
+    const cal = rideFieldVal('rcal', p?.calories);
+    let watts = num($('#rwatt').value), est = false;
+    if (watts == null && cal && sec) { watts = Math.round(cal * 1000 / sec); est = true; }
+    const iv = id => { const v = num($('#' + id).value); return v == null ? null : Math.round(v); };
+    const bike = $('#rbike').value.trim() || p?.bike_no || null;
+    enqueue({ table: 'rides', op: 'upsert', row: { id: r?.id || uuid(), user_id: S.user.id, ride_date: date, duration_sec: sec,
+      distance_km: rideFieldVal('rdist', p?.distance_km), calories: cal == null ? null : Math.round(cal), avg_watts: watts == null ? null : Math.round(watts),
+      watts_estimated: est, bike_no: bike, avg_hr: iv('rhr'), max_hr: iv('rhrm'), watch_kcal: iv('rwk') } });
+    toast('הרכיבה נשמרה'); go(date === today() ? '#/' : '#/history/' + date);
+  },
+  delRide(el) {
+    openModal(`<h2>למחוק את הרכיבה?</h2><div class="stack-sm"><button class="btn btn-danger btn-block" data-a="delRideYes" data-id="${el.dataset.id}">כן, מחק</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
+  },
+  delRideYes(el) { enqueue({ table: 'rides', op: 'delete', id: el.dataset.id }); closeModal(); toast('הרכיבה נמחקה'); go('#/'); },
+  sStep(el) {
+    const k = el.dataset.k, d = parseInt(el.dataset.d, 10);
+    if (k === 'rest') S.settings.rest = Math.min(600, Math.max(15, S.settings.rest + d * 15));
+    else if (k.startsWith('min.')) { const a = k.slice(4); S.settings.minSets[a] = Math.min(40, Math.max(1, S.settings.minSets[a] + d)); }
+    saveSettings(); render();
+  },
+  tFull() { $('#tf').hidden = false; },
+  tClose() { $('#tf').hidden = true; },
+  tAdd(el) {
+    if (!S.timer) return;
+    const d = parseInt(el.dataset.d, 10) * 1000;
+    const base = Math.max(Date.now(), S.timer.end);
+    S.timer.end = Math.max(Date.now() + 1000, base + d); S.timer.total = Math.max(S.timer.total, Math.ceil((S.timer.end - Date.now()) / 1000));
+    S.timer.notified = false; localStorage.setItem(TK, JSON.stringify(S.timer)); tick();
+  },
+  tSkip() { stopTimer(); },
+  async exportJson(el) {
+    el.disabled = true; el.textContent = 'מכין קובץ';
+    try { const all = await fetchEverything(); download(new Blob([JSON.stringify({ exported_at: new Date().toISOString(), settings: S.settings, ...all }, null, 2)], { type: 'application/json' }), `koach-backup-${today()}.json`); toast('הגיבוי ירד'); }
+    catch (e) { toast('הייצוא נכשל. בדוק חיבור לאינטרנט'); }
+    render();
+  },
+  async exportCsv(el) {
+    el.disabled = true; el.textContent = 'מכין קובץ';
+    try {
+      const all = await fetchEverything(), mm = Object.fromEntries(all.machines.map(m => [m.id, m]));
+      const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+      const lines = [['תאריך', 'אזור', 'מכשיר', 'משקל', 'חזרות', 'שיא'].map(q).join(',')];
+      all.sets.forEach(s => { const m = mm[s.machine_id]; lines.push([s.workout_date, areaName(m?.area), m?.name, s.weight, s.reps, s.is_pr ? 'כן' : ''].map(q).join(',')); });
+      download(new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' }), `koach-sets-${today()}.csv`); toast('הקובץ ירד');
+    } catch (e) { toast('הייצוא נכשל. בדוק חיבור לאינטרנט'); }
+    render();
+  },
+  refresh() { toast('מרענן'); flush().then(fetchAll); },
+  signOut() {
+    openModal(`<h2>להתנתק?</h2>${S.queue.length ? `<p class="err">יש ${S.queue.length} פעולות שעוד לא נשמרו בשרת. התנתקות עכשיו תמחק אותן.</p>` : '<p class="sub">הנתונים שמורים בשרת. בפעם הבאה תצטרך להיכנס עם אימייל וסיסמה.</p>'}
+      <div class="stack-sm"><button class="btn btn-danger btn-block" data-a="signOutYes">התנתק</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
+  },
+  async signOutYes() { closeModal(); await sb.auth.signOut(); }
+};
+
+let settingsT = null;
+function saveSettings() {
+  applyTheme();
+  clearTimeout(settingsT);
+  settingsT = setTimeout(() => enqueue({ table: 'settings', op: 'upsert', row: { user_id: S.user.id, data: S.settings, updated_at: new Date().toISOString() } }), 500);
+}
+function applyTheme() {
+  const t = S.settings.theme || 'dark';
+  document.documentElement.dataset.theme = t;
+  const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  $('meta[name="theme-color"]').setAttribute('content', dark ? '#14171C' : '#F2F3F5');
+}
+function resetState() {
+  Object.assign(S, { machines: [], sets: [], days: {}, rides: [], settings: mergeSettings({}), maxByMachine: {}, photoUrls: {}, daySets: {}, queue: [], draft: {}, edit: null, timer: null, loaded: false });
+  try { localStorage.removeItem(CK); localStorage.removeItem(QK); localStorage.removeItem(TK); } catch (e) {}
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]');
+  if (el && A[el.dataset.a]) { e.preventDefault(); A[el.dataset.a](el, e); return; }
+  if (e.target.id === 'modal') closeModal();
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.closest('#app') && t.tagName === 'INPUT') t.dataset.dirty = '1';
+  if (t.dataset.draft && S.draft[S.route.a]) { const v = num(t.value); if (v != null) S.draft[S.route.a][t.dataset.draft] = v; }
+  if (['rmin', 'rsec', 'rcal', 'rwatt'].includes(t.id)) updateWattEstimate();
+});
+document.addEventListener('change', async e => {
+  const t = e.target;
+  if (t.dataset.s) {
+    const k = t.dataset.s;
+    if (k === 'split') S.settings.split[t.dataset.dow] = t.value || null;
+    else if (k === 'theme') S.settings.theme = t.value;
+    else if (k === 'wakeLock' || k === 'sound') S.settings[k] = t.checked;
+    saveSettings(); render(); return;
+  }
+  if (t.id === 'hdate' && isDate(t.value)) { go(`#/history/${t.value}${t.dataset.area ? '/' + t.dataset.area : ''}`); return; }
+  if (t.hasAttribute('data-photo') && t.files && t.files[0] && S.edit) {
+    try {
+      const blob = await compressImage(t.files[0]);
+      if (S.edit.preview) URL.revokeObjectURL(S.edit.preview);
+      S.edit.blob = blob; S.edit.preview = URL.createObjectURL(blob);
+      $('#fphoto').innerHTML = `<img src="${S.edit.preview}" alt="תמונת המכשיר">`;
+    } catch (err) { toast('לא הצלחתי לקרוא את התמונה'); }
+    t.value = '';
+  }
+});
+document.addEventListener('submit', async e => {
+  if (e.target.id !== 'loginForm') return;
+  e.preventDefault();
+  const email = $('#lemail').value.trim(), password = $('#lpass').value, btn = $('#lbtn'), err = $('#lerr');
+  if (!email || !password) { err.textContent = 'הזן אימייל וסיסמה'; return; }
+  btn.disabled = true; btn.textContent = 'נכנס'; err.textContent = '';
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { err.textContent = /invalid/i.test(error.message) ? 'האימייל או הסיסמה שגויים' : error.message; btn.disabled = false; btn.textContent = 'כניסה'; }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (!$('#modal').hidden) closeModal(); else if (!$('#tf').hidden) $('#tf').hidden = true; }
+  if (e.key === 'Enter' && e.target.classList?.contains('sinput')) e.target.blur();
+});
+window.addEventListener('hashchange', () => { S.prevHash = S.curHash; S.curHash = location.hash; render(); window.scrollTo(0, 0); });
+window.addEventListener('online', () => { updateSync(); flush(); });
+window.addEventListener('offline', updateSync);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') { updateWakeLock(); tick(); flush(); if (S.user) fetchAll(); }
+  else updateWakeLock();
+});
+setInterval(tick, 250);
+setInterval(() => { if (S.queue.length) flush(); }, 20000);
+
+/* ---------- boot ---------- */
+(function boot() {
+  if (!configured || !window.supabase) {
+    render();
+    if (configured && !window.supabase) $('#app').innerHTML = '<div class="empty" style="padding-top:30vh">טעינת הספרייה נכשלה. בדוק חיבור לאינטרנט ורענן.</div>';
+    return;
+  }
+  sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: 'koach-auth' }
+  });
+  sb.auth.onAuthStateChange((event, session) => {
+    const u = session?.user || null;
+    if (u && (!S.user || S.user.id !== u.id)) {
+      S.user = u; loadCache(); render();
+      setTimeout(() => { flush(); fetchAll(); }, 0);
+    } else if (!u && S.user) {
+      S.user = null; resetState(); render();
+    } else if (!u) {
+      render();
+    }
+  });
+})();
+</script>
+</body>
+</html>
