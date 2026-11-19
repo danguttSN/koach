@@ -288,7 +288,29 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
+const APP_VERSION = '1.1 יומן';
 const BUCKET = 'machine-photos';
+
+/* ---------- יומן תקלות ---------- */
+const LOG = [];
+function log(...args) {
+  const line = new Date().toTimeString().slice(0, 8) + '  ' + args.map(a => {
+    if (typeof a === 'string') return a;
+    if (a instanceof Error) return `${a.name}: ${a.message}`;
+    try { return JSON.stringify(a); } catch (e) { return String(a); }
+  }).join(' ');
+  LOG.push(line); if (LOG.length > 400) LOG.shift();
+  console.log('[koach]', ...args);
+  const el = document.getElementById('logbox'); if (el) { el.textContent = LOG.join('\n'); el.scrollTop = el.scrollHeight; }
+}
+window.addEventListener('error', e => log('שגיאת JS:', e.message, `${e.filename || ''}:${e.lineno || ''}`));
+window.addEventListener('unhandledrejection', e => log('Promise נכשל:', e.reason?.message || String(e.reason)));
+function cleanUrl(u) {
+  return String(u || '').trim().replace(/\/+$/, '').replace(/\/(rest|auth|storage)\/v1$/i, '').replace(/\/+$/, '');
+}
+const SB_URL = cleanUrl(CONFIG.SUPABASE_URL);
+const SB_KEY = String(CONFIG.SUPABASE_KEY || '').trim();
+const errInfo = e => e ? { name: e.name, status: e.status, code: e.code, message: e.message } : null;
 const CK = 'koach-cache-v1', QK = 'koach-queue-v1', TK = 'koach-timer-v1';
 
 const AREAS = [
@@ -360,7 +382,7 @@ const areaColor = k => AREA[k]?.c || 'var(--muted)';
 const setStr = s => `${fmtW(s.weight)}×${s.reps}`;
 
 /* ---------- state ---------- */
-const configured = !CONFIG.SUPABASE_URL.includes('YOUR-PROJECT') && !CONFIG.SUPABASE_KEY.includes('YOUR_KEY');
+const configured = !SB_URL.includes('YOUR-PROJECT') && !SB_KEY.includes('YOUR_KEY');
 let sb = null;
 const S = {
   user: null, loaded: false,
@@ -502,7 +524,7 @@ async function flush() {
       } catch (e) { break; }
       if (res.error) {
         if (!res.error.code) break;           /* בעיית רשת: ננסה שוב אחר כך */
-        console.error(res.error);
+        log('שמירה נכשלה:', op.table, errInfo(res.error));
         toast('השמירה בשרת נכשלה: ' + res.error.message, 5000);
       }
       S.queue.shift(); saveQueue();
@@ -557,7 +579,7 @@ async function fetchAll() {
     applyTheme(); saveCache(); render();
     refreshPhotos();
   } catch (e) {
-    console.error(e);
+    log('טעינת נתונים נכשלה:', errInfo(e));
     if (navigator.onLine) toast(e.code === '42501' ? 'אין הרשאה לטבלאות. צריך להריץ שוב את קובץ ה SQL' : 'טעינת הנתונים מהשרת נכשלה', 5000);
     if (!S.loaded) { S.loaded = true; render(); }
   }
@@ -629,6 +651,35 @@ function vSetup() {
     <p>האפליקציה עוד לא מחוברת למסד הנתונים.</p>
     <p class="sub">פותחים את index.html בעורך טקסט, ובראש הסקריפט ממלאים את SUPABASE_URL ואת SUPABASE_KEY מתוך לוח הבקרה של Supabase. ההוראות המלאות נמצאות בקובץ README.md.</p></main>`;
 }
+function diagPanel() {
+  return `<details class="card" style="margin-top:16px" ${LOG.some(l => l.includes('נכשל')) ? 'open' : ''}><summary style="min-height:44px;display:flex;align-items:center;font-weight:700;cursor:pointer">יומן תקלות</summary>
+    <div class="stack-sm" style="margin-top:8px">
+      <div class="grid2"><button type="button" class="btn btn-ghost" data-a="diag">בדיקת חיבור</button><button type="button" class="btn btn-ghost" data-a="copyLog">העתק יומן</button></div>
+      <pre id="logbox" dir="ltr" style="margin:0;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-size:12px;line-height:1.45;background:var(--surface2);border-radius:10px;padding:10px;text-align:left">${esc(LOG.join('\n'))}</pre>
+      <div class="sub sm">גרסה ${esc(APP_VERSION)}</div></div></details>`;
+}
+async function runDiag() {
+  log('--- בדיקת חיבור ---');
+  log('מחובר לרשת:', navigator.onLine, '| כתובת:', SB_URL);
+  const h = { apikey: SB_KEY };
+  const probe = async (name, path, opts = {}) => {
+    try {
+      const r = await fetch(SB_URL + path, { headers: h, ...opts });
+      let body = ''; try { body = (await r.text()).slice(0, 220); } catch (e) {}
+      log(name + ':', r.status, body);
+      return { status: r.status, body };
+    } catch (e) { log(name + ': נכשל לגמרי', e.message, '(כתובת שגויה, חסימת רשת או CORS)'); return null; }
+  };
+  await probe('שירות כניסה', '/auth/v1/health');
+  const st = await probe('הגדרות כניסה', '/auth/v1/settings');
+  if (st && st.status === 200) {
+    try { const j = JSON.parse(st.body.length < 220 ? st.body : '{}'); log('כניסה באימייל פעילה:', j.external?.email, '| הרשמה חסומה:', j.disable_signup); } catch (e) {}
+  }
+  await probe('גישה לטבלאות בלי כניסה (צפוי 401 או 403)', '/rest/v1/machines?select=id&limit=1');
+  const s = sb ? await sb.auth.getSession() : null;
+  log('סשן שמור בדפדפן:', !!s?.data?.session);
+  log('--- סוף בדיקה ---');
+}
 function vLogin() {
   return `<main class="login">
     <div class="brand">כוח</div><p class="sub" style="margin:0 0 20px">יומן אימונים אישי</p>
@@ -637,7 +688,7 @@ function vLogin() {
       <div class="field"><label for="lpass">סיסמה</label><input class="input" type="password" id="lpass" autocomplete="current-password" dir="ltr" required></div>
       <button class="btn btn-primary btn-big btn-block" type="submit" id="lbtn">כניסה</button>
       <div id="lerr" class="err" role="alert"></div>
-    </form></main>`;
+    </form>${diagPanel()}</main>`;
 }
 
 function weekStrip(t) {
@@ -1048,7 +1099,7 @@ function vSettings() {
     <button class="btn btn-ghost btn-block" data-a="exportCsv">ייצוא סטים לאקסל, CSV</button>
     <button class="btn btn-ghost btn-block" data-a="refresh">רענון נתונים מהשרת</button></div>`;
   h += `<div class="section-title"><span>חשבון</span></div><div class="stack-sm"><div class="sub ltr" style="align-self:flex-end">${esc(S.user?.email || '')}</div>
-    <button class="btn btn-danger btn-block" data-a="signOut">התנתקות</button></div>`;
+    <button class="btn btn-danger btn-block" data-a="signOut">התנתקות</button></div>${diagPanel()}`;
   return h + nav('settings');
 }
 
@@ -1361,7 +1412,13 @@ const A = {
     openModal(`<h2>להתנתק?</h2>${S.queue.length ? `<p class="err">יש ${S.queue.length} פעולות שעוד לא נשמרו בשרת. התנתקות עכשיו תמחק אותן.</p>` : '<p class="sub">הנתונים שמורים בשרת. בפעם הבאה תצטרך להיכנס עם אימייל וסיסמה.</p>'}
       <div class="stack-sm"><button class="btn btn-danger btn-block" data-a="signOutYes">התנתק</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
   },
-  async signOutYes() { closeModal(); await sb.auth.signOut(); }
+  async signOutYes() { closeModal(); await sb.auth.signOut(); },
+  async diag(el) { el.disabled = true; el.textContent = 'בודק'; await runDiag(); el.disabled = false; el.textContent = 'בדיקת חיבור'; },
+  async copyLog() {
+    const t = LOG.join('\n');
+    try { await navigator.clipboard.writeText(t); toast('היומן הועתק'); }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($('#logbox')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast('סמן והעתק ידנית'); }
+  }
 };
 
 let settingsT = null;
@@ -1419,8 +1476,12 @@ document.addEventListener('submit', async e => {
   const email = $('#lemail').value.trim(), password = $('#lpass').value, btn = $('#lbtn'), err = $('#lerr');
   if (!email || !password) { err.textContent = 'הזן אימייל וסיסמה'; return; }
   btn.disabled = true; btn.textContent = 'נכנס'; err.textContent = '';
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) { err.textContent = /invalid/i.test(error.message) ? 'האימייל או הסיסמה שגויים' : error.message; btn.disabled = false; btn.textContent = 'כניסה'; }
+  log('ניסיון כניסה:', email, '| אורך סיסמה', password.length);
+  let error;
+  try { ({ error } = await sb.auth.signInWithPassword({ email, password })); }
+  catch (ex) { error = ex; }
+  if (error) log('הכניסה נכשלה:', errInfo(error)); else log('הכניסה הצליחה');
+  if (error) { err.textContent = /invalid login/i.test(error.message) ? 'האימייל או הסיסמה שגויים' : (error.message || 'שגיאה לא ידועה') + (error.status ? ` (${error.status})` : ''); btn.disabled = false; btn.textContent = 'כניסה'; }
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { if (!$('#modal').hidden) closeModal(); else if (!$('#tf').hidden) $('#tf').hidden = true; }
@@ -1438,16 +1499,21 @@ setInterval(() => { if (S.queue.length) flush(); }, 20000);
 
 /* ---------- boot ---------- */
 (function boot() {
+  log('גרסה', APP_VERSION, '| דפדפן:', navigator.userAgent);
+  log('כתובת בקובץ:', CONFIG.SUPABASE_URL, SB_URL !== CONFIG.SUPABASE_URL ? '=> תוקנה ל ' + SB_URL : '(תקינה)');
+  log('מפתח:', SB_KEY.slice(0, 18) + '…', 'אורך', SB_KEY.length, SB_KEY.startsWith('sb_publishable_') ? '(publishable, תקין)' : SB_KEY.startsWith('sb_secret_') ? '(סודי! אסור בדפדפן)' : SB_KEY.startsWith('eyJ') ? '(מפתח anon ישן)' : '(סוג לא מוכר)');
+  log('ספריית Supabase נטענה:', !!window.supabase, '| מחובר לרשת:', navigator.onLine);
   if (!configured || !window.supabase) {
     render();
     if (configured && !window.supabase) $('#app').innerHTML = '<div class="empty" style="padding-top:30vh">טעינת הספרייה נכשלה. בדוק חיבור לאינטרנט ורענן.</div>';
     return;
   }
-  sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY, {
+  sb = window.supabase.createClient(SB_URL, SB_KEY, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: 'koach-auth' }
   });
   sb.auth.onAuthStateChange((event, session) => {
     const u = session?.user || null;
+    log('אירוע התחברות:', event, u ? 'משתמש ' + u.email : 'אין משתמש');
     if (u && (!S.user || S.user.id !== u.id)) {
       S.user = u; loadCache(); render();
       setTimeout(() => { flush(); fetchAll(); }, 0);
