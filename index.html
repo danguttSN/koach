@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F2F2F7">
+<meta name="theme-color" content="#3D8BFF">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="כוח">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="noindex, nofollow">
@@ -302,12 +302,272 @@ details.more[open] summary > svg:last-child{transform:rotate(180deg)}
 .day-badge b{font-size:23px;font-family:var(--round)}
 .day-badge small{font-size:13px;font-weight:600;opacity:.92;margin-top:3px}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* ===================== 2.1: שפת עיצוב 2027 ===================== */
+:root{
+  --r-card:26px; --nav-h:64px; --tb-h:72px;
+  --nav-bottom:max(calc(var(--sb) - 12px), 10px);
+  --above-nav:calc(var(--nav-bottom) + var(--nav-h) + 12px);
+  --glass:rgba(250,250,252,.66); --glass-edge:rgba(255,255,255,.85);
+  --float:0 14px 34px rgba(17,24,39,.14),0 2px 8px rgba(17,24,39,.06);
+  --lift:0 1px 2px rgba(17,24,39,.04),0 8px 24px rgba(17,24,39,.045);
+  --accent-grad:linear-gradient(180deg,#2A93FF 0%,#0A72F2 100%);
+}
+html{min-height:100%}
+#app{padding-bottom:calc(var(--above-nav) + 150px)}
+.large h1{font-size:40px;letter-spacing:-.6px}
+.large h1.sm{font-size:31px;letter-spacing:-.4px}
+.lsub{letter-spacing:.1px}
+.h2{letter-spacing:-.4px}
+
+/* משטחים: צל עדין במקום שטוח לגמרי */
+.card,.list,.week,.mcard,.prev,.photobox{box-shadow:var(--lift)}
+.card,.list{outline:.5px solid rgba(17,24,39,.035);outline-offset:-.5px}
+
+/* כפתורים */
+.btn-primary{background:var(--accent-grad);box-shadow:0 8px 20px rgba(10,114,242,.26),inset 0 1px 0 rgba(255,255,255,.28)}
+.btn-tinted{background:rgba(0,122,255,.11)}
+.btn:active{transform:scale(.975)}
+
+/* פס ניווט עליון: זכוכית עם קצה רך */
+body.scrolled .navbar{background:rgba(242,242,247,.74);box-shadow:none}
+.navbar::after{content:"";position:absolute;inset:auto 0 -16px 0;height:16px;pointer-events:none;background:linear-gradient(rgba(242,242,247,.74),rgba(242,242,247,0));opacity:0;transition:opacity .2s}
+body.scrolled .navbar::after{opacity:1}
+
+/* סרגל לשוניות צף */
+.nav{left:max(14px,calc(50% - 290px));right:max(14px,calc(50% - 290px));bottom:var(--nav-bottom);height:var(--nav-h);padding:6px;gap:2px;border-radius:999px;
+  background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);
+  box-shadow:var(--float),inset 0 0 0 .5px var(--glass-edge),inset 0 1px 0 rgba(255,255,255,.95)}
+.nav a{border-radius:999px;font-size:11px;gap:1px;transition:background-color .2s,color .2s}
+.nav a svg{width:26px;height:26px}
+.nav a.on{background:rgba(0,122,255,.12)}
+
+/* טיימר מנוחה צף */
+.tb{bottom:var(--above-nav);height:var(--tb-h);width:min(580px,calc(100% - 28px));border-radius:999px;padding:0 10px 0 8px;
+  background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);
+  box-shadow:var(--float),inset 0 0 0 .5px var(--glass-edge),inset 0 1px 0 rgba(255,255,255,.95)}
+.tb-main{min-height:60px}
+.tb .ring{width:50px;height:50px}
+.tb-time{font-size:30px}
+.tb-btn{min-width:52px;height:52px;background:rgba(118,118,128,.14)}
+.tb.done{background:rgba(48,190,84,.92);animation:pulse 1s ease-in-out 3}
+.tb.done .tb-time{color:#fff}
+.tf-btns button{box-shadow:var(--lift)}
+@keyframes pulse{50%{transform:translateX(-50%) scale(1.03)}}
+#flash{position:fixed;inset:0;z-index:65;pointer-events:none;opacity:0;
+  background:radial-gradient(120% 80% at 50% 100%,rgba(52,199,89,.55),rgba(52,199,89,.12) 60%,rgba(52,199,89,0) 85%)}
+#flash.on{animation:flash 1.4s ease-out 2}
+@keyframes flash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
+
+/* סטטוס סנכרון */
+.sync{top:calc(var(--st) + 74px);bottom:auto;display:inline-flex;align-items:center;gap:7px;padding:7px 14px;font-size:14px;
+  background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:var(--float),inset 0 0 0 .5px var(--glass-edge);color:var(--text)}
+.sync::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.sync.syncing::before{animation:blink 1s ease-in-out infinite}
+.sync.offline::before{background:#FF9500}
+.sync.failed::before{background:var(--danger)}
+.sync.ok::before{background:var(--okfill)}
+body.has-timer .sync{bottom:auto}
+@keyframes blink{50%{opacity:.25}}
+.syncbox{display:flex;flex-direction:column;gap:4px}
+.syncbox .st{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:600}
+.syncbox .st i{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--okfill)}
+.syncbox .st i.wait{background:#FF9500}
+.syncbox .st i.bad{background:var(--danger)}
+
+/* גיליון וטוסט */
+.sheet{border-radius:34px 34px 0 0;box-shadow:0 -10px 40px rgba(17,24,39,.12)}
+.toast{background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);box-shadow:var(--float),inset 0 0 0 .5px var(--glass-edge)}
+
+/* רישום לאגודל אחד */
+.sinput[readonly]{cursor:pointer;-webkit-user-select:none;user-select:none;caret-color:transparent}
+.sinput[readonly]:focus{background:transparent}
+.sinput:not([readonly]){background:var(--accent-tint)}
+.sbtn{background:rgba(118,118,128,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+.qchips{display:flex;gap:8px;justify-content:center;flex-wrap:nowrap;margin-top:6px}
+.qchip{flex:1;max-width:66px;min-width:0;height:50px;padding:0;border-radius:999px;border:0;background:rgba(118,118,128,.12);color:var(--text);font:700 20px var(--round);transition:background-color .15s,color .15s,transform .1s}
+.qchip:active{transform:scale(.94)}
+.qchip.on{background:var(--accent);color:#fff}
+.target{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:-6px;font-size:16px;font-weight:600;color:var(--muted)}
+.target b{color:var(--text);font-family:var(--round)}
+.dock{position:sticky;bottom:var(--above-nav);z-index:11;margin-top:14px}
+body.has-timer .dock{bottom:calc(var(--above-nav) + var(--tb-h) + 10px)}
+.dock .btn{box-shadow:0 12px 28px rgba(10,114,242,.34),inset 0 1px 0 rgba(255,255,255,.3)}
+.setup{display:flex;align-items:center;gap:10px;margin:-6px 2px 14px;padding:12px 16px;border-radius:18px;background:var(--accent-tint);color:var(--accent-text);font-size:18px;font-weight:600}
+.setup svg{flex-shrink:0}
+.rest-val{min-width:96px;text-align:center;font-size:19px;font-weight:700}
+.rest-val small{display:block;font-size:13px;color:var(--muted);font-weight:600}
+
+/* כשהמקלדת פתוחה: מסתירים את מה שצף בתחתית */
+body.kb .nav,body.kb .tb,body.kb .sync,body.kb .dock{visibility:hidden}
+
+@media (prefers-reduced-motion: reduce){#flash.on{animation:none;opacity:.6}.tb.done{animation:none}}
+
+/* ===================== 2.2: עיצוב בהשראת Streaks ===================== */
+html{--g1:#3A86FF;--g2:#1F5BE0;--g3:#1838A8;--ink:#1F5BE0;background:var(--g3)}
+html[data-th="A"]{--g1:#3D8BFF;--g2:#2160E6;--g3:#1937A6;--ink:#1F57D6}
+html[data-th="B"]{--g1:#FF7A59;--g2:#F2465A;--g3:#C2245A;--ink:#DD3352}
+html[data-th="C"]{--g1:#22C47A;--g2:#0FA08C;--g3:#0A7477;--ink:#0B8270}
+html[data-th="X"]{--g1:#8A6CFF;--g2:#A84BF0;--g3:#C73BC9;--ink:#8E3FE0}
+html[data-th="H"]{--g1:#7B6BFF;--g2:#5A3DE0;--g3:#3B2399;--ink:#5236D8}
+html[data-th="M"]{--g1:#FF5FA2;--g2:#D23CB8;--g3:#8C2DB5;--ink:#B8329E}
+html[data-th="S"]{--g1:#71819F;--g2:#4E5C7C;--g3:#313C57;--ink:#3E4B69}
+html[data-th="R"]{--g1:#FFAC4A;--g2:#FF7E33;--g3:#E5531F;--ink:#DD5A1C}
+body{background:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(172deg,var(--g1) 0%,var(--g2) 52%,var(--g3) 100%)}
+
+/* צבעים בתוך האפליקציה: לבן על צבע */
+#app{color:#fff;--text:#fff;--muted:rgba(255,255,255,.8);--faint:rgba(255,255,255,.55);
+  --surface:rgba(255,255,255,.15);--fill:rgba(255,255,255,.16);--fill2:rgba(255,255,255,.28);--sep:rgba(255,255,255,.2);
+  --accent:#fff;--accent-text:#fff;--accent-tint:rgba(255,255,255,.2);--on-accent:var(--ink);
+  --ok:#fff;--ok-tint:rgba(255,255,255,.24);--warn:#fff;--warn-tint:rgba(255,255,255,.22);--danger:#FFE1E4;--danger-tint:rgba(255,255,255,.16)}
+#app .card,#app .list,#app .week,#app .mcard,#app .prev,#app .photobox{box-shadow:none;outline:none}
+#app .card,#app .list,#app .prev,#app .week,#app .mcard{background:rgba(255,255,255,.14)}
+#app .chev{color:rgba(255,255,255,.6)}
+#app .lrow:active{background:rgba(255,255,255,.12)}
+
+/* טיפוגרפיה: כבדה וצפופה */
+.large h1{font-size:42px;font-weight:900;letter-spacing:-.8px}
+.large h1.sm{font-size:32px;font-weight:900;letter-spacing:-.5px}
+.lsub{color:rgba(255,255,255,.82);font-weight:700}
+.h2,.h3,.group-head,.section-title{font-weight:800}
+
+/* פס עליון */
+body.scrolled .navbar{background:rgba(0,0,0,.14);background:color-mix(in srgb,var(--g1) 86%,transparent)}
+.navbar::after{background:linear-gradient(rgba(0,0,0,.14),transparent);background:linear-gradient(color-mix(in srgb,var(--g1) 86%,transparent),transparent)}
+.nb-back,.nb-icon{color:#fff;font-weight:600}
+
+/* כפתורים */
+#app .btn-primary{background:#fff;color:var(--ink);box-shadow:0 10px 26px rgba(0,0,0,.18)}
+#app .btn-tinted,#app .btn-ghost,#app .card .btn-ghost,#app .btn-gray{background:rgba(255,255,255,.2);color:#fff}
+#app .btn-danger{background:rgba(255,255,255,.14);color:#FFE1E4}
+#app .link{color:#fff;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.45)}
+#app .section-title a{color:#fff}
+
+/* פריטים קטנים */
+#app .dot{box-shadow:0 0 0 2px rgba(255,255,255,.9)}
+#app .bar{background:rgba(255,255,255,.24)}
+#app .bar>i{background:#fff!important}
+#app .done-ck{background:#fff;color:var(--ink)}
+#app .cnt{background:#fff;color:var(--ink)}
+#app .pill.neutral{background:rgba(255,255,255,.2);color:#fff}
+#app .note{background:rgba(255,255,255,.94);color:#4A3A00}
+#app .setup{background:rgba(255,255,255,.2);color:#fff}
+#app .ps{background:rgba(255,255,255,.2)}
+#app .chip{background:rgba(255,255,255,.18);color:#fff}
+#app .chip.on{background:#fff;color:var(--ink)}
+#app .seg{background:rgba(255,255,255,.18)}
+#app .seg button.on{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+#app .mini button,#app .sbtn{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
+#app .qchip{background:rgba(255,255,255,.18);color:#fff}
+#app .qchip.on{background:#fff;color:var(--ink)}
+#app .sinput:not([readonly]){background:rgba(255,255,255,.2)}
+#app .input{background:rgba(255,255,255,.18);color:#fff}
+#app .input::placeholder{color:rgba(255,255,255,.55)}
+#app .input:focus{box-shadow:0 0 0 2.5px #fff}
+#app select.input{color:#fff}
+#app select.input option{color:#1C1C1E}
+#app .toggle span{background:rgba(255,255,255,.25)}
+#app .toggle input:checked + span{background:#fff}
+#app .toggle input:checked + span::after{background:var(--ink)}
+#app .stat{background:rgba(255,255,255,.16)}
+#app .thumb{background:rgba(255,255,255,.9);color:var(--ink)}
+#app .ic{box-shadow:0 0 0 2px rgba(255,255,255,.85)}
+#app .err{color:#FFE1E4;font-weight:600}
+#app .empty{color:rgba(255,255,255,.85)}
+#app .gh-v{color:#fff}
+#app .day-badge{box-shadow:0 0 0 2px rgba(255,255,255,.85)}
+
+/* שבוע */
+#app .wd{color:rgba(255,255,255,.75)}
+#app .wd .c{color:rgba(255,255,255,.55)}
+#app .wd.plan .c{background:rgba(255,255,255,.18);color:#fff}
+#app .wd.done .c{background:#fff;color:var(--c,var(--ink))}
+#app .wd.today{color:#fff}
+#app .wd.today .c{box-shadow:inset 0 0 0 2.5px #fff;color:#fff}
+#app .wd.today.done .c{box-shadow:0 0 0 3px rgba(255,255,255,.45);color:var(--c,var(--ink))}
+#app .wd .rd.on,#app .cd .rd.on{background:#fff}
+
+/* לוח חודש */
+#app .cd .cn{color:#fff}
+#app .cd.fut .cn{color:rgba(255,255,255,.4)}
+#app .cd.w .cn{background:#fff;color:var(--c)}
+#app .cd.today .cn{box-shadow:inset 0 0 0 2.5px #fff}
+#app .cd.today.w .cn{box-shadow:0 0 0 3px rgba(255,255,255,.45)}
+#app .legend-row{color:rgba(255,255,255,.85)}
+#app .legend-row i{box-shadow:0 0 0 2px #fff}
+#app .legend-row i.rdot{background:#fff;box-shadow:none}
+.ms .v{font-size:46px;font-weight:900;letter-spacing:-1px}
+.ms .k{color:rgba(255,255,255,.82);font-weight:700}
+
+/* אריחי עיגול בסגנון Streaks */
+.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px;margin:8px 0 6px}
+.tl{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:#fff;background:none;border:0;padding:0;font:inherit;text-align:center;min-width:0;cursor:pointer}
+.tl-c{position:relative;width:min(40vw,150px);aspect-ratio:1;display:block;transition:transform .15s cubic-bezier(.2,.8,.2,1)}
+.tl:active .tl-c{transform:scale(.94)}
+.tl-r{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.tl-r .tr{fill:none;stroke:rgba(255,255,255,.3);stroke-width:4.5}
+.tl-r .tp{fill:none;stroke:#fff;stroke-width:4.5;stroke-linecap:round;transition:stroke-dashoffset .5s cubic-bezier(.2,.8,.2,1)}
+.tl-in{position:absolute;inset:11%;border-radius:50%;background:rgba(255,255,255,.17);display:grid;place-items:center;overflow:hidden;color:#fff}
+.tl-in img{width:100%;height:100%;object-fit:cover;display:block}
+.tl-in.ph{background:#fff;color:var(--ink)}
+.tl.done .tl-in{background:#fff;color:var(--ink)}
+.tl.done .tl-r .tr{stroke:#fff}
+.tl.go .tl-in{background:rgba(255,255,255,.24)}
+.tl-n{font:900 46px/1 var(--round);letter-spacing:-1px;display:inline-flex;align-items:baseline;direction:ltr}
+.tl-n small{font-size:20px;font-weight:800;opacity:.7;margin-inline-start:2px}
+.tl-b{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);background:#fff;color:var(--ink);font:800 14px/1 var(--round);padding:5px 10px;border-radius:999px;box-shadow:0 3px 10px rgba(0,0,0,.15);direction:ltr;white-space:nowrap}
+.tl-k{position:absolute;bottom:4%;left:4%;width:30%;aspect-ratio:1;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.tl-k svg{width:55%;height:55%}
+.tl-l{display:flex;align-items:center;justify-content:center;gap:7px;font-size:17px;font-weight:800;line-height:1.2;letter-spacing:-.2px;max-width:100%}
+.tl-l .dot{width:10px;height:10px}
+.tl-s{font-size:14px;font-weight:600;color:rgba(255,255,255,.8);margin-top:-3px;max-width:100%}
+.tgrid + .actions{margin-top:28px}
+.tpl-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-4px 4px 10px;font-size:17px;font-weight:700;color:rgba(255,255,255,.9)}
+.tpl-line span:first-child{flex:1;min-width:0}
+.tpl-line .link{min-height:36px;padding:4px 2px}
+.ghead2{display:flex;align-items:center;gap:10px;margin:30px 4px 6px;font-size:22px;font-weight:900}
+.ghead2 .gh-v{margin-inline-start:auto;font:800 20px var(--round)}
+.ghead2 + .bar{margin:0 4px 14px;height:6px}
+
+/* גרף חודשי */
+.chart{padding:18px 16px 14px}
+.chart h3{margin:0 0 12px;font-size:16px;font-weight:800;color:rgba(255,255,255,.85)}
+.chart svg{display:block;width:100%;height:120px}
+.chart .ax{display:flex;justify-content:space-between;margin-top:8px;font:700 13px var(--round);color:rgba(255,255,255,.7)}
+
+/* סרגל לשוניות, טיימר וטיימר מלא על רקע צבעוני */
+#app .nav{background:rgba(255,255,255,.16);background:color-mix(in srgb,var(--g3) 52%,rgba(255,255,255,.12));box-shadow:0 12px 30px rgba(0,0,0,.2),inset 0 0 0 .5px rgba(255,255,255,.35)}
+#app .nav a{color:rgba(255,255,255,.8)}
+#app .nav a.on{background:#fff;color:var(--ink)}
+.tb{background:rgba(0,0,0,.25);background:color-mix(in srgb,var(--g3) 62%,rgba(255,255,255,.1));color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.22),inset 0 0 0 .5px rgba(255,255,255,.35)}
+.tb .ring{color:#fff}
+.tb-lbl{color:rgba(255,255,255,.82)}
+.tb-btn{background:rgba(255,255,255,.2);color:#fff}
+.tb.done{background:#fff;color:var(--ink)}
+.tb.done .ring,.tb.done .tb-lbl,.tb.done .tb-time{color:var(--ink)}
+.tb.done .tb-btn{background:rgba(0,0,0,.06);color:var(--ink)}
+.tf{background:linear-gradient(172deg,var(--g1),var(--g2) 55%,var(--g3));color:#fff}
+.tf-top,.tf-lbl{color:rgba(255,255,255,.88)}
+.tf-top .iconbtn{color:#fff;background:rgba(255,255,255,.18)}
+.tf-ring,.tf.done .tf-ring{color:#fff}
+.tf.done .tf-time{color:#fff}
+.tf-btns button{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
+.tf .btn-primary{background:#fff;color:var(--ink);box-shadow:0 10px 26px rgba(0,0,0,.2)}
+#flash{background:radial-gradient(120% 80% at 50% 100%,rgba(255,255,255,.6),rgba(255,255,255,.15) 60%,rgba(255,255,255,0) 85%)}
+#app .dock .btn{box-shadow:0 14px 30px rgba(0,0,0,.24)}
+.sheet .btn-primary{background:var(--ink);box-shadow:none}
+.login .app-icon{box-shadow:0 14px 34px rgba(0,0,0,.25)}
+.login .app-icon{align-self:center;margin-inline:auto}
+.login .brand,.login > p.sub{text-align:center;align-self:center}
 </style>
 </head>
 <body>
 <div id="app"><div class="empty" style="padding-top:40vh">טוען</div></div>
 
 <div id="sync" class="sync" hidden role="status"></div>
+<div id="flash" aria-hidden="true"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div id="modal" class="modal" hidden></div>
 
@@ -353,7 +613,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '2.0';
+const APP_VERSION = '2.2';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -376,7 +636,7 @@ function cleanUrl(u) {
 const SB_URL = cleanUrl(CONFIG.SUPABASE_URL);
 const SB_KEY = String(CONFIG.SUPABASE_KEY || '').trim();
 const errInfo = e => e ? { name: e.name, status: e.status, code: e.code, message: e.message } : null;
-const CK = 'koach-cache-v1', QK = 'koach-queue-v1', TK = 'koach-timer-v1';
+const CK = 'koach-cache-v1', QK = 'koach-queue-v1', TK = 'koach-timer-v1', FK = 'koach-failed-v1', LK = 'koach-lastsync-v1';
 
 const AREAS = [
   { k:'back',      n:'גב',        c:'var(--a-back)' },
@@ -396,7 +656,8 @@ const DEFAULT_SETTINGS = {
   rest: 120,
   minSets: { back:9, biceps:9, chest:9, triceps:9, shoulders:9, legs:12, abs:9 },
   split: { '0':'A', '1':'B', '2':'A', '3':'B', '4':'C', '5':null, '6':null },
-  wakeLock: true, sound: true, theme: 'dark'
+  wakeLock: true, sound: true, theme: 'dark',
+  restByArea: {}, machineRest: {}, machineSetup: {}
 };
 const CONFLICT = { sets:'id', machines:'id', rides:'id', workout_days:'user_id,workout_date', settings:'user_id' };
 
@@ -418,6 +679,7 @@ const I = {
   timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4M10 2h4"/>',
   down:'<path d="M6 9l6 6 6-6"/>'
 };
+const PLAY = s => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.6v12.8a1 1 0 0 0 1.53.85l10.1-6.4a1 1 0 0 0 0-1.7L9.53 4.75A1 1 0 0 0 8 5.6z"/></svg>`;
 function svg(p, s = 24, w = 2) {
   return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 }
@@ -454,7 +716,7 @@ const S = {
   machines: [], sets: [], days: {}, rides: [], settings: mergeSettings({}),
   maxByMachine: {}, photoUrls: {}, rangeStart: addDays(today(), -120),
   daySets: {}, dayLoading: {}, monthLoaded: {}, monthLoading: {},
-  queue: [], draft: {}, edit: null, mfilter: 'all', showArchived: false,
+  queue: [], failed: [], lastSync: 0, persisted: null, syncedFlash: 0, draft: {}, edit: null, mfilter: 'all', showArchived: false,
   timer: null, route: { name: 'today' }, prevHash: '', curHash: location.hash
 };
 
@@ -462,7 +724,8 @@ function mergeSettings(d) {
   d = d || {};
   return { ...DEFAULT_SETTINGS, ...d,
     minSets: { ...DEFAULT_SETTINGS.minSets, ...(d.minSets || {}) },
-    split: { ...DEFAULT_SETTINGS.split, ...(d.split || {}) } };
+    split: { ...DEFAULT_SETTINGS.split, ...(d.split || {}) },
+    restByArea: { ...(d.restByArea || {}) }, machineRest: { ...(d.machineRest || {}) }, machineSetup: { ...(d.machineSetup || {}) } };
 }
 const normSet = s => ({ ...s, weight: Number(s.weight) || 0, reps: Number(s.reps) || 0 });
 const normMachine = m => ({ ...m, min_weight: Number(m.min_weight) || 0, weight_step: Number(m.weight_step) || 5, default_sets: Number(m.default_sets) || 3 });
@@ -513,6 +776,9 @@ function lastDateForArea(a, before) {
   for (const s of S.sets) { if (s.workout_date >= before) continue; const m = machineById(s.machine_id); if (m && m.area === a && (!best || s.workout_date > best)) best = s.workout_date; }
   return best;
 }
+const areaRest = a => S.settings.restByArea?.[a] || S.settings.rest;
+const restFor = m => (m && (S.settings.machineRest?.[m.id] || areaRest(m.area))) || S.settings.rest;
+const setupOf = m => (m && S.settings.machineSetup?.[m.id]) || '';
 function photoUrl(m) { return m && m.photo_path ? S.photoUrls[m.photo_path]?.url || null : null; }
 function photoHtml(m, size = 22) {
   const u = photoUrl(m);
@@ -539,15 +805,17 @@ function loadCache() {
         rangeStart: c.rangeStart || S.rangeStart });
       S.loaded = true;
     }
+    S.failed = JSON.parse(localStorage.getItem(FK) || '[]').filter(o => o.uid === S.user?.id);
+    S.lastSync = Number(localStorage.getItem(LK)) || 0;
     const q = JSON.parse(localStorage.getItem(QK) || '[]');
     S.queue = q.filter(o => o.uid === S.user?.id);
     S.queue.forEach(applyLocal);
     const t = JSON.parse(localStorage.getItem(TK) || 'null');
-    if (t && t.end > Date.now() - 6000) S.timer = t;
+    if (t && t.end > Date.now() - 10 * 60000) S.timer = t;
   } catch (e) {}
   applyTheme();
 }
-function saveQueue() { try { localStorage.setItem(QK, JSON.stringify(S.queue)); } catch (e) {} }
+function saveQueue() { try { localStorage.setItem(QK, JSON.stringify(S.queue)); localStorage.setItem(FK, JSON.stringify(S.failed)); } catch (e) {} }
 
 function applyLocal(op) {
   const t = op.table;
@@ -590,19 +858,39 @@ async function flush() {
       if (res.error) {
         if (!res.error.code) break;           /* בעיית רשת: ננסה שוב אחר כך */
         log('שמירה נכשלה:', op.table, errInfo(res.error));
-        toast('השמירה בשרת נכשלה: ' + res.error.message, 5000);
+        toast('השמירה בשרת נכשלה. הפעולה נשמרה בטלפון, אפשר לנסות שוב בהגדרות', 5000);
+        S.failed.push({ ...op, err: res.error.message, at: Date.now() });
       }
       S.queue.shift(); saveQueue();
+      if (!S.queue.length) { S.lastSync = Date.now(); S.syncedFlash = Date.now(); try { localStorage.setItem(LK, String(S.lastSync)); } catch (e) {} }
     }
   } finally { flushing = false; updateSync(); }
 }
+let syncHideT = null;
 function updateSync() {
   const el = $('#sync'); if (!el) return;
-  const n = S.queue.length;
+  const n = S.queue.length, f = S.failed.length;
+  const show = (cls, txt) => { el.hidden = false; el.className = 'sync ' + cls; el.textContent = txt; };
+  clearTimeout(syncHideT);
   if (!S.user) { el.hidden = true; return; }
-  if (!navigator.onLine) { el.hidden = false; el.textContent = n ? `לא מחובר, ${n} ממתינים` : 'לא מחובר'; }
-  else if (n) { el.hidden = false; el.textContent = `שומר ${n}`; }
+  if (!navigator.onLine) show('offline', n ? `לא מחובר, ${n === 1 ? 'פעולה אחת ממתינה' : n + ' ממתינות'}` : 'לא מחובר');
+  else if (n) show('syncing', n === 1 ? 'שומר פעולה אחת' : `שומר ${n} פעולות`);
+  else if (f) show('failed', f === 1 ? 'פעולה אחת לא נשמרה' : `${f} פעולות לא נשמרו`);
+  else if (Date.now() - S.syncedFlash < 1800) { show('ok', 'נשמר'); syncHideT = setTimeout(updateSync, 1900); }
   else el.hidden = true;
+  if (S.route?.name === 'settings') { const b = $('#syncbox'); if (b) b.outerHTML = syncBox(); }
+}
+function syncBox() {
+  const n = S.queue.length, f = S.failed.length;
+  const last = S.lastSync ? new Date(S.lastSync) : null;
+  const when = last ? (ymd(last) === today() ? `היום ב ${pad(last.getHours())}:${pad(last.getMinutes())}` : `${last.getDate()}.${last.getMonth() + 1} ב ${pad(last.getHours())}:${pad(last.getMinutes())}`) : 'עוד לא';
+  const st = !navigator.onLine ? ['wait', n ? `לא מחובר, ${n} ממתינות לשליחה` : 'לא מחובר לאינטרנט']
+    : n ? ['wait', `${n} פעולות בדרך לשרת`] : f ? ['bad', `${f} פעולות נדחו על ידי השרת`] : ['', 'כל הנתונים שמורים בשרת'];
+  return `<div class="list" id="syncbox"><div class="srow2"><div class="grow syncbox"><span class="st"><i class="${st[0]}"></i>${st[1]}</span>
+    <span class="sub sm">סנכרון אחרון: ${when}${S.persisted === true ? ', אחסון קבוע בטלפון פעיל' : ''}</span>
+    ${f ? `<span class="sub sm">${esc(S.failed[S.failed.length - 1].err || '')}</span>` : ''}</div></div>
+    ${n ? `<button class="lrow add-row" data-a="syncNow">${svg(I.check, 22, 2.4)}<span>שלח עכשיו</span></button>` : ''}
+    ${f ? `<button class="lrow add-row" data-a="retryFailed">${svg(I.history, 22, 2.2)}<span>נסה שוב את מה שנכשל</span></button>` : ''}</div>`;
 }
 
 /* ---------- server fetch ---------- */
@@ -707,9 +995,14 @@ function legend(areas, counts, mins) {
 function stepper(id, label, val, st, opts = {}) {
   return `<div class="stepper"><label class="slabel" for="${id}">${label}</label><div class="srow">
     <button type="button" class="sbtn" data-a="step" data-t="${id}" data-st="${st}" data-d="1" aria-label="הוסף ל${label}">${svg(I.plus, 28, 2.6)}</button>
-    <input id="${id}" class="sinput num" dir="ltr" inputmode="${opts.int ? 'numeric' : 'decimal'}" value="${fmtW(val)}" ${opts.draft ? `data-draft="${opts.draft}"` : ''} autocomplete="off" enterkeyhint="done">
+    <input id="${id}" class="sinput num" dir="ltr" inputmode="${opts.int ? 'numeric' : 'decimal'}" value="${fmtW(val)}" ${opts.draft ? `data-draft="${opts.draft}"` : ''} autocomplete="off" enterkeyhint="done" readonly data-tapedit="1" aria-description="הקשה על המספר פותחת הקלדה">
     <button type="button" class="sbtn" data-a="step" data-t="${id}" data-st="${st}" data-d="-1" aria-label="הפחת מ${label}">${svg(I.minus, 28, 2.6)}</button>
-  </div></div>`;
+  </div>${opts.chips ? `<div class="qchips" data-for="${id}">${opts.chips.map(v => `<button type="button" class="qchip num${Number(val) === v ? ' on' : ''}" data-a="qset" data-t="${id}" data-v="${v}" aria-label="${v} ${label}">${v}</button>`).join('')}</div>` : ''}</div>`;
+}
+function syncChips(inp) {
+  const box = document.querySelector(`.qchips[data-for="${inp.id}"]`); if (!box) return;
+  const v = num(inp.value);
+  box.querySelectorAll('.qchip').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === v));
 }
 function areaProgress(a, c, min) {
   const pct = min ? Math.min(100, Math.round(c / min * 100)) : 0;
@@ -724,6 +1017,49 @@ function rideSummary(r) {
   if (r.calories != null) parts.push(`${ltr(r.calories)} קלוריות`);
   if (r.avg_watts != null) parts.push(`${ltr(r.avg_watts)} וואט${r.watts_estimated ? ' משוער' : ''}`);
   return parts.join(', ');
+}
+
+/* ---------- אריחי עיגול ---------- */
+function tring(frac) {
+  const c = 2 * Math.PI * 46, f = Math.max(0, Math.min(1, frac || 0));
+  return `<svg class="tl-r" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" class="tr"/>${f > 0 ? `<circle cx="50" cy="50" r="46" class="tp" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c * (1 - f)).toFixed(1)}" transform="rotate(-90 50 50)"/>` : ''}</svg>`;
+}
+function tile(o) {
+  const tag = o.tag || 'a';
+  return `<${tag} class="tl${o.done ? ' done' : ''}${o.cls ? ' ' + o.cls : ''}" ${o.attrs || ''}>
+    <span class="tl-c">${tring(o.done ? 1 : o.frac)}<span class="tl-in${o.ph ? ' ph' : ''}">${o.inner}</span>${o.badge ? `<span class="tl-b">${o.badge}</span>` : ''}${o.done && o.check ? `<span class="tl-k">${svg(I.check, 20, 3.4)}</span>` : ''}</span>
+    <span class="tl-l">${o.dot ? `<span class="dot" style="background:${o.dot}"></span>` : ''}<span>${o.label}</span></span>${o.sub ? `<span class="tl-s">${o.sub}</span>` : ''}</${tag}>`;
+}
+function rideShort(r) {
+  if (r.distance_km != null) return `${ltr(fmtW(r.distance_km))} ק״מ, ${ltr(Math.round(r.duration_sec / 60))} דקות`;
+  return `${ltr(Math.round(r.duration_sec / 60))} דקות`;
+}
+function machineSub(m, t) {
+  const ms = setsOn(t).filter(s => s.machine_id === m.id), n = ms.length, prev = prevSession(m.id, t);
+  if (n) return `${setsTxt(n)}, עד ${ltr(fmtW(Math.max(...ms.map(s => s.weight))))} ק״ג`;
+  if (prev) return `קודם ${ltr(setStr(prev.sets[0]))}`;
+  return m.min_weight > 0 ? `פתיחה ${ltr(fmtW(m.min_weight))} ק״ג` : 'עוד לא נרשם';
+}
+function machineTile(m, t) {
+  const n = setsOn(t).filter(s => s.machine_id === m.id).length, done = n >= m.default_sets;
+  return tile({ attrs: `href="#/m/${m.id}" aria-label="${esc(m.name)}, ${n} מתוך ${m.default_sets} סטים"`, inner: photoHtml(m, 40), ph: true,
+    label: esc(m.name), sub: machineSub(m, t), frac: n / m.default_sets, done, check: true, badge: n && !done ? `${n}/${m.default_sets}` : '' });
+}
+const AREA_TPL = { back: 'A', biceps: 'A', chest: 'B', triceps: 'B', shoulders: 'B', legs: 'C' };
+function themeKey(r) {
+  if (!S.user) return 'A';
+  if (r.name === 'history') return 'H';
+  if (r.name === 'machines' || r.name === 'edit') return 'M';
+  if (r.name === 'settings') return 'S';
+  if (r.name === 'ride') return 'R';
+  if (r.name === 'm') { const m = machineById(r.a); if (m) return AREA_TPL[m.area] || templateFor(today()) || 'A'; }
+  return templateFor(today()) || 'X';
+}
+const TH_COLOR = { A: '#3D8BFF', B: '#FF7A59', C: '#22C47A', X: '#8A6CFF', H: '#7B6BFF', M: '#FF5FA2', S: '#71819F', R: '#FFAC4A' };
+function setTheme(k) {
+  if (document.documentElement.dataset.th === k) return;
+  document.documentElement.dataset.th = k;
+  const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', TH_COLOR[k] || '#3D8BFF');
 }
 
 /* ---------- views ---------- */
@@ -798,25 +1134,28 @@ function vToday() {
       <div class="sub">צלם כל מכשיר, תן לו שם, בחר אזור בגוף וקבע משקל פתיחה. אחרי זה האימון כבר מסודר.</div>
       <a class="btn btn-primary btn-block" href="#/edit/new">הוסף מכשיר ראשון</a></section>`;
   }
+  const tiles = [];
   if (tpl) {
-    const going = total > 0 || (day.started_at && !day.finished_at), areas = TEMPLATES[tpl];
-    h += `<section class="card today-card" aria-label="אימון כוח">
-      <div class="tc-head"><div class="grow"><div class="lsub">אימון כוח</div><div class="h2">אימון ${TPL_NAME[tpl]}</div></div>
-      ${day.finished_at ? `<span class="pill ok">${svg(I.check, 16, 3)}הסתיים</span>` : ''}</div>
-      <div class="tc-body">${rings(areas, counts, S.settings.minSets, 142)}${legend(areas, counts, S.settings.minSets)}</div>
-      <button class="btn btn-primary btn-big btn-block" data-a="start">${going ? 'המשך אימון' : 'התחל אימון'}</button>
-      <button class="link center" style="margin-top:-10px" data-a="switchTpl">החלף אימון</button></section>`;
+    const areas = TEMPLATES[tpl], mins = S.settings.minSets;
+    const need = areas.reduce((a, k) => a + mins[k], 0), have = areas.reduce((a, k) => a + Math.min(counts[k], mins[k]), 0);
+    const going = total > 0 || (day.started_at && !day.finished_at);
+    h += `<div class="tpl-line"><span>אימון ${TPL_NAME[tpl]}: ${areas.map(areaName).join(', ')}</span>${day.finished_at ? `<span class="pill ok">${svg(I.check, 16, 3)}הסתיים</span>` : ''}<button class="link" data-a="switchTpl">החלף אימון</button></div>`;
+    tiles.push(tile({ tag: 'button', attrs: 'type="button" data-a="start"', cls: 'go', inner: PLAY(58),
+      label: going ? 'המשך אימון' : `התחל אימון ${TPL_NAME[tpl]}`, sub: `${have} מתוך ${need} סטים`, frac: need ? have / need : 0, done: have >= need && need > 0 }));
+    areas.forEach(a => {
+      const c = counts[a], mn = mins[a];
+      tiles.push(tile({ attrs: `href="#/workout" aria-label="${areaName(a)}, ${c} מתוך ${mn}"`, inner: `<span class="tl-n">${c}<small>/${mn}</small></span>`,
+        label: areaName(a), dot: areaColor(a), sub: c >= mn ? 'עמדת ביעד' : missTxt(mn - c), frac: c / mn, done: c >= mn }));
+    });
   } else {
-    h += `<section class="card stack"><div class="lsub">אימון כוח</div><div class="h2">היום יום מנוחה</div>
-      <div class="sub">רוצה בכל זאת להתאמן? בחר אימון:</div>
-      <div class="grid3">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost" data-a="start" data-t="${k}">אימון ${TPL_NAME[k]}</button>`).join('')}</div>
-      ${total ? `<a class="btn btn-tinted btn-block" href="#/workout">${setsTxt(total)} היום</a>` : ''}</section>`;
+    h += `<div class="tpl-line"><span>היום יום מנוחה. רוצה בכל זאת להתאמן?</span></div>`;
+    Object.keys(TEMPLATES).forEach(k => tiles.push(tile({ tag: 'button', attrs: `type="button" data-a="start" data-t="${k}"`, inner: `<span class="tl-n">${TPL_NAME[k]}</span>`,
+      label: `אימון ${TPL_NAME[k]}`, sub: TEMPLATES[k].map(areaName).join(', ') })));
+    if (total) tiles.push(tile({ attrs: 'href="#/workout"', inner: `<span class="tl-n">${total}</span>`, label: 'סטים היום', done: true }));
   }
   const r = rideOn(t);
-  h += `<section class="card ride-card" style="margin-top:14px" aria-label="רכיבת ספינינג">
-    <div class="ic" style="--c:var(--a-shoulders)">${svg(I.bike, 30, 2)}</div>
-    <div class="grow"><div class="h3">ספינינג</div><div class="sub">${r ? rideSummary(r) : 'טרם נרשמה היום'}</div></div>
-    <a class="btn btn-tinted btn-sm" href="#/ride/${t}">${r ? 'עריכה' : 'רשום'}</a></section>`;
+  tiles.push(tile({ attrs: `href="#/ride/${t}"`, inner: svg(I.bike, 58, 2), label: 'ספינינג', sub: r ? rideShort(r) : 'טרם נרשמה היום', done: !!r }));
+  h += `<div class="tgrid">${tiles.join('')}</div>`;
   return h + nav('today');
 }
 function machineRow(m, t) {
@@ -842,14 +1181,14 @@ function vWorkout() {
   areas.forEach((a, i) => {
     const c = counts[a], min = S.settings.minSets[a], met = c >= min, pct = Math.min(100, Math.round(c / min * 100));
     const list = sortMachines(S.machines.filter(m => !m.archived && m.area === a));
-    h += `<div class="group-head" style="${i === 0 ? 'margin-top:4px' : ''}"><span class="dot" style="background:${areaColor(a)}"></span><span class="grow">${areaName(a)}</span>
-      <span class="gh-v ${met ? 'met' : ''}">${met ? svg(I.check, 18, 3) : ''}<span class="ltr num">${c} / ${min}</span></span></div>
-      <div class="bar"><i style="width:${pct}%;background:${areaColor(a)}"></i></div>`;
-    h += `<div class="list">${list.length ? list.map(m => machineRow(m, t)).join('') : `<a class="lrow add-row" href="#/edit/new/${a}">${svg(I.plus, 24, 2.4)}<span>הוסף מכשיר ל${areaName(a)}</span></a>`}</div>`;
+    h += `<div class="ghead2" style="${i === 0 ? 'margin-top:6px' : ''}"><span class="dot" style="background:${areaColor(a)}"></span><span>${areaName(a)}</span>
+      <span class="gh-v">${met ? svg(I.check, 20, 3) : ''}<span class="ltr num">${c} / ${min}</span></span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div>`;
+    h += `<div class="tgrid">${list.length ? list.map(m => machineTile(m, t)).join('') : tile({ attrs: `href="#/edit/new/${a}"`, inner: svg(I.plus, 54, 2.4), label: 'הוסף מכשיר', sub: areaName(a) })}</div>`;
   });
   const off = [...new Set(sets.map(s => s.machine_id))].map(machineById).filter(m => m && !areas.includes(m.area));
-  if (off.length) h += `<div class="group-head"><span class="grow">מחוץ לתוכנית</span></div><div class="list">${off.map(m => machineRow(m, t)).join('')}</div>`;
-  h += `<div class="actions" style="margin-top:22px">
+  if (off.length) h += `<div class="ghead2"><span>מחוץ לתוכנית</span></div><div class="tgrid">${off.map(m => machineTile(m, t)).join('')}</div>`;
+  h += `<div class="actions" style="margin-top:30px">
     <a class="btn btn-ghost btn-block" href="#/pick/all">${svg(I.plus, 22, 2.4)}מכשיר מחוץ לתוכנית</a>
     <button class="btn btn-primary btn-big btn-block" data-a="finish">סיים אימון</button>
     <a class="link center" href="#/sets">סטים לפי אזור</a></div>`;
@@ -888,8 +1227,11 @@ function vPick(area) {
 function nextDefaults(m, ts, prev) {
   const n = ts.length;
   if (n === 0) return { w: prev ? prev.sets[0].weight : m.min_weight, r: prev?.sets[0]?.reps ?? 10 };
-  const last = ts[n - 1];
-  return { w: last.weight, r: prev?.sets[n]?.reps ?? last.reps };
+  const last = ts[n - 1], ps = prev?.sets || [];
+  /* כל עוד הסטים היום זהים במשקל לפעם הקודמת, ממשיכים לפי אותו מספר סט מהפעם הקודמת.
+     אם שינית משקל באחד הסטים היום, השינוי עובר לסטים הבאים. */
+  const following = ps[n] && ts.every((s, i) => ps[i] && s.weight === ps[i].weight);
+  return { w: following ? ps[n].weight : last.weight, r: ps[n]?.reps ?? last.reps };
 }
 function nextMachine(cur) {
   const t = today(), tpl = templateFor(t); if (!tpl) return null;
@@ -911,6 +1253,7 @@ function vMachine(id) {
   const c = areaCountsOn(t)[m.area], min = S.settings.minSets[m.area];
   let h = pageHead(esc(m.name), { back: '#/workout', backLabel: 'אימון', small: true,
     end: `<span class="pill neutral"><span class="dot" style="background:${areaColor(m.area)}"></span>${areaName(m.area)} <span class="ltr num">${c}/${min}</span></span>` });
+  if (setupOf(m)) h += `<div class="setup">${svg(I.settings, 22, 2.2)}<span>${esc(setupOf(m))}</span></div>`;
   if (photoUrl(m)) h += `<div class="hero">${photoHtml(m)}</div>`;
   if (m.note) h += `<div class="note">${esc(m.note)}</div>`;
   h += prev ? `<section class="prev"><div class="lsub">בפעם הקודמת, ${ltr(shortDate(prev.date))}</div><div class="prev-sets">${prev.sets.map(s => `<span class="ps num ltr">${fmtW(s.weight)} × ${s.reps}</span>`).join('')}</div></section>`
@@ -919,10 +1262,11 @@ function vMachine(id) {
   const last = ts[ts.length - 1];
   h += `<section class="card setcard" aria-label="סט ${ts.length + 1}">
     <div class="sc-head"><span class="h3">סט ${ts.length + 1}</span><span class="sub sm">${ts.length >= m.default_sets ? 'סט נוסף מעבר לרגיל' : `מתוך ${m.default_sets}`}</span></div>
+    ${prev && prev.sets[ts.length] ? `<div class="target">בפעם הקודמת, סט ${ts.length + 1}: <b class="ltr">${fmtW(prev.sets[ts.length].weight)} × ${prev.sets[ts.length].reps}</b></div>` : ''}
     ${stepper('dw', 'משקל, ק״ג', d.w, m.weight_step, { draft: 'w' })}
-    ${stepper('dr', 'חזרות', d.r, 1, { int: true, draft: 'r' })}
-    <button class="btn btn-primary btn-big btn-block" data-a="saveSet" data-id="${id}">${svg(I.check, 26, 3)}בוצע</button>
-    ${last ? `<button class="btn btn-tinted btn-block" data-a="repeatSet" data-id="${id}">חזור על הסט ${ltr(fmtW(last.weight) + ' × ' + last.reps)}</button>` : ''}</section>`;
+    ${stepper('dr', 'חזרות', d.r, 1, { int: true, draft: 'r', chips: [6, 8, 10, 12, 15] })}
+    ${last ? `<button class="btn btn-tinted btn-block" data-a="repeatSet" data-id="${id}">חזור על הסט ${ltr(fmtW(last.weight) + ' × ' + last.reps)}</button>` : ''}</section>
+  <div class="dock"><button class="btn btn-primary btn-big btn-block" data-a="saveSet" data-id="${id}">${svg(I.check, 26, 3)}בוצע</button></div>`;
   const nx = nextMachine(m);
   h += `<div class="actions">${nx ? `<a class="btn btn-ghost btn-block" href="#/m/${nx.id}">הבא: ${esc(nx.name)}</a>` : ''}
     <a class="btn btn-ghost btn-block" href="#/workout">חזרה לאימון</a>
@@ -986,12 +1330,17 @@ function tplHint(area) {
   const tpls = Object.keys(TEMPLATES).filter(k => TEMPLATES[k].includes(area)).map(k => 'אימון ' + TPL_NAME[k]);
   return `יופיע ב${tpls.join(' וב')}, ${daysForArea(area)}`;
 }
+function restLabel() {
+  const E = S.edit; if (!E) return '';
+  return E.rest ? `<span class="ltr">${fmtDur(E.rest)}</span><small>למכשיר הזה</small>` : `<span class="ltr">${fmtDur(E.area ? areaRest(E.area) : S.settings.rest)}</span><small>לפי האזור</small>`;
+}
 function vEdit(id, prefArea) {
   const isNew = id === 'new';
   const key = location.hash;
   if (!S.edit || S.edit.key !== key) {
     const m0 = isNew ? null : machineById(id);
-    S.edit = { key, id: isNew ? uuid() : id, isNew, area: m0?.area || (AREA[prefArea] ? prefArea : null), step: m0?.weight_step || 5, blob: null, preview: null };
+    const eid = isNew ? uuid() : id;
+    S.edit = { key, id: eid, isNew, area: m0?.area || (AREA[prefArea] ? prefArea : null), step: m0?.weight_step || 5, blob: null, preview: null, rest: S.settings.machineRest?.[eid] || null };
   }
   const E = S.edit;
   const m = isNew ? { name: '', min_weight: 0, weight_step: 5, default_sets: 3, note: '' } : machineById(id);
@@ -1017,7 +1366,12 @@ function vEdit(id, prefArea) {
       <div class="mini" style="align-self:flex-start"><button type="button" data-a="step" data-t="fsets" data-st="1" data-d="1" aria-label="הוסף סט">${svg(I.plus, 20, 2.4)}</button>
       <input id="fsets" class="input num" style="width:70px;text-align:center;font-size:20px;font-weight:700" inputmode="numeric" dir="ltr" value="${m.default_sets}">
       <button type="button" data-a="step" data-t="fsets" data-st="1" data-d="-1" aria-label="הפחת סט">${svg(I.minus, 20, 2.4)}</button></div></div>
+    <div class="field"><label for="fsetup">כוונון המכשיר</label><input class="input" id="fsetup" value="${esc(isNew ? '' : setupOf(m))}" placeholder="לדוגמה: מושב 4, משענת 2, אחיזה רחבה" autocomplete="off" enterkeyhint="done">
+      <div class="sub sm">מוצג תמיד מתחת לשם המכשיר כשרושמים סטים</div></div>
     <div class="field"><label for="fnote">הערה קבועה</label><input class="input" id="fnote" value="${esc(m.note || '')}" placeholder="לדוגמה: מושב בחריץ 4" autocomplete="off"></div>
+    <div class="field"><span class="flabel">מנוחה אחרי כל סט</span>
+      <div class="row"><div class="mini"><button type="button" data-a="frest" data-d="1" aria-label="הארך מנוחה">${svg(I.plus, 20, 2.4)}</button><span class="rest-val num" id="frestv">${restLabel()}</span><button type="button" data-a="frest" data-d="-1" aria-label="קצר מנוחה">${svg(I.minus, 20, 2.4)}</button></div>
+      <button type="button" class="link" data-a="frest" data-d="0" id="frestreset" ${E.rest ? '' : 'hidden'}>לפי האזור</button></div></div>
     <button class="btn btn-primary btn-big btn-block" data-a="saveMachine" id="fsave">שמור מכשיר</button>
     ${isNew ? '' : `<button class="btn ${m.archived ? 'btn-ghost' : 'btn-danger'} btn-block" data-a="archive">${m.archived ? 'החזר מהארכיון' : 'העבר לארכיון'}</button>
       <p class="sub sm" style="text-align:center;margin:0">מכשיר בארכיון לא מופיע בבחירה, וההיסטוריה שלו נשמרת.</p>`}
@@ -1099,6 +1453,17 @@ function vMonth(ym) {
     <div class="ms"><div class="v num">${totalSets}</div><div class="k">סטים</div></div>
     <div class="ms"><div class="v num">${rides}</div><div class="k">רכיבות ספינינג</div></div>
     <div class="ms"><div class="v num">${fmtW(Math.round(km * 10) / 10)}</div><div class="k">ק״מ ברכיבה</div></div></section>`;
+  if (totalSets) {
+    const n = days.length, mx = Math.max(1, ...days.map(d => info[d].n)), W = n * 10;
+    let bars = '';
+    days.forEach((d, i) => {
+      const v = info[d].n, x = (n - 1 - i) * 10 + 2, hgt = v ? Math.max(6, v / mx * 100) : 3;
+      bars += `<rect x="${x}" y="${104 - hgt}" width="6" height="${hgt}" rx="3" fill="#fff" fill-opacity="${v ? 1 : .28}"${d === t ? ' stroke="#fff" stroke-width="0"' : ''}/>`;
+    });
+    h += `<section class="card chart" style="margin-top:14px" aria-label="סטים בכל יום בחודש"><h3>סטים בכל יום</h3>
+      <svg viewBox="0 0 ${W} 106" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>
+      <div class="ax"><span>1</span><span>15</span><span>${n}</span></div></section>`;
+  }
   let cal = `<section class="card cal" aria-label="לוח החודש"><div class="cal-grid cal-head" aria-hidden="true">${DAY_LETTERS.map(l => `<span>${l}</span>`).join('')}</div><div class="cal-grid">`;
   for (let i = 0; i < parseYmd(first).getDay(); i++) cal += '<span></span>';
   days.forEach(d => {
@@ -1250,7 +1615,9 @@ function vSettings() {
   const mini = (k, v, label) => `<div class="mini"><button type="button" data-a="sStep" data-k="${k}" data-d="1" aria-label="הוסף ל${label}">${svg(I.plus, 20, 2.4)}</button><span class="val num ltr">${v}</span><button type="button" data-a="sStep" data-k="${k}" data-d="-1" aria-label="הפחת מ${label}">${svg(I.minus, 20, 2.4)}</button></div>`;
   let h = pageHead('הגדרות');
   h += `<div class="section-title"><span>מנוחה בין סטים</span></div><div class="list"><div class="srow2"><div class="grow">זמן ברירת מחדל</div>${mini('rest', fmtDur(st.rest), 'זמן המנוחה')}</div>
-    <div class="srow2"><div class="grow">צליל בסוף המנוחה</div><label class="toggle"><input type="checkbox" data-s="sound" ${st.sound ? 'checked' : ''} aria-label="צליל בסוף המנוחה"><span></span></label></div></div>`;
+    <div class="srow2"><div class="grow">צליל בסוף המנוחה</div><label class="toggle"><input type="checkbox" data-s="sound" ${st.sound ? 'checked' : ''} aria-label="צליל בסוף המנוחה"><span></span></label></div></div>
+    <div class="section-title"><span>מנוחה לפי אזור</span></div><div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}${st.restByArea[a.k] ? '<div class="sub sm">מותאם</div>' : ''}</div>${mini('restA.' + a.k, fmtDur(areaRest(a.k)), 'מנוחה ' + a.n)}</div>`).join('')}</div>
+    <p class="sub sm">אפשר גם לקבוע מנוחה למכשיר מסוים, במסך עריכת המכשיר.</p>`;
   h += `<div class="section-title"><span>מינימום סטים ביום</span></div><div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}</div>${mini('min.' + a.k, st.minSets[a.k], 'מינימום ' + a.n)}</div>`).join('')}</div>
     <p class="sub sm">המינימום חל בימים שבהם האזור נמצא באימון.</p>`;
   h += `<div class="section-title"><span>חלוקת האימונים בשבוע</span></div><div class="list">${DAY_NAMES.map((n, i) => `<div class="srow2"><label class="grow" for="sp${i}">יום ${n}</label>
@@ -1260,7 +1627,7 @@ function vSettings() {
     
     <div class="srow2"><div class="grow">המסך נשאר דלוק באימון<div class="sub sm">תלוי בתמיכת הדפדפן</div></div><label class="toggle"><input type="checkbox" data-s="wakeLock" ${st.wakeLock ? 'checked' : ''} aria-label="המסך נשאר דלוק באימון"><span></span></label></div></div>`;
   h += `<div class="section-title"><span>נתונים</span></div><div class="stack-sm">
-    <div class="sub">${S.queue.length ? `${S.queue.length} פעולות ממתינות לשמירה בשרת` : 'כל הנתונים שמורים בשרת'}</div>
+    ${syncBox()}
     <button class="btn btn-ghost btn-block" data-a="exportJson">ייצוא גיבוי מלא, JSON</button>
     <button class="btn btn-ghost btn-block" data-a="exportCsv">ייצוא סטים לאקסל, CSV</button>
     <button class="btn btn-ghost btn-block" data-a="refresh">רענון נתונים מהשרת</button></div>`;
@@ -1277,9 +1644,10 @@ function parseRoute() {
 let lastRenderKey = '';
 function render() {
   const app = $('#app');
-  if (!configured) { app.innerHTML = vSetup(); return; }
-  if (!S.user) { app.innerHTML = vLogin(); updateSync(); return; }
+  if (!configured) { setTheme('A'); app.innerHTML = vSetup(); return; }
+  if (!S.user) { setTheme('A'); app.innerHTML = vLogin(); updateSync(); return; }
   const r = S.route = parseRoute();
+  setTheme(themeKey(r));
   const key = location.hash;
   const keep = {}; let focusId = null;
   if (key === lastRenderKey) {
@@ -1313,10 +1681,17 @@ let actx = null;
 function ensureAudio() {
   try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch (e) {}
 }
+let audioPrimed = false;
+function primeAudio() {
+  ensureAudio();
+  if (audioPrimed || !actx) return;
+  try { const b = actx.createBuffer(1, 1, 22050), src = actx.createBufferSource(); src.buffer = b; src.connect(actx.destination); src.start(0); audioPrimed = true; } catch (e) {}
+}
 function beep() {
   if (!S.settings.sound || !actx) return;
+  try { if (actx.state !== 'running') actx.resume(); } catch (e) {}
   try {
-    [0, 0.25].forEach(off => { const o = actx.createOscillator(), g = actx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(actx.destination);
+    [0, 0.25, 0.7, 0.95].forEach(off => { const o = actx.createOscillator(), g = actx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(actx.destination);
       const t0 = actx.currentTime + off; g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.4, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18); o.start(t0); o.stop(t0 + 0.2); });
   } catch (e) {}
 }
@@ -1341,13 +1716,16 @@ function tick() {
   $('#tfName').textContent = S.timer.name || '';
   if (rem <= 0) {
     tb.classList.add('done'); tf.classList.add('done');
+    const over = Date.now() - S.timer.end;
     $('#tbLbl').textContent = 'המנוחה נגמרה'; $('#tfLbl').textContent = 'המנוחה נגמרה';
+    if (over > 4000) { const o = '+' + fmtDur(over / 1000); $('#tbTime').textContent = o; $('#tfTime').textContent = o; }
     if (!S.timer.notified) {
       S.timer.notified = true; localStorage.setItem(TK, JSON.stringify(S.timer));
       if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
       beep();
+      const fl = $('#flash'); fl.classList.remove('on'); void fl.offsetWidth; fl.classList.add('on');
       const end = S.timer.end;
-      setTimeout(() => { if (S.timer && S.timer.end === end) stopTimer(); }, 5000);
+      setTimeout(() => { if (S.timer && S.timer.end === end) stopTimer(); }, over > 4000 ? 8000 : 5000);
     }
   } else {
     tb.classList.remove('done'); tf.classList.remove('done');
@@ -1401,10 +1779,17 @@ function logSet(m, w, r) {
   if (!day.started_at || !day.template) enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: day.started_at || new Date().toISOString() } });
   delete S.draft[m.id];
   document.querySelectorAll('#app [data-dirty]').forEach(x => { delete x.dataset.dirty; });
-  startTimer(undefined, m.name);
+  startTimer(restFor(m), m.name);
   const c = areaCountsOn(t)[m.area], min = S.settings.minSets[m.area];
   if (c === min && minFor(m.area, t) != null) toast(`עמדת ביעד של ${areaName(m.area)}: ${min} סטים`, 3500);
   render();
+  setTimeout(revealSetCard, 60);
+}
+/* אחרי סט: גוללים כך שכרטיס הסט הבא כולו גלוי מעל הכפתור והטיימר */
+function revealSetCard() {
+  const card = $('.setcard'), dock = $('.dock'); if (!card || !dock) return;
+  const gap = card.getBoundingClientRect().bottom - dock.getBoundingClientRect().top + 16;
+  if (gap > 0) window.scrollBy({ top: gap, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }
 const A = {
   start(el) {
@@ -1455,6 +1840,7 @@ const A = {
     const v = Math.max(0, round2((num(inp.value) || 0) + d * st));
     inp.value = fmtW(v); inp.dataset.dirty = '1';
     if (inp.dataset.draft && S.draft[S.route.a]) S.draft[S.route.a][inp.dataset.draft] = v;
+    syncChips(inp);
   },
   saveSet(el) {
     ensureAudio();
@@ -1491,6 +1877,26 @@ const A = {
     S.edit.area = el.dataset.k;
     document.querySelectorAll('[data-a="farea"]').forEach(b => { const on = b.dataset.k === S.edit.area; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
     $('#fhint').textContent = tplHint(S.edit.area);
+    const rv = $('#frestv'); if (rv) rv.innerHTML = restLabel();
+  },
+  frest(el) {
+    const E = S.edit; if (!E) return;
+    const d = parseInt(el.dataset.d, 10);
+    if (d === 0) E.rest = null;
+    else { const base = E.rest || (E.area ? areaRest(E.area) : S.settings.rest); E.rest = Math.min(600, Math.max(15, base + d * 15)); }
+    $('#frestv').innerHTML = restLabel(); $('#frestreset').hidden = !E.rest;
+  },
+  qset(el) {
+    const inp = document.getElementById(el.dataset.t); if (!inp) return;
+    const v = Number(el.dataset.v);
+    inp.value = fmtW(v); inp.dataset.dirty = '1';
+    if (inp.dataset.draft && S.draft[S.route.a]) S.draft[S.route.a][inp.dataset.draft] = v;
+    syncChips(inp);
+  },
+  syncNow() { flush(); },
+  retryFailed() {
+    const f = S.failed.map(({ err, at, ...op }) => op); S.failed = [];
+    S.queue = f.concat(S.queue); saveQueue(); updateSync(); flush();
   },
   fstep(el) {
     S.edit.step = parseFloat(el.dataset.v);
@@ -1519,6 +1925,13 @@ const A = {
       default_sets: Math.max(1, Math.round(num($('#fsets').value) || 3)), note: $('#fnote').value.trim() || null, photo_path,
       sort_order: old?.sort_order ?? S.machines.length, archived: old?.archived ?? false };
     enqueue({ table: 'machines', op: 'upsert', row });
+    const setup = ($('#fsetup')?.value || '').trim();
+    const ms = S.settings.machineSetup, mr = S.settings.machineRest;
+    if ((ms[E.id] || '') !== setup || (mr[E.id] || null) !== (E.rest || null)) {
+      if (setup) ms[E.id] = setup; else delete ms[E.id];
+      if (E.rest) mr[E.id] = E.rest; else delete mr[E.id];
+      saveSettings();
+    }
     S.edit = null; toast('המכשיר נשמר');
     const back = S.prevHash && !S.prevHash.startsWith('#/edit') ? S.prevHash : '#/machines';
     go(back);
@@ -1550,6 +1963,7 @@ const A = {
   sStep(el) {
     const k = el.dataset.k, d = parseInt(el.dataset.d, 10);
     if (k === 'rest') S.settings.rest = Math.min(600, Math.max(15, S.settings.rest + d * 15));
+    else if (k.startsWith('restA.')) { const a = k.slice(6), v = Math.min(600, Math.max(15, areaRest(a) + d * 15)); if (v === S.settings.rest) delete S.settings.restByArea[a]; else S.settings.restByArea[a] = v; }
     else if (k.startsWith('min.')) { const a = k.slice(4); S.settings.minSets[a] = Math.min(40, Math.max(1, S.settings.minSets[a] + d)); }
     saveSettings(); render();
   },
@@ -1602,15 +2016,21 @@ function saveSettings() {
 }
 function applyTheme() {
   document.documentElement.dataset.theme = 'light';
-  const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', '#F2F2F7');
 }
 function resetState() {
   Object.assign(S, { machines: [], sets: [], days: {}, rides: [], settings: mergeSettings({}), maxByMachine: {}, photoUrls: {}, daySets: {}, monthLoaded: {}, monthLoading: {}, queue: [], draft: {}, edit: null, timer: null, loaded: false });
-  try { localStorage.removeItem(CK); localStorage.removeItem(QK); localStorage.removeItem(TK); } catch (e) {}
+  S.failed = [];
+  try { localStorage.removeItem(CK); localStorage.removeItem(QK); localStorage.removeItem(TK); localStorage.removeItem(FK); } catch (e) {}
 }
 
 /* ---------- events ---------- */
 document.addEventListener('click', e => {
+  const ti = e.target.closest('input[data-tapedit]');
+  if (ti && ti.readOnly) {
+    ti.blur(); ti.readOnly = false; ti.focus();
+    try { ti.setSelectionRange(0, ti.value.length); } catch (err) { ti.select(); }
+    return;
+  }
   const el = e.target.closest('[data-a]');
   if (el && A[el.dataset.a]) { e.preventDefault(); A[el.dataset.a](el, e); return; }
   if (e.target.id === 'modal') closeModal();
@@ -1653,6 +2073,29 @@ document.addEventListener('submit', async e => {
   if (error) log('הכניסה נכשלה:', errInfo(error)); else log('הכניסה הצליחה');
   if (error) { err.textContent = /invalid login/i.test(error.message) ? 'האימייל או הסיסמה שגויים' : (error.message || 'שגיאה לא ידועה') + (error.status ? ` (${error.status})` : ''); btn.disabled = false; btn.textContent = 'כניסה'; }
 });
+/* ---------- באג המקלדת באייפון: הסרגל התחתון נתקע באמצע המסך ---------- */
+const isEditable = el => !!el && ((el.tagName === 'INPUT' && !el.readOnly && !['checkbox', 'radio', 'file', 'button', 'submit'].includes(el.type)) || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT');
+function settleViewport() {
+  if (isEditable(document.activeElement)) return;
+  document.body.classList.remove('kb');
+  const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  if (window.scrollY > max) window.scrollTo(0, max);
+  ['.nav', '#tb', '#sync'].forEach(sel => { const el = $(sel); if (!el) return; const d = el.style.display; el.style.display = 'none'; void el.offsetHeight; el.style.display = d; });
+}
+document.addEventListener('focusin', e => { if (isEditable(e.target)) document.body.classList.add('kb'); });
+document.addEventListener('focusout', e => {
+  const t = e.target;
+  const wasTyping = isEditable(t);
+  if (t && t.dataset && t.dataset.tapedit) { t.readOnly = true; syncChips(t); }
+  if (wasTyping) { setTimeout(settleViewport, 80); setTimeout(settleViewport, 400); }
+});
+if (window.visualViewport) {
+  let vvT = null;
+  visualViewport.addEventListener('resize', () => { clearTimeout(vvT); vvT = setTimeout(() => { if (visualViewport.height > window.innerHeight * 0.85) settleViewport(); }, 120); });
+}
+window.addEventListener('orientationchange', () => setTimeout(settleViewport, 300));
+window.addEventListener('pageshow', () => { settleViewport(); if (S.user) flush(); });
+document.addEventListener('pointerdown', primeAudio, { passive: true });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { if (!$('#modal').hidden) closeModal(); else if (!$('#tf').hidden) $('#tf').hidden = true; }
   if (e.key === 'Enter' && e.target.classList?.contains('sinput')) e.target.blur();
@@ -1662,12 +2105,20 @@ window.addEventListener('scroll', () => { document.body.classList.toggle('scroll
 window.addEventListener('online', () => { updateSync(); flush(); });
 window.addEventListener('offline', updateSync);
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') { updateWakeLock(); tick(); flush(); if (S.user) fetchAll(); }
+  if (document.visibilityState === 'visible') { try { if (actx && actx.state !== 'running') actx.resume(); } catch (e) {} settleViewport(); updateWakeLock(); tick(); flush(); if (S.user) fetchAll(); }
   else updateWakeLock();
 });
 setInterval(tick, 250);
 setInterval(() => { if (S.queue.length) flush(); }, 20000);
 
+async function requestPersist() {
+  try {
+    if (!navigator.storage || !navigator.storage.persist) return;
+    S.persisted = (await navigator.storage.persisted()) || (await navigator.storage.persist());
+    log('אחסון קבוע:', S.persisted ? 'פעיל' : 'לא אושר');
+    updateSync();
+  } catch (e) {}
+}
 /* ---------- boot ---------- */
 (function boot() {
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
@@ -1689,7 +2140,7 @@ setInterval(() => { if (S.queue.length) flush(); }, 20000);
     const u = session?.user || null;
     log('אירוע התחברות:', event, u ? 'משתמש ' + u.email : 'אין משתמש');
     if (u && (!S.user || S.user.id !== u.id)) {
-      S.user = u; loadCache(); render();
+      S.user = u; loadCache(); render(); requestPersist();
       setTimeout(() => { flush(); fetchAll(); }, 0);
     } else if (!u && S.user) {
       S.user = null; resetState(); render();
