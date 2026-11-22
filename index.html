@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="he" dir="rtl" data-theme="light">
+<html lang="he" dir="rtl" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#3D8BFF">
+<meta name="theme-color" content="#0A0A0B">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -404,163 +404,185 @@ body.kb .nav,body.kb .tb,body.kb .sync,body.kb .dock{visibility:hidden}
 
 @media (prefers-reduced-motion: reduce){#flash.on{animation:none;opacity:.6}.tb.done{animation:none}}
 
-/* ===================== 2.2: עיצוב בהשראת Streaks ===================== */
-html{--g1:#3A86FF;--g2:#1F5BE0;--g3:#1838A8;--ink:#1F5BE0;background:var(--g3)}
-html[data-th="A"]{--g1:#3D8BFF;--g2:#2160E6;--g3:#1937A6;--ink:#1F57D6}
-html[data-th="B"]{--g1:#FF7A59;--g2:#F2465A;--g3:#C2245A;--ink:#DD3352}
-html[data-th="C"]{--g1:#22C47A;--g2:#0FA08C;--g3:#0A7477;--ink:#0B8270}
-html[data-th="X"]{--g1:#8A6CFF;--g2:#A84BF0;--g3:#C73BC9;--ink:#8E3FE0}
-html[data-th="H"]{--g1:#7B6BFF;--g2:#5A3DE0;--g3:#3B2399;--ink:#5236D8}
-html[data-th="M"]{--g1:#FF5FA2;--g2:#D23CB8;--g3:#8C2DB5;--ink:#B8329E}
-html[data-th="S"]{--g1:#71819F;--g2:#4E5C7C;--g3:#313C57;--ink:#3E4B69}
-html[data-th="R"]{--g1:#FFAC4A;--g2:#FF7E33;--g3:#E5531F;--ink:#DD5A1C}
-body{background:transparent}
-body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(172deg,var(--g1) 0%,var(--g2) 52%,var(--g3) 100%)}
+/* ===================== 2.3: עיצוב בהשראת Boostcamp, כהה, צהוב, גדול ===================== */
+:root,html[data-theme]{
+  --bg:#0A0A0B; --surface:#17171A; --surface2:#212125; --fill:rgba(255,255,255,.08); --fill2:rgba(255,255,255,.14);
+  --sep:rgba(255,255,255,.08); --text:#F5F5F7; --muted:#A3A3AB; --faint:#5E5E66;
+  --accent:#FCC100; --accent-text:#FCC100; --accent-tint:rgba(252,193,0,.14); --on-accent:#0A0A0B;
+  --accent-grad:linear-gradient(180deg,#FFD02E 0%,#FCC100 100%);
+  --ok:#FCC100; --okfill:#FCC100; --ok-tint:rgba(252,193,0,.14);
+  --warn:#FFB340; --warn-tint:rgba(255,179,64,.14); --danger:#FF5A5F; --danger-tint:rgba(255,90,95,.12);
+  --note-bg:rgba(252,193,0,.1); --note:#FFD86B;
+  --a-back:#7B79FF; --a-biceps:#FF4F7B; --a-chest:#FF5A4E; --a-triceps:#C77DFF; --a-shoulders:#FFA13D; --a-legs:#4ADE80; --a-abs:#2DD4BF;
+  --glass:rgba(28,28,32,.72); --glass-edge:rgba(255,255,255,.1);
+  --lift:none; --float:0 16px 40px rgba(0,0,0,.55);
+  --r-card:28px; --nav-h:76px; --tb-h:78px;
+  color-scheme:dark;
+}
+html,body{background:var(--bg)}
+body{font-size:20px;line-height:1.38}
+#app{padding-bottom:calc(var(--above-nav) + 170px)}
+.sub{font-size:17px}
+.sm{font-size:16px}
+.card,.list,.week,.mcard,.prev,.photobox{background:var(--surface);box-shadow:none;outline:none}
 
-/* צבעים בתוך האפליקציה: לבן על צבע */
-#app{color:#fff;--text:#fff;--muted:rgba(255,255,255,.8);--faint:rgba(255,255,255,.55);
-  --surface:rgba(255,255,255,.15);--fill:rgba(255,255,255,.16);--fill2:rgba(255,255,255,.28);--sep:rgba(255,255,255,.2);
-  --accent:#fff;--accent-text:#fff;--accent-tint:rgba(255,255,255,.2);--on-accent:var(--ink);
-  --ok:#fff;--ok-tint:rgba(255,255,255,.24);--warn:#fff;--warn-tint:rgba(255,255,255,.22);--danger:#FFE1E4;--danger-tint:rgba(255,255,255,.16)}
-#app .card,#app .list,#app .week,#app .mcard,#app .prev,#app .photobox{box-shadow:none;outline:none}
-#app .card,#app .list,#app .prev,#app .week,#app .mcard{background:rgba(255,255,255,.14)}
-#app .chev{color:rgba(255,255,255,.6)}
-#app .lrow:active{background:rgba(255,255,255,.12)}
-
-/* טיפוגרפיה: כבדה וצפופה */
-.large h1{font-size:42px;font-weight:900;letter-spacing:-.8px}
-.large h1.sm{font-size:32px;font-weight:900;letter-spacing:-.5px}
-.lsub{color:rgba(255,255,255,.82);font-weight:700}
-.h2,.h3,.group-head,.section-title{font-weight:800}
-
-/* פס עליון */
-body.scrolled .navbar{background:rgba(0,0,0,.14);background:color-mix(in srgb,var(--g1) 86%,transparent)}
-.navbar::after{background:linear-gradient(rgba(0,0,0,.14),transparent);background:linear-gradient(color-mix(in srgb,var(--g1) 86%,transparent),transparent)}
-.nb-back,.nb-icon{color:#fff;font-weight:600}
+/* טיפוגרפיה גדולה */
+.large{padding-top:6px}
+.large h1{font-size:48px;font-weight:900;letter-spacing:-1.2px;line-height:1.05}
+.large h1.sm{font-size:36px;font-weight:900;letter-spacing:-.8px}
+.lsub{font-size:17px;font-weight:700;color:var(--muted);letter-spacing:.2px}
+.h2{font-size:32px;font-weight:900;letter-spacing:-.6px}
+.h3{font-size:24px;font-weight:800;letter-spacing:-.3px}
+.section-title,.group-head{font-size:24px;font-weight:900}
+.nb-title{font-weight:800}
+body.scrolled .navbar{background:rgba(10,10,11,.82)}
+.navbar::after{background:linear-gradient(rgba(10,10,11,.82),rgba(10,10,11,0))}
 
 /* כפתורים */
-#app .btn-primary{background:#fff;color:var(--ink);box-shadow:0 10px 26px rgba(0,0,0,.18)}
-#app .btn-tinted,#app .btn-ghost,#app .card .btn-ghost,#app .btn-gray{background:rgba(255,255,255,.2);color:#fff}
-#app .btn-danger{background:rgba(255,255,255,.14);color:#FFE1E4}
-#app .link{color:#fff;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.45)}
-#app .section-title a{color:#fff}
+.btn{min-height:62px;font-size:21px;font-weight:800;border-radius:20px}
+.btn-big{min-height:74px;font-size:24px;border-radius:22px}
+.btn-sm{min-height:50px;font-size:18px}
+.btn-primary,#app .btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:0 10px 30px rgba(252,193,0,.22)}
+.btn-tinted{background:var(--accent-tint);color:var(--accent)}
+.btn-ghost,.card .btn-ghost,.btn-gray{background:var(--surface2);color:var(--text)}
+.link{color:var(--accent);font-weight:700}
 
-/* פריטים קטנים */
-#app .dot{box-shadow:0 0 0 2px rgba(255,255,255,.9)}
-#app .bar{background:rgba(255,255,255,.24)}
-#app .bar>i{background:#fff!important}
-#app .done-ck{background:#fff;color:var(--ink)}
-#app .cnt{background:#fff;color:var(--ink)}
-#app .pill.neutral{background:rgba(255,255,255,.2);color:#fff}
-#app .note{background:rgba(255,255,255,.94);color:#4A3A00}
-#app .setup{background:rgba(255,255,255,.2);color:#fff}
-#app .ps{background:rgba(255,255,255,.2)}
-#app .chip{background:rgba(255,255,255,.18);color:#fff}
-#app .chip.on{background:#fff;color:var(--ink)}
-#app .seg{background:rgba(255,255,255,.18)}
-#app .seg button.on{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.15)}
-#app .mini button,#app .sbtn{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
-#app .qchip{background:rgba(255,255,255,.18);color:#fff}
-#app .qchip.on{background:#fff;color:var(--ink)}
-#app .sinput:not([readonly]){background:rgba(255,255,255,.2)}
-#app .input{background:rgba(255,255,255,.18);color:#fff}
-#app .input::placeholder{color:rgba(255,255,255,.55)}
-#app .input:focus{box-shadow:0 0 0 2.5px #fff}
-#app select.input{color:#fff}
-#app select.input option{color:#1C1C1E}
-#app .toggle span{background:rgba(255,255,255,.25)}
-#app .toggle input:checked + span{background:#fff}
-#app .toggle input:checked + span::after{background:var(--ink)}
-#app .stat{background:rgba(255,255,255,.16)}
-#app .thumb{background:rgba(255,255,255,.9);color:var(--ink)}
-#app .ic{box-shadow:0 0 0 2px rgba(255,255,255,.85)}
-#app .err{color:#FFE1E4;font-weight:600}
-#app .empty{color:rgba(255,255,255,.85)}
-#app .gh-v{color:#fff}
-#app .day-badge{box-shadow:0 0 0 2px rgba(255,255,255,.85)}
+/* רשימות */
+.lrow{min-height:84px;font-size:21px}
+.lrow .t{font-size:21px;font-weight:800}
+.thumb{width:64px;height:64px;border-radius:16px;background:var(--surface2)}
+.chev{color:var(--faint)}
+.done-ck{background:var(--accent);color:var(--on-accent)}
+.cnt{background:var(--accent-tint);color:var(--accent)}
+.pill.ok{background:var(--accent);color:var(--on-accent)}
+.pill.neutral{background:var(--surface2);color:var(--text)}
+.chip{min-height:52px;font-size:19px;background:var(--surface2);color:var(--text)}
+.chip.on{background:var(--accent);color:var(--on-accent)}
+.seg{background:var(--surface2)}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.input{background:var(--surface2);color:var(--text);min-height:62px;font-size:21px;border-radius:18px}
+.input:focus{box-shadow:0 0 0 2.5px var(--accent)}
+.toggle input:checked + span{background:var(--accent)}
+.note{background:var(--note-bg);color:var(--note);font-weight:600}
+.setup{background:var(--surface2);color:var(--text);font-size:19px}
+.setup svg{color:var(--accent)}
+.bar{background:rgba(255,255,255,.1);height:10px}
+.bar>i{background:var(--accent)!important}
+.dot{box-shadow:none}
+.stat{background:var(--surface2)}
 
 /* שבוע */
-#app .wd{color:rgba(255,255,255,.75)}
-#app .wd .c{color:rgba(255,255,255,.55)}
-#app .wd.plan .c{background:rgba(255,255,255,.18);color:#fff}
-#app .wd.done .c{background:#fff;color:var(--c,var(--ink))}
-#app .wd.today{color:#fff}
-#app .wd.today .c{box-shadow:inset 0 0 0 2.5px #fff;color:#fff}
-#app .wd.today.done .c{box-shadow:0 0 0 3px rgba(255,255,255,.45);color:var(--c,var(--ink))}
-#app .wd .rd.on,#app .cd .rd.on{background:#fff}
+.week{padding:14px 10px}
+.wd{font-size:15px;font-weight:700;color:var(--muted)}
+.wd .c{width:44px;height:44px;font-size:19px;font-weight:900;color:var(--faint);background:transparent}
+.wd.plan .c{background:var(--surface2);color:var(--text)}
+.wd.done .c{background:var(--accent);color:var(--on-accent)}
+.wd.today{color:var(--text)}
+.wd.today .c{box-shadow:inset 0 0 0 2.5px var(--accent);color:var(--accent)}
+.wd.today.done .c{box-shadow:0 0 0 3px rgba(252,193,0,.35);color:var(--on-accent)}
+.wd .rd.on,.cd .rd.on{background:var(--a-shoulders)}
 
-/* לוח חודש */
-#app .cd .cn{color:#fff}
-#app .cd.fut .cn{color:rgba(255,255,255,.4)}
-#app .cd.w .cn{background:#fff;color:var(--c)}
-#app .cd.today .cn{box-shadow:inset 0 0 0 2.5px #fff}
-#app .cd.today.w .cn{box-shadow:0 0 0 3px rgba(255,255,255,.45)}
-#app .legend-row{color:rgba(255,255,255,.85)}
-#app .legend-row i{box-shadow:0 0 0 2px #fff}
-#app .legend-row i.rdot{background:#fff;box-shadow:none}
+/* מסך היום */
+.hero-w{padding:24px 22px 22px;margin-top:6px;background:radial-gradient(120% 90% at 100% 0%,rgba(252,193,0,.16),rgba(252,193,0,0) 60%),var(--surface)}
+.hero-w .kick{font-size:16px;font-weight:800;color:var(--accent);letter-spacing:.3px}
+.hero-w .big{font-size:52px;font-weight:900;letter-spacing:-1.4px;line-height:1.02;margin:4px 0 4px}
+.hero-w .areas{font-size:19px;font-weight:600;color:var(--muted);margin-bottom:18px}
+.arow{display:flex;flex-direction:column;gap:9px;padding:14px 0;border-top:1px solid var(--sep)}
+.arow:first-of-type{border-top:0}
+.arow .top{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:800}
+.arow .v{margin-inline-start:auto;font:900 24px var(--round)}
+.arow .v small{font-size:17px;color:var(--muted);font-weight:700}
+.arow.met .v{color:var(--accent)}
+.hero-w .btn-big{margin-top:16px}
+.wkstats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.wkstats .s{background:var(--surface);border-radius:24px;padding:18px 20px}
+.wkstats .v{font:900 40px/1 var(--round);letter-spacing:-1px}
+.wkstats .k{font-size:16px;font-weight:700;color:var(--muted);margin-top:6px}
+.ride-card .ic{width:62px;height:62px;border-radius:18px}
+.ride-card .h3{font-size:24px}
+
+/* מסך אימון: כרטיסי מכשיר גדולים */
+.xhead{display:flex;align-items:center;gap:12px;margin:34px 4px 12px}
+.xhead .n{font-size:28px;font-weight:900;letter-spacing:-.5px}
+.xhead .c{margin-inline-start:auto;font:900 22px var(--round);padding:6px 14px;border-radius:999px;background:var(--surface2)}
+.xhead .c.met{background:var(--accent);color:var(--on-accent)}
+.xhead .dot{width:14px;height:14px}
+.xlist{display:flex;flex-direction:column;gap:12px}
+.xcard{display:flex;align-items:center;gap:16px;padding:14px;border-radius:26px;background:var(--surface);color:var(--text);text-decoration:none;min-height:116px;transition:transform .12s}
+.xcard:active{transform:scale(.985);background:var(--surface2)}
+.xcard .xt{width:88px;height:88px;border-radius:20px;overflow:hidden;background:#fff;flex-shrink:0;display:grid;place-items:center;color:#6b6b73}
+.xcard .xt img{width:100%;height:100%;object-fit:cover}
+.xcard .xn{font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.2px}
+.xcard .xs{font-size:17px;color:var(--muted);margin-top:3px}
+.xdots{display:flex;gap:7px;margin-top:10px}
+.xdots i{width:22px;height:8px;border-radius:999px;background:rgba(255,255,255,.14)}
+.xdots i.on{background:var(--accent)}
+.xcard .xe{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;color:var(--faint)}
+.xcard.done .xe{background:var(--accent);color:var(--on-accent)}
+.xcard.done .xn{color:var(--muted)}
+
+/* מסך מכשיר: טבלת סטים */
+.stable{padding:10px 8px 6px}
+.st-cap{display:flex;justify-content:space-between;padding:8px 12px 6px;font-size:16px;font-weight:700;color:var(--muted)}
+.st-h,.st-r{display:grid;grid-template-columns:52px 1.25fr 1fr 1fr 52px;align-items:center;gap:4px;padding:0 8px;text-align:center}
+.st-h{font-size:14px;font-weight:800;color:var(--faint);letter-spacing:.4px;padding-bottom:6px}
+.st-r{min-height:64px;border-radius:18px;font:800 23px var(--round);color:var(--text);background:none;border:0;width:100%}
+.st-r + .st-r{margin-top:4px}
+.st-r .sn{font-size:20px;color:var(--muted)}
+.st-r .sp{font-size:17px;font-weight:700;color:var(--muted);direction:ltr}
+.st-r .ck{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;margin:auto;background:var(--surface2);color:transparent}
+.st-r.done .ck{background:var(--accent);color:var(--on-accent)}
+.st-r.done{background:rgba(252,193,0,.07)}
+.st-r.cur{background:var(--surface2);box-shadow:inset 0 0 0 2px var(--accent)}
+.st-r.cur .sn{color:var(--accent)}
+.st-r.fut{color:var(--faint)}
+.setcard .sc-head .h3{font-size:26px}
+.sinput{font-size:64px!important;font-weight:900}
+.sbtn{width:80px;height:80px;background:var(--surface2);box-shadow:none;color:var(--accent)}
+.qchip{height:54px;background:var(--surface2);color:var(--text);font-size:21px}
+.qchip.on{background:var(--accent);color:var(--on-accent)}
+.target{color:var(--muted)}
+.target b{color:var(--accent)}
+.sinput:not([readonly]){background:var(--accent-tint)}
+.dock .btn{box-shadow:0 14px 34px rgba(252,193,0,.28)}
+
+/* סרגל לשוניות */
+.nav{background:rgba(24,24,28,.86);box-shadow:var(--float),inset 0 0 0 .5px rgba(255,255,255,.1)}
+.nav a{color:#8E8E96;font-size:13px;font-weight:700}
+.nav a svg{width:30px;height:30px}
+.nav a.on{background:rgba(252,193,0,.14);color:var(--accent)}
+
+/* טיימר */
+.tb{background:rgba(24,24,28,.9);color:var(--text);box-shadow:var(--float),inset 0 0 0 .5px rgba(255,255,255,.1)}
+.tb .ring{color:var(--accent)}
+.tb-time{font-size:32px}
+.tb-btn{background:var(--surface2);color:var(--text)}
+.tb.done{background:var(--accent);color:var(--on-accent)}
+.tb.done .ring,.tb.done .tb-lbl,.tb.done .tb-time{color:var(--on-accent)}
+.tb.done .tb-btn{background:rgba(0,0,0,.12);color:var(--on-accent)}
+.tf{background:var(--bg);color:var(--text)}
+.tf-ring{color:var(--accent)}
+.tf.done .tf-ring,.tf.done .tf-time{color:var(--accent)}
+.tf-btns button{background:var(--surface2);color:var(--text);box-shadow:none}
+#flash{background:radial-gradient(120% 80% at 50% 100%,rgba(252,193,0,.5),rgba(252,193,0,.12) 60%,rgba(252,193,0,0) 85%)}
+
+/* היסטוריה */
+.cd .cn{font-size:19px;font-weight:700}
+.cd.w .cn{background:var(--accent);color:var(--on-accent)!important}
+.cd.today .cn{box-shadow:inset 0 0 0 2.5px var(--accent)}
 .ms .v{font-size:46px;font-weight:900;letter-spacing:-1px}
-.ms .k{color:rgba(255,255,255,.82);font-weight:700}
+.ms .k{font-weight:700}
+.chart{padding:20px 18px 16px}
+.chart h3{margin:0 0 12px;font-size:18px;font-weight:800;color:var(--muted)}
+.chart svg{display:block;width:100%;height:130px}
+.chart .ax{display:flex;justify-content:space-between;margin-top:8px;font:700 14px var(--round);color:var(--faint)}
 
-/* אריחי עיגול בסגנון Streaks */
-.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px;margin:8px 0 6px}
-.tl{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:#fff;background:none;border:0;padding:0;font:inherit;text-align:center;min-width:0;cursor:pointer}
-.tl-c{position:relative;width:min(40vw,150px);aspect-ratio:1;display:block;transition:transform .15s cubic-bezier(.2,.8,.2,1)}
-.tl:active .tl-c{transform:scale(.94)}
-.tl-r{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.tl-r .tr{fill:none;stroke:rgba(255,255,255,.3);stroke-width:4.5}
-.tl-r .tp{fill:none;stroke:#fff;stroke-width:4.5;stroke-linecap:round;transition:stroke-dashoffset .5s cubic-bezier(.2,.8,.2,1)}
-.tl-in{position:absolute;inset:11%;border-radius:50%;background:rgba(255,255,255,.17);display:grid;place-items:center;overflow:hidden;color:#fff}
-.tl-in img{width:100%;height:100%;object-fit:cover;display:block}
-.tl-in.ph{background:#fff;color:var(--ink)}
-.tl.done .tl-in{background:#fff;color:var(--ink)}
-.tl.done .tl-r .tr{stroke:#fff}
-.tl.go .tl-in{background:rgba(255,255,255,.24)}
-.tl-n{font:900 46px/1 var(--round);letter-spacing:-1px;display:inline-flex;align-items:baseline;direction:ltr}
-.tl-n small{font-size:20px;font-weight:800;opacity:.7;margin-inline-start:2px}
-.tl-b{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);background:#fff;color:var(--ink);font:800 14px/1 var(--round);padding:5px 10px;border-radius:999px;box-shadow:0 3px 10px rgba(0,0,0,.15);direction:ltr;white-space:nowrap}
-.tl-k{position:absolute;bottom:4%;left:4%;width:30%;aspect-ratio:1;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.2)}
-.tl-k svg{width:55%;height:55%}
-.tl-l{display:flex;align-items:center;justify-content:center;gap:7px;font-size:17px;font-weight:800;line-height:1.2;letter-spacing:-.2px;max-width:100%}
-.tl-l .dot{width:10px;height:10px}
-.tl-s{font-size:14px;font-weight:600;color:rgba(255,255,255,.8);margin-top:-3px;max-width:100%}
-.tgrid + .actions{margin-top:28px}
-.tpl-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-4px 4px 10px;font-size:17px;font-weight:700;color:rgba(255,255,255,.9)}
-.tpl-line span:first-child{flex:1;min-width:0}
-.tpl-line .link{min-height:36px;padding:4px 2px}
-.ghead2{display:flex;align-items:center;gap:10px;margin:30px 4px 6px;font-size:22px;font-weight:900}
-.ghead2 .gh-v{margin-inline-start:auto;font:800 20px var(--round)}
-.ghead2 + .bar{margin:0 4px 14px;height:6px}
-
-/* גרף חודשי */
-.chart{padding:18px 16px 14px}
-.chart h3{margin:0 0 12px;font-size:16px;font-weight:800;color:rgba(255,255,255,.85)}
-.chart svg{display:block;width:100%;height:120px}
-.chart .ax{display:flex;justify-content:space-between;margin-top:8px;font:700 13px var(--round);color:rgba(255,255,255,.7)}
-
-/* סרגל לשוניות, טיימר וטיימר מלא על רקע צבעוני */
-#app .nav{background:rgba(255,255,255,.16);background:color-mix(in srgb,var(--g3) 52%,rgba(255,255,255,.12));box-shadow:0 12px 30px rgba(0,0,0,.2),inset 0 0 0 .5px rgba(255,255,255,.35)}
-#app .nav a{color:rgba(255,255,255,.8)}
-#app .nav a.on{background:#fff;color:var(--ink)}
-.tb{background:rgba(0,0,0,.25);background:color-mix(in srgb,var(--g3) 62%,rgba(255,255,255,.1));color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.22),inset 0 0 0 .5px rgba(255,255,255,.35)}
-.tb .ring{color:#fff}
-.tb-lbl{color:rgba(255,255,255,.82)}
-.tb-btn{background:rgba(255,255,255,.2);color:#fff}
-.tb.done{background:#fff;color:var(--ink)}
-.tb.done .ring,.tb.done .tb-lbl,.tb.done .tb-time{color:var(--ink)}
-.tb.done .tb-btn{background:rgba(0,0,0,.06);color:var(--ink)}
-.tf{background:linear-gradient(172deg,var(--g1),var(--g2) 55%,var(--g3));color:#fff}
-.tf-top,.tf-lbl{color:rgba(255,255,255,.88)}
-.tf-top .iconbtn{color:#fff;background:rgba(255,255,255,.18)}
-.tf-ring,.tf.done .tf-ring{color:#fff}
-.tf.done .tf-time{color:#fff}
-.tf-btns button{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
-.tf .btn-primary{background:#fff;color:var(--ink);box-shadow:0 10px 26px rgba(0,0,0,.2)}
-#flash{background:radial-gradient(120% 80% at 50% 100%,rgba(255,255,255,.6),rgba(255,255,255,.15) 60%,rgba(255,255,255,0) 85%)}
-#app .dock .btn{box-shadow:0 14px 30px rgba(0,0,0,.24)}
-.sheet .btn-primary{background:var(--ink);box-shadow:none}
-.login .app-icon{box-shadow:0 14px 34px rgba(0,0,0,.25)}
-.login .app-icon{align-self:center;margin-inline:auto}
+/* גיליונות, טוסט, סנכרון */
+.sheet{background:var(--surface)}
+.toast,.sync{background:rgba(32,32,36,.94);color:var(--text)}
+.login .app-icon{align-self:center;margin-inline:auto;box-shadow:0 14px 40px rgba(252,193,0,.25)}
 .login .brand,.login > p.sub{text-align:center;align-self:center}
+.login .brand{font-size:56px;font-weight:900}
 </style>
 </head>
 <body>
@@ -613,7 +635,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '2.2';
+const APP_VERSION = '2.3';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -679,7 +701,6 @@ const I = {
   timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4M10 2h4"/>',
   down:'<path d="M6 9l6 6 6-6"/>'
 };
-const PLAY = s => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.6v12.8a1 1 0 0 0 1.53.85l10.1-6.4a1 1 0 0 0 0-1.7L9.53 4.75A1 1 0 0 0 8 5.6z"/></svg>`;
 function svg(p, s = 24, w = 2) {
   return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 }
@@ -999,7 +1020,12 @@ function stepper(id, label, val, st, opts = {}) {
     <button type="button" class="sbtn" data-a="step" data-t="${id}" data-st="${st}" data-d="-1" aria-label="הפחת מ${label}">${svg(I.minus, 28, 2.6)}</button>
   </div>${opts.chips ? `<div class="qchips" data-for="${id}">${opts.chips.map(v => `<button type="button" class="qchip num${Number(val) === v ? ' on' : ''}" data-a="qset" data-t="${id}" data-v="${v}" aria-label="${v} ${label}">${v}</button>`).join('')}</div>` : ''}</div>`;
 }
+function updCur() {
+  const w = $('#curW'), r = $('#curR'), dw = $('#dw'), dr = $('#dr');
+  if (w && dw) w.textContent = dw.value; if (r && dr) r.textContent = dr.value;
+}
 function syncChips(inp) {
+  updCur();
   const box = document.querySelector(`.qchips[data-for="${inp.id}"]`); if (!box) return;
   const v = num(inp.value);
   box.querySelectorAll('.qchip').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === v));
@@ -1017,49 +1043,6 @@ function rideSummary(r) {
   if (r.calories != null) parts.push(`${ltr(r.calories)} קלוריות`);
   if (r.avg_watts != null) parts.push(`${ltr(r.avg_watts)} וואט${r.watts_estimated ? ' משוער' : ''}`);
   return parts.join(', ');
-}
-
-/* ---------- אריחי עיגול ---------- */
-function tring(frac) {
-  const c = 2 * Math.PI * 46, f = Math.max(0, Math.min(1, frac || 0));
-  return `<svg class="tl-r" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" class="tr"/>${f > 0 ? `<circle cx="50" cy="50" r="46" class="tp" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c * (1 - f)).toFixed(1)}" transform="rotate(-90 50 50)"/>` : ''}</svg>`;
-}
-function tile(o) {
-  const tag = o.tag || 'a';
-  return `<${tag} class="tl${o.done ? ' done' : ''}${o.cls ? ' ' + o.cls : ''}" ${o.attrs || ''}>
-    <span class="tl-c">${tring(o.done ? 1 : o.frac)}<span class="tl-in${o.ph ? ' ph' : ''}">${o.inner}</span>${o.badge ? `<span class="tl-b">${o.badge}</span>` : ''}${o.done && o.check ? `<span class="tl-k">${svg(I.check, 20, 3.4)}</span>` : ''}</span>
-    <span class="tl-l">${o.dot ? `<span class="dot" style="background:${o.dot}"></span>` : ''}<span>${o.label}</span></span>${o.sub ? `<span class="tl-s">${o.sub}</span>` : ''}</${tag}>`;
-}
-function rideShort(r) {
-  if (r.distance_km != null) return `${ltr(fmtW(r.distance_km))} ק״מ, ${ltr(Math.round(r.duration_sec / 60))} דקות`;
-  return `${ltr(Math.round(r.duration_sec / 60))} דקות`;
-}
-function machineSub(m, t) {
-  const ms = setsOn(t).filter(s => s.machine_id === m.id), n = ms.length, prev = prevSession(m.id, t);
-  if (n) return `${setsTxt(n)}, עד ${ltr(fmtW(Math.max(...ms.map(s => s.weight))))} ק״ג`;
-  if (prev) return `קודם ${ltr(setStr(prev.sets[0]))}`;
-  return m.min_weight > 0 ? `פתיחה ${ltr(fmtW(m.min_weight))} ק״ג` : 'עוד לא נרשם';
-}
-function machineTile(m, t) {
-  const n = setsOn(t).filter(s => s.machine_id === m.id).length, done = n >= m.default_sets;
-  return tile({ attrs: `href="#/m/${m.id}" aria-label="${esc(m.name)}, ${n} מתוך ${m.default_sets} סטים"`, inner: photoHtml(m, 40), ph: true,
-    label: esc(m.name), sub: machineSub(m, t), frac: n / m.default_sets, done, check: true, badge: n && !done ? `${n}/${m.default_sets}` : '' });
-}
-const AREA_TPL = { back: 'A', biceps: 'A', chest: 'B', triceps: 'B', shoulders: 'B', legs: 'C' };
-function themeKey(r) {
-  if (!S.user) return 'A';
-  if (r.name === 'history') return 'H';
-  if (r.name === 'machines' || r.name === 'edit') return 'M';
-  if (r.name === 'settings') return 'S';
-  if (r.name === 'ride') return 'R';
-  if (r.name === 'm') { const m = machineById(r.a); if (m) return AREA_TPL[m.area] || templateFor(today()) || 'A'; }
-  return templateFor(today()) || 'X';
-}
-const TH_COLOR = { A: '#3D8BFF', B: '#FF7A59', C: '#22C47A', X: '#8A6CFF', H: '#7B6BFF', M: '#FF5FA2', S: '#71819F', R: '#FFAC4A' };
-function setTheme(k) {
-  if (document.documentElement.dataset.th === k) return;
-  document.documentElement.dataset.th = k;
-  const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', TH_COLOR[k] || '#3D8BFF');
 }
 
 /* ---------- views ---------- */
@@ -1123,6 +1106,11 @@ function weekStrip(t) {
   }
   return h + '</div>';
 }
+function weekNums(t) {
+  const start = addDays(t, -parseYmd(t).getDay()); let days = 0, sets = 0;
+  for (let i = 0; i < 7; i++) { const n = setsOn(addDays(start, i)).length; sets += n; if (n) days++; }
+  return { days, sets };
+}
 function vToday() {
   const t = today(), tpl = templateFor(t), counts = areaCountsOn(t), day = S.days[t] || {};
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
@@ -1130,32 +1118,31 @@ function vToday() {
   h += weekStrip(t);
   if (!S.loaded) return h + '<div class="empty">טוען נתונים</div>' + nav('today');
   if (!S.machines.length) {
-    h += `<section class="card stack" style="margin-bottom:14px"><div class="h3">מתחילים: מוסיפים את המכשירים</div>
+    h += `<section class="card stack" style="margin:14px 0"><div class="h3">מתחילים: מוסיפים את המכשירים</div>
       <div class="sub">צלם כל מכשיר, תן לו שם, בחר אזור בגוף וקבע משקל פתיחה. אחרי זה האימון כבר מסודר.</div>
       <a class="btn btn-primary btn-block" href="#/edit/new">הוסף מכשיר ראשון</a></section>`;
   }
-  const tiles = [];
   if (tpl) {
-    const areas = TEMPLATES[tpl], mins = S.settings.minSets;
-    const need = areas.reduce((a, k) => a + mins[k], 0), have = areas.reduce((a, k) => a + Math.min(counts[k], mins[k]), 0);
-    const going = total > 0 || (day.started_at && !day.finished_at);
-    h += `<div class="tpl-line"><span>אימון ${TPL_NAME[tpl]}: ${areas.map(areaName).join(', ')}</span>${day.finished_at ? `<span class="pill ok">${svg(I.check, 16, 3)}הסתיים</span>` : ''}<button class="link" data-a="switchTpl">החלף אימון</button></div>`;
-    tiles.push(tile({ tag: 'button', attrs: 'type="button" data-a="start"', cls: 'go', inner: PLAY(58),
-      label: going ? 'המשך אימון' : `התחל אימון ${TPL_NAME[tpl]}`, sub: `${have} מתוך ${need} סטים`, frac: need ? have / need : 0, done: have >= need && need > 0 }));
-    areas.forEach(a => {
-      const c = counts[a], mn = mins[a];
-      tiles.push(tile({ attrs: `href="#/workout" aria-label="${areaName(a)}, ${c} מתוך ${mn}"`, inner: `<span class="tl-n">${c}<small>/${mn}</small></span>`,
-        label: areaName(a), dot: areaColor(a), sub: c >= mn ? 'עמדת ביעד' : missTxt(mn - c), frac: c / mn, done: c >= mn }));
-    });
+    const going = total > 0 || (day.started_at && !day.finished_at), areas = TEMPLATES[tpl], mins = S.settings.minSets;
+    h += `<section class="card hero-w" aria-label="האימון של היום"><div class="row"><div class="grow kick">האימון של היום</div>${day.finished_at ? `<span class="pill ok">${svg(I.check, 16, 3)}הסתיים</span>` : ''}</div>
+      <div class="big">אימון ${TPL_NAME[tpl]}</div><div class="areas">${areas.map(areaName).join(', ')}</div>
+      ${areas.map(a => { const c = counts[a], mn = mins[a], met = c >= mn;
+        return `<div class="arow ${met ? 'met' : ''}"><div class="top"><span class="dot" style="background:${areaColor(a)}"></span><span>${areaName(a)}</span><span class="v ltr">${met ? svg(I.check, 20, 3.2) + ' ' : ''}${c}<small>/${mn}</small></span></div>
+        <div class="bar"><i style="width:${Math.min(100, Math.round(c / mn * 100))}%"></i></div></div>`; }).join('')}
+      <button class="btn btn-primary btn-big btn-block" data-a="start">${going ? 'המשך אימון' : 'התחל אימון'}</button>
+      <button class="link center" style="margin-top:6px;width:100%" data-a="switchTpl">החלף אימון</button></section>`;
   } else {
-    h += `<div class="tpl-line"><span>היום יום מנוחה. רוצה בכל זאת להתאמן?</span></div>`;
-    Object.keys(TEMPLATES).forEach(k => tiles.push(tile({ tag: 'button', attrs: `type="button" data-a="start" data-t="${k}"`, inner: `<span class="tl-n">${TPL_NAME[k]}</span>`,
-      label: `אימון ${TPL_NAME[k]}`, sub: TEMPLATES[k].map(areaName).join(', ') })));
-    if (total) tiles.push(tile({ attrs: 'href="#/workout"', inner: `<span class="tl-n">${total}</span>`, label: 'סטים היום', done: true }));
+    h += `<section class="card hero-w stack"><div class="kick">היום יום מנוחה</div><div class="big">רוצה בכל זאת?</div>
+      <div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost btn-block" data-a="start" data-t="${k}">אימון ${TPL_NAME[k]}: ${TEMPLATES[k].map(areaName).join(', ')}</button>`).join('')}</div>
+      ${total ? `<a class="btn btn-tinted btn-block" href="#/workout">${setsTxt(total)} היום</a>` : ''}</section>`;
   }
+  const w = weekNums(t);
+  h += `<div class="wkstats"><div class="s"><div class="v">${w.days}</div><div class="k">אימונים השבוע</div></div><div class="s"><div class="v">${w.sets}</div><div class="k">סטים השבוע</div></div></div>`;
   const r = rideOn(t);
-  tiles.push(tile({ attrs: `href="#/ride/${t}"`, inner: svg(I.bike, 58, 2), label: 'ספינינג', sub: r ? rideShort(r) : 'טרם נרשמה היום', done: !!r }));
-  h += `<div class="tgrid">${tiles.join('')}</div>`;
+  h += `<section class="card ride-card" style="margin-top:14px" aria-label="רכיבת ספינינג">
+    <div class="ic" style="--c:var(--a-shoulders)">${svg(I.bike, 34, 2)}</div>
+    <div class="grow"><div class="h3">ספינינג</div><div class="sub">${r ? rideSummary(r) : 'טרם נרשמה היום'}</div></div>
+    <a class="btn btn-tinted btn-sm" href="#/ride/${t}">${r ? 'עריכה' : 'רשום'}</a></section>`;
   return h + nav('today');
 }
 function machineRow(m, t) {
@@ -1167,6 +1154,18 @@ function machineRow(m, t) {
   const done = n >= m.default_sets;
   const end = done ? `<span class="done-ck" aria-label="הושלם">${svg(I.check, 18, 3.2)}</span>` : n ? `<span class="cnt num ltr">${n}/${m.default_sets}</span>` : `<span class="chev">${svg(I.fwd, 22)}</span>`;
   return `<a class="lrow ${done ? 'is-done' : ''}" href="#/m/${m.id}"><div class="thumb">${photoHtml(m)}</div><div class="grow"><div class="t">${esc(m.name)}</div><div class="sub sm">${sub}</div></div>${end}</a>`;
+}
+function machineCard(m, t) {
+  const ms = setsOn(t).filter(s => s.machine_id === m.id), n = ms.length, prev = prevSession(m.id, t), done = n >= m.default_sets;
+  let sub;
+  if (n) sub = `${setsTxt(n)}, עד ${ltr(fmtW(Math.max(...ms.map(s => s.weight))))} ק״ג`;
+  else if (prev) sub = `קודם ${ltr(setStr(prev.sets[0]))}, ${setsTxt(prev.sets.length)}`;
+  else sub = m.min_weight > 0 ? `פתיחה ${ltr(fmtW(m.min_weight))} ק״ג` : 'עוד לא נרשם';
+  const dots = Array.from({ length: Math.max(m.default_sets, n) }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('');
+  return `<a class="xcard ${done ? 'done' : ''}" href="#/m/${m.id}" aria-label="${esc(m.name)}, ${n} מתוך ${m.default_sets} סטים">
+    <div class="xt">${photoHtml(m, 34)}</div>
+    <div class="grow"><div class="xn">${esc(m.name)}</div><div class="xs">${sub}</div><div class="xdots" aria-hidden="true">${dots}</div></div>
+    <span class="xe">${done ? svg(I.check, 24, 3.2) : svg(I.fwd, 26, 2.4)}</span></a>`;
 }
 function sortMachines(l) { return l.sort((x, y) => (x.sort_order - y.sort_order) || x.name.localeCompare(y.name, 'he')); }
 function vWorkout() {
@@ -1181,13 +1180,13 @@ function vWorkout() {
   areas.forEach((a, i) => {
     const c = counts[a], min = S.settings.minSets[a], met = c >= min, pct = Math.min(100, Math.round(c / min * 100));
     const list = sortMachines(S.machines.filter(m => !m.archived && m.area === a));
-    h += `<div class="ghead2" style="${i === 0 ? 'margin-top:6px' : ''}"><span class="dot" style="background:${areaColor(a)}"></span><span>${areaName(a)}</span>
-      <span class="gh-v">${met ? svg(I.check, 20, 3) : ''}<span class="ltr num">${c} / ${min}</span></span></div>
-      <div class="bar"><i style="width:${pct}%"></i></div>`;
-    h += `<div class="tgrid">${list.length ? list.map(m => machineTile(m, t)).join('') : tile({ attrs: `href="#/edit/new/${a}"`, inner: svg(I.plus, 54, 2.4), label: 'הוסף מכשיר', sub: areaName(a) })}</div>`;
+    h += `<div class="xhead" style="${i === 0 ? 'margin-top:8px' : ''}"><span class="dot" style="background:${areaColor(a)}"></span><span class="n">${areaName(a)}</span>
+      <span class="c ${met ? 'met' : ''}"><span class="ltr">${c} / ${min}</span></span></div>
+      <div class="bar" style="margin:0 4px 14px"><i style="width:${pct}%"></i></div>`;
+    h += `<div class="xlist">${list.length ? list.map(m => machineCard(m, t)).join('') : `<a class="xcard" href="#/edit/new/${a}"><div class="xt">${svg(I.plus, 34, 2.4)}</div><div class="grow"><div class="xn">הוסף מכשיר</div><div class="xs">${areaName(a)}</div></div></a>`}</div>`;
   });
   const off = [...new Set(sets.map(s => s.machine_id))].map(machineById).filter(m => m && !areas.includes(m.area));
-  if (off.length) h += `<div class="ghead2"><span>מחוץ לתוכנית</span></div><div class="tgrid">${off.map(m => machineTile(m, t)).join('')}</div>`;
+  if (off.length) h += `<div class="xhead"><span class="n">מחוץ לתוכנית</span></div><div class="xlist">${off.map(m => machineCard(m, t)).join('')}</div>`;
   h += `<div class="actions" style="margin-top:30px">
     <a class="btn btn-ghost btn-block" href="#/pick/all">${svg(I.plus, 22, 2.4)}מכשיר מחוץ לתוכנית</a>
     <button class="btn btn-primary btn-big btn-block" data-a="finish">סיים אימון</button>
@@ -1256,13 +1255,23 @@ function vMachine(id) {
   if (setupOf(m)) h += `<div class="setup">${svg(I.settings, 22, 2.2)}<span>${esc(setupOf(m))}</span></div>`;
   if (photoUrl(m)) h += `<div class="hero">${photoHtml(m)}</div>`;
   if (m.note) h += `<div class="note">${esc(m.note)}</div>`;
-  h += prev ? `<section class="prev"><div class="lsub">בפעם הקודמת, ${ltr(shortDate(prev.date))}</div><div class="prev-sets">${prev.sets.map(s => `<span class="ps num ltr">${fmtW(s.weight)} × ${s.reps}</span>`).join('')}</div></section>`
-            : `<div class="sub first">פעם ראשונה על המכשיר${m.min_weight > 0 ? `, משקל פתיחה ${ltr(fmtW(m.min_weight))} ק״ג` : ''}</div>`;
-  if (ts.length) h += `<div class="list sets-list">${ts.map((s, i) => `<button class="lrow setrow" data-a="editSet" data-id="${s.id}" aria-label="ערוך סט ${i + 1}"><span class="n">סט ${i + 1}</span><span class="grow w">${ltr(fmtW(s.weight) + ' × ' + s.reps)}</span><span class="done-ck">${svg(I.check, 18, 3.2)}</span></button>`).join('')}</div>`;
+  const rowsN = Math.max(m.default_sets, ts.length + 1), ps = prev ? prev.sets : [];
+  const pv = i => ps[i] ? `${fmtW(ps[i].weight)}×${ps[i].reps}` : '';
+  let tb = `<section class="card stable" aria-label="טבלת סטים"><div class="st-cap"><span>${prev ? `קודם מתאריך ${ltr(shortDate(prev.date))}` : 'פעם ראשונה על המכשיר'}</span>${!prev && m.min_weight > 0 ? `<span>פתיחה ${ltr(fmtW(m.min_weight))} ק״ג</span>` : ''}</div>
+    <div class="st-h" aria-hidden="true"><span>סט</span><span>קודם</span><span>ק״ג</span><span>חזרות</span><span></span></div>`;
+  for (let i = 0; i < rowsN; i++) {
+    if (i < ts.length) { const x = ts[i];
+      tb += `<button class="st-r done" data-a="editSet" data-id="${x.id}" aria-label="סט ${i + 1}: ${fmtW(x.weight)} קילו, ${x.reps} חזרות. הקש לעריכה"><span class="sn">${i + 1}</span><span class="sp">${pv(i)}</span><span>${fmtW(x.weight)}</span><span>${x.reps}</span><span class="ck">${svg(I.check, 22, 3.4)}</span></button>`;
+    } else if (i === ts.length) {
+      tb += `<div class="st-r cur" aria-hidden="true"><span class="sn">${i + 1}</span><span class="sp">${pv(i)}</span><span id="curW">${fmtW(d.w)}</span><span id="curR">${d.r}</span><span class="ck"></span></div>`;
+    } else {
+      tb += `<div class="st-r fut" aria-hidden="true"><span class="sn">${i + 1}</span><span class="sp">${pv(i)}</span><span>${ps[i] ? fmtW(ps[i].weight) : ''}</span><span>${ps[i] ? ps[i].reps : ''}</span><span class="ck"></span></div>`;
+    }
+  }
+  h += tb + '</section>';
   const last = ts[ts.length - 1];
   h += `<section class="card setcard" aria-label="סט ${ts.length + 1}">
     <div class="sc-head"><span class="h3">סט ${ts.length + 1}</span><span class="sub sm">${ts.length >= m.default_sets ? 'סט נוסף מעבר לרגיל' : `מתוך ${m.default_sets}`}</span></div>
-    ${prev && prev.sets[ts.length] ? `<div class="target">בפעם הקודמת, סט ${ts.length + 1}: <b class="ltr">${fmtW(prev.sets[ts.length].weight)} × ${prev.sets[ts.length].reps}</b></div>` : ''}
     ${stepper('dw', 'משקל, ק״ג', d.w, m.weight_step, { draft: 'w' })}
     ${stepper('dr', 'חזרות', d.r, 1, { int: true, draft: 'r', chips: [6, 8, 10, 12, 15] })}
     ${last ? `<button class="btn btn-tinted btn-block" data-a="repeatSet" data-id="${id}">חזור על הסט ${ltr(fmtW(last.weight) + ' × ' + last.reps)}</button>` : ''}</section>
@@ -1458,7 +1467,7 @@ function vMonth(ym) {
     let bars = '';
     days.forEach((d, i) => {
       const v = info[d].n, x = (n - 1 - i) * 10 + 2, hgt = v ? Math.max(6, v / mx * 100) : 3;
-      bars += `<rect x="${x}" y="${104 - hgt}" width="6" height="${hgt}" rx="3" fill="#fff" fill-opacity="${v ? 1 : .28}"${d === t ? ' stroke="#fff" stroke-width="0"' : ''}/>`;
+      bars += `<rect x="${x}" y="${104 - hgt}" width="6" height="${hgt}" rx="3" fill="${v ? '#FCC100' : 'rgba(255,255,255,.14)'}"/>`;
     });
     h += `<section class="card chart" style="margin-top:14px" aria-label="סטים בכל יום בחודש"><h3>סטים בכל יום</h3>
       <svg viewBox="0 0 ${W} 106" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>
@@ -1644,10 +1653,9 @@ function parseRoute() {
 let lastRenderKey = '';
 function render() {
   const app = $('#app');
-  if (!configured) { setTheme('A'); app.innerHTML = vSetup(); return; }
-  if (!S.user) { setTheme('A'); app.innerHTML = vLogin(); updateSync(); return; }
+  if (!configured) { app.innerHTML = vSetup(); return; }
+  if (!S.user) { app.innerHTML = vLogin(); updateSync(); return; }
   const r = S.route = parseRoute();
-  setTheme(themeKey(r));
   const key = location.hash;
   const keep = {}; let focusId = null;
   if (key === lastRenderKey) {
@@ -2015,7 +2023,7 @@ function saveSettings() {
   settingsT = setTimeout(() => enqueue({ table: 'settings', op: 'upsert', row: { user_id: S.user.id, data: S.settings, updated_at: new Date().toISOString() } }), 500);
 }
 function applyTheme() {
-  document.documentElement.dataset.theme = 'light';
+  document.documentElement.dataset.theme = 'dark';
 }
 function resetState() {
   Object.assign(S, { machines: [], sets: [], days: {}, rides: [], settings: mergeSettings({}), maxByMachine: {}, photoUrls: {}, daySets: {}, monthLoaded: {}, monthLoading: {}, queue: [], draft: {}, edit: null, timer: null, loaded: false });
@@ -2038,7 +2046,7 @@ document.addEventListener('click', e => {
 document.addEventListener('input', e => {
   const t = e.target;
   if (t.closest('#app') && t.tagName === 'INPUT') t.dataset.dirty = '1';
-  if (t.dataset.draft && S.draft[S.route.a]) { const v = num(t.value); if (v != null) S.draft[S.route.a][t.dataset.draft] = v; }
+  if (t.dataset.draft && S.draft[S.route.a]) { const v = num(t.value); if (v != null) S.draft[S.route.a][t.dataset.draft] = v; updCur(); }
   if (['rmin', 'rsec', 'rcal', 'rwatt'].includes(t.id)) updateWattEstimate();
 });
 document.addEventListener('change', async e => {
