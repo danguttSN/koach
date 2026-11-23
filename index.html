@@ -697,6 +697,40 @@ button.ps:active{background:var(--fill2)}
 .btn.tplbtn{flex-direction:column;gap:2px;white-space:normal;min-height:78px;padding:12px 18px;line-height:1.15}
 .btn.tplbtn b{font-size:22px;font-weight:900}
 .btn.tplbtn small{font-size:16px;font-weight:700;opacity:.72}
+
+/* ===================== 2.5 ===================== */
+/* סרגל תחתון אטום יותר, כדי שכפתורים צהובים מתחתיו לא יצבעו אותו */
+.nav{background:rgba(22,22,26,.97)}
+
+/* אימון: שורת סיכום מה נשאר, ולשוניות אזור עם שם בלבד */
+.wsum{display:flex;align-items:center;gap:12px;margin:-6px 2px 10px;font-size:18px;font-weight:700;color:var(--muted);line-height:1.3}
+.wsum .done{display:inline-flex;align-items:center;gap:6px;color:var(--accent)}
+.wall{flex-shrink:0;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;background:var(--surface2);color:var(--text);font-size:17px;font-weight:800;text-decoration:none}
+.wall.on{background:var(--accent);color:var(--on-accent)}
+.wseg a{min-height:58px;padding:8px 4px 16px}
+.wseg .n{font-size:16px;letter-spacing:-.2px}
+.wseg .ok{position:absolute;top:5px;left:6px;display:flex;color:var(--accent)}
+.wseg a.on .ok{color:var(--on-accent)}
+
+/* בית: ספינינג עם ארבעה מדדים */
+.stabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:12px}
+.stab{display:flex;flex-direction:column;align-items:center;gap:1px;padding:10px 2px 9px;border:0;border-radius:18px;background:var(--surface2);color:var(--text);min-width:0}
+.stab .v{font:900 22px/1.1 var(--round);letter-spacing:-.5px}
+.stab .l{font-size:14px;font-weight:800;color:var(--muted)}
+.stab .d{font-size:12.5px;font-weight:800;color:var(--faint);margin-top:2px;white-space:nowrap}
+.stab .d.up{color:var(--accent)}
+.stab .d.down{color:var(--warn)}
+.stab.on{background:var(--accent);color:var(--on-accent)}
+.stab.on .l,.stab.on .d,.stab.on .d.up,.stab.on .d.down{color:var(--on-accent);opacity:.78}
+.stab:active{transform:scale(.97)}
+.spwk1{margin-top:14px;padding-top:12px;border-top:1px solid var(--sep);font-size:16px;font-weight:700;color:var(--muted)}
+
+/* היסטוריה: יום לעריכה */
+.hday{padding:16px}
+.hday .prev-sets{margin-top:12px}
+button.ps.add{display:inline-flex;align-items:center;justify-content:center;min-width:52px;background:var(--accent-tint);color:var(--accent)}
+
+.wsum .nw{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -749,7 +783,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '2.4';
+const APP_VERSION = '2.5';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -856,7 +890,7 @@ const S = {
   daySets: {}, dayLoading: {}, monthLoaded: {}, monthLoading: {},
   queue: [], failed: [], lastSync: 0, persisted: null, syncedFlash: 0, draft: {}, edit: null, mfilter: 'all', showArchived: false,
   timer: null, route: { name: 'today' }, prevHash: '', curHash: location.hash,
-  wf: null, busy: null, undo: null
+  wf: null, busy: null, undo: null, spinM: 'w'
 };
 
 function mergeSettings(d) {
@@ -1263,20 +1297,27 @@ function weeklyAreaCounts(nW) {
   }
   return out;
 }
-function rideWeeks(nW) {
+/* ספינינג: ארבעה מדדים, ממוצע לרכיבה */
+const SPIN_M = [
+  { k: 'w', l: 'וואט', get: r => r.avg_watts, dec: 0 },
+  { k: 'km', l: 'ק״מ', get: r => r.distance_km, dec: 1 },
+  { k: 'min', l: 'דקות', get: r => (r.duration_sec ? r.duration_sec / 60 : null), dec: 0 },
+  { k: 'kcal', l: 'קלוריות', get: r => r.calories, dec: 0 }
+];
+const fmtD = (v, dec) => (dec ? (Math.round(v * 10) / 10).toFixed(1) : String(Math.round(v)));
+function rideWeeks(nW, get) {
   const t = today(), first = addDays(weekStartOf(t), -7 * (nW - 1));
-  const out = Array.from({ length: nW }, (_, i) => ({ start: addDays(first, 7 * i), w: [], n: 0, sec: 0, km: 0, avg: null }));
+  const out = Array.from({ length: nW }, (_, i) => ({ start: addDays(first, 7 * i), v: [], avg: null }));
   for (const r of S.rides) {
     if (r.ride_date < first || r.ride_date > t) continue;
-    const o = out[Math.floor(dayDiff(r.ride_date, first) / 7)]; if (!o) continue;
-    o.n++; o.sec += Number(r.duration_sec) || 0; o.km += Number(r.distance_km) || 0;
-    if (r.avg_watts != null) o.w.push(Number(r.avg_watts));
+    const o = out[Math.floor(dayDiff(r.ride_date, first) / 7)], v = get(r);
+    if (o && v != null && isFinite(Number(v))) o.v.push(Number(v));
   }
-  out.forEach(o => { if (o.w.length) o.avg = o.w.reduce((a, b) => a + b, 0) / o.w.length; });
+  out.forEach(o => { if (o.v.length) o.avg = o.v.reduce((a, b) => a + b, 0) / o.v.length; });
   return out;
 }
-function avgWatts(from, to) {
-  const l = S.rides.filter(r => r.ride_date >= from && r.ride_date <= to && r.avg_watts != null).map(r => Number(r.avg_watts));
+function rideAvg(from, to, get) {
+  const l = S.rides.filter(r => r.ride_date >= from && r.ride_date <= to).map(get).filter(v => v != null && isFinite(Number(v))).map(Number);
   return l.length ? l.reduce((a, b) => a + b, 0) / l.length : null;
 }
 function volumeKg(from, to) { let v = 0; for (const s of S.sets) if (s.workout_date >= from && s.workout_date <= to) v += s.weight * s.reps; return v; }
@@ -1290,17 +1331,19 @@ function avgWorkoutMin(days) {
   return l.length ? Math.round(l.reduce((a, b) => a + b, 0) / l.length / 60000) : null;
 }
 /* גרף קו: הישן מימין, השבוע הנוכחי משמאל, כמו הגרף בהיסטוריה */
-function lineChart(vals) {
+function lineChart(vals, dec = 0) {
   const W = 320, H = 120, n = vals.length, nums = vals.filter(v => v != null);
   if (!nums.length) return '';
   let lo = Math.min(...nums), hi = Math.max(...nums);
-  if (hi - lo < 12) { const md = (hi + lo) / 2; lo = md - 6; hi = md + 6; }
-  const x = i => W - 14 - i * (W - 28) / Math.max(1, n - 1), y = v => H - 18 - (v - lo) / (hi - lo) * (H - 38);
+  const span = Math.max(Math.abs((hi + lo) / 2) * 0.08, 0.5);
+  if (hi - lo < span) { const md = (hi + lo) / 2; lo = md - span / 2; hi = md + span / 2; }
+  const x = i => W - 16 - i * (W - 32) / Math.max(1, n - 1), y = v => H - 16 - (v - lo) / (hi - lo) * (H - 46);
   let path = '', pen = false, dots = '', lastI = -1;
   vals.forEach((v, i) => { if (v == null) { pen = false; return; } path += `${pen ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`; pen = true; lastI = i; });
   vals.forEach((v, i) => { if (v != null) dots += `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${i === lastI ? 6.5 : 4}" fill="${i === lastI ? 'var(--accent)' : 'var(--surface)'}" stroke="var(--accent)" stroke-width="3"/>`; });
   const guide = [hi, lo].map(v => `<line x1="0" x2="${W}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="3 5"/>`).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${guide}<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;
+  const lv = vals[lastI], lab = lastI >= 0 ? `<text x="${x(lastI).toFixed(1)}" y="${(y(lv) - 13).toFixed(1)}" text-anchor="middle" font-size="15" font-weight="800" fill="var(--text)" style="font-family:var(--round)">${fmtD(lv, dec)}</text>` : '';
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${guide}${lab}<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;
 }
 function todayCard(t, tpl, counts, day, total) {
   if (!tpl) return `<section class="card hero-w stack" aria-label="היום"><div class="kick">היום יום מנוחה</div><div class="big">רוצה בכל זאת?</div>
@@ -1335,19 +1378,21 @@ function weekCard() {
   return h + `<div class="wk-foot">עמודות: 8 שבועות אחרונים, השבוע משמאל. קו לבן: היעד עד סוף היום.</div></section>`;
 }
 function spinCard() {
-  const t = today(), r = rideOn(t), R = rideWeeks(12), wk = R[R.length - 1];
-  const a30 = avgWatts(addDays(t, -29), t), p30 = avgWatts(addDays(t, -59), addDays(t, -30)), vals = R.map(o => o.avg);
-  let h = `<section class="card spin" aria-label="ספינינג"><div class="top"><div class="ic" style="--c:var(--a-shoulders)">${svg(I.bike, 32, 2)}</div>
-    <div class="grow"><div class="h3">ספינינג</div><div class="sub">${r ? 'היום: ' + rideSummary(r) : 'טרם נרשמה היום'}</div></div>
-    <a class="btn btn-tinted btn-sm" href="#/ride/${t}">${r ? 'עריכה' : 'רשום'}</a></div>`;
-  if (a30 == null && !vals.some(v => v != null)) return h + `<div class="sub" style="margin-top:14px">כשיהיו רכיבות עם וואט, תופיע כאן המגמה של 12 השבועות האחרונים.</div></section>`;
-  const d = a30 != null && p30 != null ? Math.round(a30 - p30) : null;
-  h += `<div class="bigw"><span class="v num ltr">${a30 != null ? Math.round(a30) : '-'}</span><span class="u">וואט ממוצע<br>ב 30 הימים האחרונים</span></div>
-    ${d != null ? `<span class="delta ${d > 0 ? 'up' : d < 0 ? 'down' : ''}">${d === 0 ? 'ללא שינוי מהחודש הקודם' : `<span class="ltr num">${d > 0 ? '+' : ''}${d}</span>&nbsp;וואט מהחודש הקודם`}</span>` : ''}
-    <div class="spchart" role="img" aria-label="ממוצע וואט לפי שבוע, 12 השבועות האחרונים">${lineChart(vals)}</div>
-    <div class="spax" aria-hidden="true"><span>${shortDate(R[0].start)}</span><span>ממוצע לפי שבוע</span><span>השבוע</span></div>
-    <div class="spwk"><div><b class="num">${wk.n}</b><span>${wk.n === 1 ? 'רכיבה' : 'רכיבות'} השבוע</span></div><div><b class="num">${Math.round(wk.sec / 60)}</b><span>דקות</span></div><div><b class="num ltr">${fmtW(Math.round(wk.km * 10) / 10)}</b><span>ק״מ</span></div></div></section>`;
-  return h;
+  const t = today(), mk = SPIN_M.find(x => x.k === S.spinM) || SPIN_M[0];
+  if (!S.rides.length) return `<section class="card spin" aria-label="ספינינג"><div class="dash-h"><h2>ספינינג</h2></div><div class="sub" style="margin-top:8px">עוד אין רכיבות. רושמים רכיבה בלשונית אימון.</div></section>`;
+  const tabs = SPIN_M.map(x => {
+    const a = rideAvg(addDays(t, -29), t, x.get), p = rideAvg(addDays(t, -59), addDays(t, -30), x.get);
+    const d = a != null && p != null ? Number(fmtD(a - p, x.dec)) : 0, on = x.k === mk.k;
+    return `<button type="button" class="stab${on ? ' on' : ''}" data-a="spinM" data-k="${x.k}" aria-pressed="${on}"><span class="v num ltr">${a == null ? '-' : fmtD(a, x.dec)}</span><span class="l">${x.l}</span><span class="d ${d > 0 ? 'up' : d < 0 ? 'down' : ''}">${d ? `<span class="ltr">${d > 0 ? '+' : ''}${fmtD(d, x.dec)}</span>` : 'ללא שינוי'}</span></button>`;
+  }).join('');
+  const R = rideWeeks(12, mk.get), ws = weekStartOf(t), wr = S.rides.filter(r => r.ride_date >= ws && r.ride_date <= t);
+  const wsec = wr.reduce((s, r) => s + (Number(r.duration_sec) || 0), 0), wkm = wr.reduce((s, r) => s + (Number(r.distance_km) || 0), 0);
+  return `<section class="card spin" aria-label="ספינינג"><div class="dash-h"><h2>ספינינג</h2></div>
+    <div class="dash-sub">ממוצע לרכיבה ב 30 יום, ושינוי מהחודש הקודם</div>
+    <div class="stabs">${tabs}</div>
+    <div class="spchart" role="img" aria-label="${mk.l}, ממוצע לרכיבה בכל שבוע, 12 השבועות האחרונים">${lineChart(R.map(o => o.avg), mk.dec)}</div>
+    <div class="spax" aria-hidden="true"><span>${shortDate(R[0].start)}</span><span>${mk.l}, ממוצע לרכיבה בכל שבוע</span><span>השבוע</span></div>
+    <div class="spwk1">השבוע: ${wr.length === 1 ? 'רכיבה אחת' : wr.length + ' רכיבות'}, ${Math.round(wsec / 60)} דקות, ${ltr(fmtW(Math.round(wkm * 10) / 10))} ק״מ</div></section>`;
 }
 function statTiles() {
   const t = today(), first = t.slice(0, 8) + '01', ws = weekStartOf(t);
@@ -1375,7 +1420,7 @@ function vToday() {
       <div class="sub">צלם כל מכשיר, תן לו שם, בחר אזור בגוף וקבע משקל פתיחה. אחרי זה האימון כבר מסודר.</div>
       <a class="btn btn-primary btn-block" href="#/edit/new">הוסף מכשיר ראשון</a></section>`;
   }
-  h += todayCard(t, tpl, counts, day, total) + weekCard() + spinCard() + statTiles();
+  h += weekCard() + spinCard() + statTiles();
   return h + nav('home');
 }
 function machineRow(m, t) {
@@ -1422,21 +1467,30 @@ function workoutOrder(list, t) {
   const rank = m => { const n = cnt[m.id] || 0; return n >= m.default_sets ? 3 : busy.includes(m.id) ? 2 : n ? 0 : 1; };
   return list.sort((x, y) => (rank(x) - rank(y)) || (x.sort_order - y.sort_order) || x.name.localeCompare(y.name, 'he'));
 }
+function rideCard(t) {
+  const r = rideOn(t);
+  return `<section class="card ride-card" style="margin-top:22px" aria-label="ספינינג היום"><div class="ic" style="--c:var(--a-shoulders)">${svg(I.bike, 32, 2)}</div>
+    <div class="grow"><div class="h3">ספינינג</div><div class="sub">${r ? rideSummary(r) : 'טרם נרשמה היום'}</div></div>
+    <a class="btn btn-tinted btn-sm" href="#/ride/${t}">${r ? 'עריכה' : 'רשום'}</a></section>`;
+}
 function vWorkout(arg) {
   const t = today(), tpl = templateFor(t);
-  if (arg && (arg === 'all' || AREA[arg])) S.wf = { date: t, area: arg };
+  if (arg === 'auto') S.wf = null;
+  else if (arg && (arg === 'all' || AREA[arg])) S.wf = { date: t, area: arg };
   if (!tpl) {
     return pageHead('אימון', { sub: 'היום מוגדר כיום מנוחה' }) + `<section class="card stack"><div class="h3">איזה אימון לעשות?</div>
-      <div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost btn-block tplbtn" data-a="start" data-t="${k}">${tplLabel(k)}</button>`).join('')}</div></section>` + nav('workout');
+      <div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost btn-block tplbtn" data-a="start" data-t="${k}">${tplLabel(k)}</button>`).join('')}</div></section>` + rideCard(t) + nav('workout');
   }
   const counts = areaCountsOn(t), sets = setsOn(t), areas = TEMPLATES[tpl], mins = S.settings.minSets, sel = wfArea(tpl, counts);
   const segAreas = sel !== 'all' && !areas.includes(sel) ? [...areas, sel] : areas;
-  let h = pageHead(`אימון ${TPL_NAME[tpl]}`, { sub: areas.map(areaName).join(', '),
-    end: `<span class="nb-timer">${svg(I.timer, 20, 2.2)}<span class="ltr num" id="elapsed"></span></span>` });
-  const tot = areas.reduce((s, a) => s + Math.min(counts[a], mins[a]), 0), totT = areas.reduce((s, a) => s + mins[a], 0);
-  const seg = (k, name, c, mn) => { const met = c >= mn, on = k === sel;
-    return `<a role="tab" href="#/workout/${k}" class="${on ? 'on' : ''}${met ? ' met' : ''}${k === 'all' ? ' all' : ''}" aria-selected="${on}" aria-label="${name}, ${c} מתוך ${mn}"><span class="n">${name}</span><span class="c">${met ? svg(I.check, 16, 3.4) : ''}<span class="ltr">${c}/${mn}</span></span><span class="pt"><i class="p" style="width:${Math.min(100, Math.round(c / mn * 100))}%"></i></span></a>`; };
-  h += `<div class="wseg" role="tablist" aria-label="סינון לפי אזור" style="grid-template-columns:repeat(${segAreas.length},minmax(0,1fr)) auto">${segAreas.map(a => seg(a, areaName(a), counts[a], mins[a] || 1)).join('')}${seg('all', 'הכל', tot, totT)}</div>`;
+  let h = pageHead(`אימון ${TPL_NAME[tpl]}`);
+  const left = areas.filter(a => counts[a] < mins[a]), rem = left.reduce((s, a) => s + mins[a] - counts[a], 0);
+  const sum = rem ? `נשארו ${rem === 1 ? 'סט אחד' : rem + ' סטים'}: ${left.map(a => `<span class="nw">${areaName(a)} ${mins[a] - counts[a]}</span>`).join(', ')}`
+    : `${svg(I.check, 20, 3.2)}<span>כל האזורים הגיעו ליעד</span>`;
+  h += `<div class="wsum"><span class="grow${rem ? '' : ' done'}">${sum}</span><a class="wall${sel === 'all' ? ' on' : ''}" href="#/workout/${sel === 'all' ? 'auto' : 'all'}" aria-pressed="${sel === 'all'}">הכל</a></div>`;
+  const seg = k => { const c = counts[k], mn = mins[k] || 1, met = c >= mn, on = k === sel;
+    return `<a role="tab" href="#/workout/${k}" class="${on ? 'on' : ''}${met ? ' met' : ''}" aria-selected="${on}" aria-label="${areaName(k)}, ${c} מתוך ${mn}${met ? ', הושלם' : ''}">${met ? `<span class="ok">${svg(I.check, 15, 3.4)}</span>` : ''}<span class="n">${areaName(k)}</span><span class="pt"><i class="p" style="width:${Math.min(100, Math.round(c / mn * 100))}%"></i></span></a>`; };
+  h += `<div class="wseg" role="tablist" aria-label="בחירת אזור" style="grid-template-columns:repeat(${segAreas.length},minmax(0,1fr))">${segAreas.map(seg).join('')}</div>`;
   const show = sel === 'all' ? areas : [sel];
   show.forEach((a, i) => {
     const c = counts[a], min = mins[a], met = c >= min, pct = Math.min(100, Math.round(c / min * 100));
@@ -1457,7 +1511,7 @@ function vWorkout(arg) {
     <a class="btn btn-ghost btn-block" href="#/pick/all">${svg(I.plus, 22, 2.4)}מכשיר מחוץ לתוכנית</a>
     <button class="btn btn-primary btn-big btn-block" data-a="finish">סיים אימון</button>
     <div class="row" style="justify-content:center;gap:22px"><button class="link" data-a="switchTpl">החלף אימון</button><a class="link" href="#/sets">סטים לפי אזור</a></div></div>`;
-  return h + nav('workout');
+  return h + rideCard(t) + nav('workout');
 }
 function vPick(area) {
   const t = today(), tpl = templateFor(t), counts = areaCountsOn(t);
@@ -1763,22 +1817,6 @@ function vMonth(ym) {
     if (r) { rides++; km += r.distance_km || 0; }
     info[d] = { n, r, tpl: n ? dayTpl(d) : null };
   });
-  h += `<section class="card mstats" aria-label="סיכום החודש">
-    <div class="ms"><div class="v num">${workouts}</div><div class="k">אימוני כוח${planned ? ` מתוך ${planned}` : ''}</div></div>
-    <div class="ms"><div class="v num">${totalSets}</div><div class="k">סטים</div></div>
-    <div class="ms"><div class="v num">${rides}</div><div class="k">רכיבות ספינינג</div></div>
-    <div class="ms"><div class="v num">${fmtW(Math.round(km * 10) / 10)}</div><div class="k">ק״מ ברכיבה</div></div></section>`;
-  if (totalSets) {
-    const n = days.length, mx = Math.max(1, ...days.map(d => info[d].n)), W = n * 10;
-    let bars = '';
-    days.forEach((d, i) => {
-      const v = info[d].n, x = (n - 1 - i) * 10 + 2, hgt = v ? Math.max(6, v / mx * 100) : 3;
-      bars += `<rect x="${x}" y="${104 - hgt}" width="6" height="${hgt}" rx="3" fill="${v ? '#FCC100' : 'rgba(255,255,255,.14)'}"/>`;
-    });
-    h += `<section class="card chart" style="margin-top:14px" aria-label="סטים בכל יום בחודש"><h3>סטים בכל יום</h3>
-      <svg viewBox="0 0 ${W} 106" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>
-      <div class="ax"><span>1</span><span>15</span><span>${n}</span></div></section>`;
-  }
   let cal = `<section class="card cal" aria-label="לוח החודש"><div class="cal-grid cal-head" aria-hidden="true">${DAY_LETTERS.map(l => `<span>${l}</span>`).join('')}</div><div class="cal-grid">`;
   for (let i = 0; i < parseYmd(first).getDay(); i++) cal += '<span></span>';
   days.forEach(d => {
@@ -1814,35 +1852,34 @@ function vHistory(a, b) {
 function vHistoryDay(date, loading) {
   let h = pageHead(fmtDate(date), { back: `#/history/${ymOf(date)}`, backLabel: HE_MONTHS[parseYmd(date).getMonth()], small: true, end: dayArrows(date) });
   if (loading) return h + '<div class="empty">טוען</div>' + nav('history');
-  const sets = setsOn(date), counts = areaCountsOn(date), tpl = sets.length ? dayTpl(date) : null, day = S.days[date] || {}, r = rideOn(date);
+  const sets = sortSets(setsOn(date)), counts = areaCountsOn(date), tpl = sets.length ? dayTpl(date) : null, day = S.days[date] || {}, r = rideOn(date);
   const bits = [];
   if (sets.length) bits.push(`${tpl ? 'אימון ' + TPL_NAME[tpl] + ', ' : ''}${setsTxt(sets.length)}`);
   if (day.started_at && day.finished_at) bits.push(`משך ${ltr(fmtClock(Date.parse(day.finished_at) - Date.parse(day.started_at)))}`);
-  if (day.avg_hr) bits.push(`דופק ממוצע ${ltr(day.avg_hr)}`);
   if (bits.length) h += `<div class="sub" style="margin:-8px 4px 4px">${bits.join(', ')}</div>`;
   const trained = AREAS.filter(a => counts[a.k] > 0);
-  if (trained.length) {
-    h += `<div class="section-title"><span>אזורים שאומנו</span></div><div class="list">`;
-    h += trained.map(a => {
-      const c = counts[a.k], min = minFor(a.k, date), as = sets.filter(s => machineById(s.machine_id)?.area === a.k);
-      const ms = new Set(as.map(s => s.machine_id)), mx = Math.max(...as.map(s => s.weight));
-      const badge = min == null ? `<span class="pill neutral"><span class="ltr num">${c}</span></span>`
-        : c >= min ? `<span class="pill ok">${svg(I.check, 14, 3)}<span class="ltr num">${c} / ${min}</span></span>`
-        : `<span class="pill warn">${missTxt(min - c)}</span>`;
-      return `<a class="lrow" href="#/history/${date}/${a.k}"><span class="dot" style="background:${a.c};width:14px;height:14px"></span>
-        <div class="grow"><div class="t">${a.n}</div><div class="sub sm">${ms.size === 1 ? 'מכשיר אחד' : ms.size + ' מכשירים'}, עד ${ltr(fmtW(mx))} ק״ג</div></div>${badge}<span class="chev">${svg(I.fwd, 20)}</span></a>`;
+  if (trained.length) h += `<div class="sub sm" style="margin:6px 4px 0">נגיעה בסט פותחת עריכה או מחיקה. כפתור הפלוס מוסיף סט.</div>`;
+  trained.forEach(a => {
+    const c = counts[a.k], min = minFor(a.k, date), as = sets.filter(s => machineById(s.machine_id)?.area === a.k);
+    const badge = min == null ? `<span class="pill neutral"><span class="ltr num">${c}</span></span>`
+      : c >= min ? `<span class="pill ok">${svg(I.check, 14, 3)}<span class="ltr num">${c} / ${min}</span></span>` : `<span class="pill warn"><span class="ltr num">${c} / ${min}</span></span>`;
+    h += `<div class="section-title"><span class="row" style="gap:8px"><span class="dot" style="background:${a.c}"></span>${a.n}</span>${badge}</div><div class="stack-sm">`;
+    h += [...new Set(as.map(s => s.machine_id))].map(id => {
+      const m = machineById(id), ms = as.filter(s => s.machine_id === id);
+      return `<section class="card hday"><div class="row"><div class="thumb" style="width:48px;height:48px">${photoHtml(m, 20)}</div><div class="grow h3">${esc(m?.name || '')}</div></div>
+        <div class="prev-sets">${ms.map(s => `<button type="button" class="ps num ltr" data-a="editSet" data-id="${s.id}" aria-label="${fmtW(s.weight)} קילו, ${s.reps} חזרות. הקש לעריכה">${fmtW(s.weight)} × ${s.reps}</button>`).join('')}<button type="button" class="ps add" data-a="addSet" data-date="${date}" data-m="${id}" aria-label="הוסף סט ל${esc(m?.name || '')}">${svg(I.plus, 20, 2.8)}</button></div></section>`;
     }).join('') + '</div>';
-  }
+  });
   if (r) {
     h += `<div class="section-title"><span>ספינינג</span><a href="#/ride/${date}">עריכה</a></div>
       <div class="list"><div class="lrow"><div class="ic" style="--c:var(--a-shoulders)">${svg(I.bike, 28, 2)}</div><div class="grow">${rideSummary(r)}${r.avg_hr ? `<div class="sub sm">דופק ממוצע ${ltr(r.avg_hr)}${r.max_hr ? `, מרבי ${ltr(r.max_hr)}` : ''}</div>` : ''}</div></div></div>`;
   }
-  if (!trained.length && !r) h += `<div class="empty">לא נרשם אימון ביום הזה.${date === today() ? '' : `<br><a class="btn btn-ghost" href="#/ride/${date}">הוסף רכיבה ליום הזה</a>`}</div>`;
-  const rest = AREAS.filter(a => !counts[a.k]);
-  if (rest.length && (trained.length || r)) {
-    h += `<div class="section-title"><span>שאר האזורים</span></div><div class="list">`;
-    h += rest.map(a => { const l = lastDateForArea(a.k, date);
-      return `<a class="lrow" style="min-height:60px" href="#/history/${date}/${a.k}"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}</div><span class="sub sm">${l ? 'פעם קודמת ' + ltr(shortDate(l)) : 'אין נתונים'}</span><span class="chev">${svg(I.fwd, 18)}</span></a>`; }).join('') + '</div>';
+  if (!trained.length && !r) h += `<div class="empty">לא נרשם אימון ביום הזה.</div>`;
+  if (date <= today()) {
+    h += `<div class="actions" style="margin-top:26px">
+      <button class="btn btn-ghost btn-block" data-a="addSet" data-date="${date}">${svg(I.plus, 22, 2.4)}הוסף סט ליום הזה</button>
+      ${r ? '' : `<a class="btn btn-ghost btn-block" href="#/ride/${date}">${svg(I.bike, 22, 2)}הוסף רכיבה ליום הזה</a>`}
+      ${sets.length ? `<button class="btn btn-danger btn-block" data-a="delDay" data-date="${date}">${svg(I.trash, 20)}מחק את כל הסטים של היום</button>` : ''}</div>`;
   }
   return h + nav('history');
 }
@@ -1888,7 +1925,7 @@ function vRide(date) {
   const ph = (v, d) => esc(v != null && v !== '' ? v : d);
   const val = v => (v == null ? '' : esc(v));
   const pm = p ? Math.floor(p.duration_sec / 60) : 30, ps = p ? p.duration_sec % 60 : 0;
-  let h = pageHead('ספינינג', { back: date === today() ? '#/' : '#/history/' + date, backLabel: date === today() ? 'בית' : shortDate(date), sub: fmtDate(date) });
+  let h = pageHead('ספינינג', { back: date === today() ? '#/workout' : '#/history/' + date, backLabel: date === today() ? 'אימון' : shortDate(date), sub: fmtDate(date) });
   h += `<div class="stack">
     ${r ? '' : `<div class="sub sm">${p ? 'הערכים באפור הם מהרכיבה הקודמת. ממלאים רק מה שהשתנה, שדה ריק יישמר כמו בפעם הקודמת.' : 'ממלאים את הנתונים מהצג של האופניים.'}</div>`}
     <div class="field"><span class="flabel">זמן</span><div class="grid2">
@@ -2115,7 +2152,50 @@ function revealSetCard() {
   const gap = card.getBoundingClientRect().bottom - dock.getBoundingClientRect().top + 16;
   if (gap > 0) window.scrollBy({ top: gap, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }
+function addDefaults(m, date) {
+  const l = sortSets(setsOn(date).filter(s => s.machine_id === m.id)), last = l[l.length - 1];
+  if (last) return { w: last.weight, r: last.reps };
+  const p = prevSession(m.id, date);
+  return p ? { w: p.sets[0].weight, r: p.sets[0].reps } : { w: m.min_weight, r: 10 };
+}
 const A = {
+  spinM(el) { S.spinM = el.dataset.k; render(); },
+  addSet(el) {
+    const date = el.dataset.date, ds = sortSets(setsOn(date));
+    const tplA = TEMPLATES[templateFor(date) || ''] || [];
+    const m0 = machineById(el.dataset.m) || (ds.length ? machineById(ds[ds.length - 1].machine_id) : null)
+      || sortMachines(S.machines.filter(m => !m.archived && tplA.includes(m.area)))[0] || sortMachines(S.machines.filter(m => !m.archived))[0];
+    if (!m0) { toast('אין עדיין מכשירים'); return; }
+    const d = addDefaults(m0, date);
+    const opts = AREAS.map(a => { const l = sortMachines(S.machines.filter(m => m.area === a.k && (!m.archived || m.id === m0.id)));
+      return l.length ? `<optgroup label="${a.n}">${l.map(m => `<option value="${m.id}" ${m.id === m0.id ? 'selected' : ''}>${esc(m.name)}</option>`).join('')}</optgroup>` : ''; }).join('');
+    openModal(`<h2>הוספת סט</h2><div class="sub" style="margin:-10px 0 16px">${fmtDate(date)}</div><div class="stack">
+      <div class="field"><label for="am">מכשיר</label><select class="input" id="am" data-date="${date}" style="width:100%;height:60px;color:var(--text)">${opts}</select></div>
+      ${stepper('aw', 'משקל, ק״ג', d.w, m0.weight_step || 5)}${stepper('ar', 'חזרות', d.r, 1, { int: true })}
+      <button class="btn btn-primary btn-block" data-a="addSetSave" data-date="${date}">הוסף סט</button>
+      <button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
+  },
+  addSetSave(el) {
+    const date = el.dataset.date, m = machineById($('#am').value); if (!m) return;
+    const w = Math.max(0, num($('#aw').value) || 0), r = Math.round(num($('#ar').value) || 0);
+    if (r <= 0) { toast('הזן מספר חזרות'); return; }
+    const ds = sortSets(setsOn(date)), lastAt = ds.length ? Date.parse(ds[ds.length - 1].created_at) : NaN;
+    let at; if (isFinite(lastAt)) at = new Date(lastAt + 1000); else { at = parseYmd(date); at.setHours(12, 0, 0, 0); }
+    const row = { id: uuid(), user_id: S.user.id, machine_id: m.id, workout_date: date, weight: w, reps: r, is_pr: false, created_at: at.toISOString() };
+    enqueue({ table: 'sets', op: 'upsert', row });
+    if (date < S.rangeStart) (S.daySets[date] = S.daySets[date] || []).push(normSet(row));
+    closeModal(); toast('הסט נוסף'); render();
+  },
+  delDay(el) {
+    const date = el.dataset.date, n = setsOn(date).length;
+    openModal(`<h2>למחוק את כל הסטים?</h2><p class="sub">${fmtDate(date)}: ${setsTxt(n)} יימחקו. אי אפשר לבטל את זה.</p>
+      <div class="stack-sm"><button class="btn btn-danger btn-block" data-a="delDayYes" data-date="${date}">כן, מחק ${setsTxt(n)}</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
+  },
+  delDayYes(el) {
+    const date = el.dataset.date;
+    setsOn(date).slice().forEach(s => { enqueue({ table: 'sets', op: 'delete', id: s.id }); patchDaySets(s.id, () => null); });
+    closeModal(); toast('הסטים נמחקו'); render();
+  },
   start(el) {
     /* שעון האימון מתחיל בסט הראשון, לא בכניסה למסך */
     const t = today(), tpl = el.dataset.t || templateFor(t);
@@ -2308,12 +2388,12 @@ const A = {
     enqueue({ table: 'rides', op: 'upsert', row: { id: r?.id || uuid(), user_id: S.user.id, ride_date: date, duration_sec: sec,
       distance_km: rideFieldVal('rdist', p?.distance_km), calories: cal == null ? null : Math.round(cal), avg_watts: watts == null ? null : Math.round(watts),
       watts_estimated: est, bike_no: bike, avg_hr: iv('rhr'), max_hr: iv('rhrm'), watch_kcal: iv('rwk') } });
-    toast('הרכיבה נשמרה'); go(date === today() ? '#/' : '#/history/' + date);
+    toast('הרכיבה נשמרה'); go(date === today() ? '#/workout' : '#/history/' + date);
   },
   delRide(el) {
     openModal(`<h2>למחוק את הרכיבה?</h2><div class="stack-sm"><button class="btn btn-danger btn-block" data-a="delRideYes" data-id="${el.dataset.id}">כן, מחק</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
   },
-  delRideYes(el) { enqueue({ table: 'rides', op: 'delete', id: el.dataset.id }); closeModal(); toast('הרכיבה נמחקה'); go('#/'); },
+  delRideYes(el) { enqueue({ table: 'rides', op: 'delete', id: el.dataset.id }); closeModal(); toast('הרכיבה נמחקה'); const rd = S.route.a; go(isDate(rd) && rd !== today() ? '#/history/' + rd : '#/workout'); },
   sStep(el) {
     const k = el.dataset.k, d = parseInt(el.dataset.d, 10);
     if (k === 'rest') S.settings.rest = Math.min(600, Math.max(15, S.settings.rest + d * 15));
@@ -2403,6 +2483,12 @@ document.addEventListener('change', async e => {
     if (k === 'split') S.settings.split[t.dataset.dow] = t.value || null;
     else if (k === 'wakeLock' || k === 'sound') S.settings[k] = t.checked;
     saveSettings(); render(); return;
+  }
+  if (t.id === 'am') {
+    const m = machineById(t.value); if (!m) return; const d = addDefaults(m, t.dataset.date);
+    $('#aw').value = fmtW(d.w); $('#ar').value = d.r;
+    document.querySelectorAll('[data-t="aw"]').forEach(b => { b.dataset.st = m.weight_step || 5; });
+    return;
   }
   if (t.id === 'hdate' && isDate(t.value)) { go(`#/history/${t.value}${t.dataset.area ? '/' + t.dataset.area : ''}`); return; }
   if (t.hasAttribute('data-photo') && t.files && t.files[0] && S.edit) {
