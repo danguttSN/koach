@@ -583,6 +583,120 @@ body.scrolled .navbar{background:rgba(10,10,11,.82)}
 .login .app-icon{align-self:center;margin-inline:auto;box-shadow:0 14px 40px rgba(252,193,0,.25)}
 .login .brand,.login > p.sub{text-align:center;align-self:center}
 .login .brand{font-size:56px;font-weight:900}
+
+/* ===================== 2.4: בית, כפתור אימון מרכזי, סינון באימון ===================== */
+:root,html[data-theme]{ --above-nav:calc(var(--nav-bottom) + var(--nav-h) + 30px); }
+
+/* סרגל לשוניות עם כפתור אימון מרכזי */
+.nav{gap:0;padding:6px 4px}
+.nav a{font-size:12px;min-width:0}
+.nav a.fab{position:relative;justify-content:flex-end;padding-bottom:6px;background:transparent!important;color:#8E8E96}
+.nav a.fab.on{color:var(--accent)}
+.fab-w{position:absolute;top:-32px;left:50%;transform:translateX(-50%);width:78px;height:78px;border-radius:50%;background:var(--bg);display:grid;place-items:center}
+.nav a .fab-r{position:absolute;inset:0;width:78px;height:78px}
+.fab-c{width:60px;height:60px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;box-shadow:0 8px 24px rgba(252,193,0,.3);transition:transform .12s}
+.nav a .fab-c svg{width:34px;height:34px}
+.nav a.fab:active .fab-c{transform:scale(.93)}
+
+/* בית: כרטיס היום, שורות אזור לחיצות */
+.hero-w .arow{color:var(--text);text-decoration:none;border-radius:4px}
+.hero-w .arow:active{opacity:.7}
+.hero-w .arow .v{margin:0 auto 0 0}
+.arow .chev{display:flex;color:var(--faint);margin-inline-start:4px}
+
+/* בית: סטים השבוע מול היעד */
+.wk{margin-top:14px;padding:22px 20px 16px}
+.dash-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.dash-h h2{margin:0;font-size:26px;font-weight:900;letter-spacing:-.5px}
+.dash-n{font:900 30px var(--round);letter-spacing:-.5px}
+.dash-n small{font-size:18px;color:var(--muted);font-weight:800}
+.dash-sub{font-size:16px;font-weight:700;color:var(--muted);margin:2px 0 6px}
+.wr{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:14px;row-gap:9px;padding:13px 0 12px;border-top:1px solid var(--sep)}
+.wr:first-of-type{border-top:0}
+.wr .nm{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;min-width:0;line-height:1.15}
+.wr .nm .dot{width:12px;height:12px}
+.wr small.behind{display:block;font-size:14px;font-weight:700;color:var(--warn);margin-top:3px}
+.wr .vv{display:inline-flex;align-items:center;gap:0;justify-content:flex-end;min-width:76px;font:900 22px var(--round)}
+.wr .vv small{font-size:16px;color:var(--muted);font-weight:800}
+.wr .vv svg{margin-right:4px}
+.wr.met .vv{color:var(--accent)}
+.wr .tb2{grid-column:1/-1;position:relative}
+.wr .mk{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:1px;background:#fff}
+.spark{display:flex;align-items:flex-end;gap:3px;height:28px}
+.spark i{display:block;width:6px;border-radius:2px;background:rgba(255,255,255,.13)}
+.spark i.part{background:rgba(252,193,0,.42)}
+.spark i.met{background:var(--accent)}
+.spark i.now{outline:1.5px solid rgba(255,255,255,.55);outline-offset:1px}
+.wk-foot{font-size:14px;font-weight:600;color:var(--faint);margin-top:8px;line-height:1.35}
+
+/* בית: ספינינג */
+.spin{margin-top:14px;padding:20px 20px 18px}
+.spin .top{display:flex;align-items:center;gap:14px}
+.bigw{display:flex;align-items:center;gap:12px;margin:20px 0 8px}
+.bigw .v{font:900 60px/.95 var(--round);letter-spacing:-2px}
+.bigw .u{font-size:17px;font-weight:800;color:var(--muted);line-height:1.2}
+.delta{display:inline-flex;align-items:center;font-size:16px;font-weight:800;padding:5px 12px;border-radius:999px;background:var(--surface2);color:var(--text)}
+.delta.up{background:var(--accent-tint);color:var(--accent)}
+.delta.down{color:var(--warn)}
+.spchart{margin-top:12px}
+.spchart svg{display:block;width:100%;height:auto}
+.spax{display:flex;justify-content:space-between;margin-top:4px;font:700 14px var(--round);color:var(--faint)}
+.spwk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--sep)}
+.spwk div{display:flex;flex-direction:column;align-items:flex-start}
+.spwk b{font:900 26px var(--round)}
+.spwk span{font-size:15px;font-weight:700;color:var(--muted)}
+
+/* בית: סטטיסטיקה */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.tile{background:var(--surface);border-radius:24px;padding:18px 18px 16px;min-height:138px;display:flex;flex-direction:column}
+.tile .v{font:900 40px/1 var(--round);letter-spacing:-1px}
+.tile .v small{font-size:20px;color:var(--muted);font-weight:800;letter-spacing:0}
+.tile .k{font-size:16px;font-weight:700;color:var(--muted);margin-top:8px;line-height:1.25}
+.tile .s{font-size:14px;font-weight:800;color:var(--faint);margin-top:auto;padding-top:8px;line-height:1.3}
+.tile .s.up{color:var(--accent)}
+
+/* אימון: בורר אזור קבוע בראש המסך */
+.wseg{position:sticky;top:calc(52px + var(--st));z-index:13;display:grid;gap:5px;margin:0 -18px 4px;padding:6px 18px 12px;background:var(--bg)}
+.wseg a{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:72px;padding:6px 2px 14px;border-radius:18px;background:var(--surface);color:var(--text);text-decoration:none;transition:transform .1s}
+.wseg a:active{transform:scale(.96)}
+.wseg .n{font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;letter-spacing:-.2px}
+.wseg a.all{padding-inline:9px}
+.wseg a.all .c{font-size:17px}
+body.scrolled .navbar{background:rgba(10,10,11,.96)}
+.wseg .c{display:inline-flex;align-items:center;gap:3px;font:900 19px var(--round)}
+.wseg .pt{position:absolute;left:12px;right:12px;bottom:7px;height:3px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
+.wseg .p{display:block;height:100%;border-radius:2px;background:var(--accent)}
+.wseg a.on .pt{background:rgba(0,0,0,.14)}
+.wseg a.met:not(.on) .c{color:var(--accent)}
+.wseg a.on{background:var(--accent);color:var(--on-accent)}
+.wseg a.on .p{background:var(--on-accent)}
+.xs .busy{color:var(--warn);font-weight:700}
+
+/* מכשיר: ערכים מוצעים באפור עד שנוגעים */
+.sinput.ghost{color:var(--faint)}
+.st-r.cur.ghost #curW,.st-r.cur.ghost #curR{color:var(--faint)}
+.st-r.cur.ghost{box-shadow:inset 0 0 0 2px rgba(252,193,0,.45)}
+.ghint{font-size:16px;font-weight:700;color:var(--muted);margin-top:-10px;line-height:1.35}
+.sugg{display:flex;align-items:center;gap:12px;width:100%;text-align:right;border:0;border-radius:18px;padding:14px 14px 14px 12px;background:var(--accent-tint);color:var(--text);font-size:18px;font-weight:700;line-height:1.3}
+.sugg svg{color:var(--accent);flex-shrink:0}
+.sugg b{color:var(--accent);font-family:var(--round);font-size:24px}
+.sugg .sg-t{display:block;font-size:20px;font-weight:800}
+.sugg .sg-s{display:block;font-size:15px;font-weight:700;color:var(--muted);margin-top:2px}
+.stepper:has(.sinput.ghost) .qchip.on{background:var(--surface2);color:var(--text);box-shadow:inset 0 0 0 2px rgba(252,193,0,.55)}
+.sugg .sg-btn{flex-shrink:0;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:9px 14px;font-size:16px;font-weight:800}
+.undo{display:flex;align-items:center;gap:12px;margin-top:-4px;padding:8px 8px 8px 16px;border-radius:18px;background:var(--surface2);font-size:18px;font-weight:700}
+.undo button{margin-inline-start:auto;min-height:48px;padding:0 22px;border-radius:999px;border:0;background:var(--text);color:var(--bg);font-size:18px;font-weight:800}
+.linkbtn{margin-bottom:14px}
+.dock a.btn svg{margin-inline-start:2px}
+
+/* היסטוריה: סטים לעריכה */
+button.ps{border:0;color:var(--text);font-family:var(--round);font-size:19px;font-weight:700;min-height:44px;cursor:pointer}
+button.ps:active{background:var(--fill2)}
+
+/* כפתורי בחירת אימון בשתי שורות */
+.btn.tplbtn{flex-direction:column;gap:2px;white-space:normal;min-height:78px;padding:12px 18px;line-height:1.15}
+.btn.tplbtn b{font-size:22px;font-weight:900}
+.btn.tplbtn small{font-size:16px;font-weight:700;opacity:.72}
 </style>
 </head>
 <body>
@@ -635,7 +749,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '2.3';
+const APP_VERSION = '2.4';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -679,7 +793,7 @@ const DEFAULT_SETTINGS = {
   minSets: { back:9, biceps:9, chest:9, triceps:9, shoulders:9, legs:12, abs:9 },
   split: { '0':'A', '1':'B', '2':'A', '3':'B', '4':'C', '5':null, '6':null },
   wakeLock: true, sound: true, theme: 'dark',
-  restByArea: {}, machineRest: {}, machineSetup: {}
+  restByArea: {}, machineRest: {}, machineSetup: {}, machineLink: {}, repTop: 12
 };
 const CONFLICT = { sets:'id', machines:'id', rides:'id', workout_days:'user_id,workout_date', settings:'user_id' };
 
@@ -699,7 +813,10 @@ const I = {
   watch:'<rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6V3h6v3M9 18v3h6v-3"/>',
   calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4M10 2h4"/>',
-  down:'<path d="M6 9l6 6 6-6"/>'
+  down:'<path d="M6 9l6 6 6-6"/>',
+  grid:'<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/>',
+  up:'<path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/>'
 };
 function svg(p, s = 24, w = 2) {
   return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
@@ -738,7 +855,8 @@ const S = {
   maxByMachine: {}, photoUrls: {}, rangeStart: addDays(today(), -120),
   daySets: {}, dayLoading: {}, monthLoaded: {}, monthLoading: {},
   queue: [], failed: [], lastSync: 0, persisted: null, syncedFlash: 0, draft: {}, edit: null, mfilter: 'all', showArchived: false,
-  timer: null, route: { name: 'today' }, prevHash: '', curHash: location.hash
+  timer: null, route: { name: 'today' }, prevHash: '', curHash: location.hash,
+  wf: null, busy: null, undo: null
 };
 
 function mergeSettings(d) {
@@ -746,7 +864,7 @@ function mergeSettings(d) {
   return { ...DEFAULT_SETTINGS, ...d,
     minSets: { ...DEFAULT_SETTINGS.minSets, ...(d.minSets || {}) },
     split: { ...DEFAULT_SETTINGS.split, ...(d.split || {}) },
-    restByArea: { ...(d.restByArea || {}) }, machineRest: { ...(d.machineRest || {}) }, machineSetup: { ...(d.machineSetup || {}) } };
+    restByArea: { ...(d.restByArea || {}) }, machineRest: { ...(d.machineRest || {}) }, machineSetup: { ...(d.machineSetup || {}) }, machineLink: { ...(d.machineLink || {}) } };
 }
 const normSet = s => ({ ...s, weight: Number(s.weight) || 0, reps: Number(s.reps) || 0 });
 const normMachine = m => ({ ...m, min_weight: Number(m.min_weight) || 0, weight_step: Number(m.weight_step) || 5, default_sets: Number(m.default_sets) || 3 });
@@ -833,6 +951,7 @@ function loadCache() {
     S.queue.forEach(applyLocal);
     const t = JSON.parse(localStorage.getItem(TK) || 'null');
     if (t && t.end > Date.now() - 10 * 60000) S.timer = t;
+    S.busy = JSON.parse(localStorage.getItem(BK) || 'null');
   } catch (e) {}
   applyTheme();
 }
@@ -950,7 +1069,7 @@ async function fetchAll() {
     S.rangeStart = since;
     S.queue.forEach(applyLocal);
     S.loaded = true;
-    applyTheme(); saveCache(); render();
+    applyTheme(); saveCache(); maybeResume(); render();
     refreshPhotos();
   } catch (e) {
     log('טעינת נתונים נכשלה:', errInfo(e));
@@ -990,8 +1109,18 @@ function openModal(html) { const m = $('#modal'); m.innerHTML = `<div class="she
 function closeModal() { const m = $('#modal'); m.hidden = true; m.innerHTML = ''; }
 function go(h) { if (location.hash === h) render(); else location.hash = h; }
 function nav(active) {
-  const items = [['today', '#/', I.home, 'היום'], ['history', '#/history', I.history, 'היסטוריה'], ['machines', '#/machines', I.dumbbell, 'מכשירים'], ['settings', '#/settings', I.settings, 'הגדרות']];
-  return `<nav class="nav" aria-label="ניווט ראשי">${items.map(([k, h, ic, l]) => `<a href="${h}" class="${k === active ? 'on' : ''}" ${k === active ? 'aria-current="page"' : ''}>${svg(ic, 30, 2)}<span>${l}</span></a>`).join('')}</nav>`;
+  if (active === 'today') active = ['workout', 'm', 'pick', 'sets'].includes(S.route?.name) ? 'workout' : 'home';
+  const t = today(), tpl = templateFor(t);
+  let ring = '', aria = 'אימון היום';
+  if (tpl && S.loaded) {
+    const c = areaCountsOn(t), areas = TEMPLATES[tpl], mn = S.settings.minSets;
+    const tg = areas.reduce((s, a) => s + mn[a], 0), dn = areas.reduce((s, a) => s + Math.min(c[a], mn[a]), 0);
+    const f = tg ? dn / tg : 0, C = 2 * Math.PI * 35;
+    ring = `<svg class="fab-r" viewBox="0 0 78 78" aria-hidden="true"><circle cx="39" cy="39" r="35" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="4"/>${f > 0 ? `<circle cx="39" cy="39" r="35" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${(C * (1 - f)).toFixed(2)}" transform="rotate(-90 39 39)"/>` : ''}</svg>`;
+    aria = `אימון ${TPL_NAME[tpl]}, ${dn} מתוך ${tg} סטים`;
+  }
+  const tab = (k, h, ic, l) => `<a href="${h}" class="${k === active ? 'on' : ''}" ${k === active ? 'aria-current="page"' : ''}>${svg(ic, 30, 2)}<span>${l}</span></a>`;
+  return `<nav class="nav" aria-label="ניווט ראשי">${tab('home', '#/', I.home, 'בית')}${tab('machines', '#/machines', I.grid, 'מכשירים')}<a href="#/workout" class="fab ${active === 'workout' ? 'on' : ''}" aria-label="${aria}" ${active === 'workout' ? 'aria-current="page"' : ''}><span class="fab-w">${ring}<span class="fab-c">${svg(I.dumbbell, 34, 2.6)}</span></span><span>אימון</span></a>${tab('history', '#/history', I.history, 'היסטוריה')}${tab('settings', '#/settings', I.settings, 'הגדרות')}</nav>`;
 }
 function pageHead(title, opts = {}) {
   const back = opts.back ? `<a class="nb-back" href="${opts.back}">${svg(I.back, 28, 2.6)}<span>${opts.backLabel || 'חזרה'}</span></a>` : '';
@@ -1016,7 +1145,7 @@ function legend(areas, counts, mins) {
 function stepper(id, label, val, st, opts = {}) {
   return `<div class="stepper"><label class="slabel" for="${id}">${label}</label><div class="srow">
     <button type="button" class="sbtn" data-a="step" data-t="${id}" data-st="${st}" data-d="1" aria-label="הוסף ל${label}">${svg(I.plus, 28, 2.6)}</button>
-    <input id="${id}" class="sinput num" dir="ltr" inputmode="${opts.int ? 'numeric' : 'decimal'}" value="${fmtW(val)}" ${opts.draft ? `data-draft="${opts.draft}"` : ''} autocomplete="off" enterkeyhint="done" readonly data-tapedit="1" aria-description="הקשה על המספר פותחת הקלדה">
+    <input id="${id}" class="sinput num${opts.ghost ? ' ghost' : ''}" dir="ltr" inputmode="${opts.int ? 'numeric' : 'decimal'}" value="${fmtW(val)}" ${opts.draft ? `data-draft="${opts.draft}"` : ''} autocomplete="off" enterkeyhint="done" readonly data-tapedit="1" aria-description="הקשה על המספר פותחת הקלדה">
     <button type="button" class="sbtn" data-a="step" data-t="${id}" data-st="${st}" data-d="-1" aria-label="הפחת מ${label}">${svg(I.minus, 28, 2.6)}</button>
   </div>${opts.chips ? `<div class="qchips" data-for="${id}">${opts.chips.map(v => `<button type="button" class="qchip num${Number(val) === v ? ' on' : ''}" data-a="qset" data-t="${id}" data-v="${v}" aria-label="${v} ${label}">${v}</button>`).join('')}</div>` : ''}</div>`;
 }
@@ -1111,39 +1240,143 @@ function weekNums(t) {
   for (let i = 0; i < 7; i++) { const n = setsOn(addDays(start, i)).length; sets += n; if (n) days++; }
   return { days, sets };
 }
+/* ---------- 2.4: מסך הבית ---------- */
+const tplLabel = k => `<b>אימון ${TPL_NAME[k]}</b><small>${TEMPLATES[k].map(areaName).join(', ')}</small>`;
+const weekStartOf = d => addDays(d, -parseYmd(d).getDay());
+const dayDiff = (a, b) => Math.round((parseYmd(a) - parseYmd(b)) / 864e5);
+function weeklyTargets() {
+  const tg = {}, upto = {}, before = {}, dow = parseYmd(today()).getDay();
+  AREAS.forEach(a => { tg[a.k] = 0; upto[a.k] = 0; before[a.k] = 0; });
+  for (let i = 0; i < 7; i++) {
+    const t = S.settings.split[String(i)]; if (!t || !TEMPLATES[t]) continue;
+    TEMPLATES[t].forEach(a => { const n = S.settings.minSets[a]; tg[a] += n; if (i <= dow) upto[a] += n; if (i < dow) before[a] += n; });
+  }
+  return { tg, upto, before };
+}
+function weeklyAreaCounts(nW) {
+  const first = addDays(weekStartOf(today()), -7 * (nW - 1)), mm = Object.fromEntries(S.machines.map(m => [m.id, m]));
+  const out = Array.from({ length: nW }, () => Object.fromEntries(AREAS.map(a => [a.k, 0])));
+  for (const s of S.sets) {
+    if (s.workout_date < first) continue;
+    const m = mm[s.machine_id], w = out[Math.floor(dayDiff(s.workout_date, first) / 7)];
+    if (m && w) w[m.area]++;
+  }
+  return out;
+}
+function rideWeeks(nW) {
+  const t = today(), first = addDays(weekStartOf(t), -7 * (nW - 1));
+  const out = Array.from({ length: nW }, (_, i) => ({ start: addDays(first, 7 * i), w: [], n: 0, sec: 0, km: 0, avg: null }));
+  for (const r of S.rides) {
+    if (r.ride_date < first || r.ride_date > t) continue;
+    const o = out[Math.floor(dayDiff(r.ride_date, first) / 7)]; if (!o) continue;
+    o.n++; o.sec += Number(r.duration_sec) || 0; o.km += Number(r.distance_km) || 0;
+    if (r.avg_watts != null) o.w.push(Number(r.avg_watts));
+  }
+  out.forEach(o => { if (o.w.length) o.avg = o.w.reduce((a, b) => a + b, 0) / o.w.length; });
+  return out;
+}
+function avgWatts(from, to) {
+  const l = S.rides.filter(r => r.ride_date >= from && r.ride_date <= to && r.avg_watts != null).map(r => Number(r.avg_watts));
+  return l.length ? l.reduce((a, b) => a + b, 0) / l.length : null;
+}
+function volumeKg(from, to) { let v = 0; for (const s of S.sets) if (s.workout_date >= from && s.workout_date <= to) v += s.weight * s.reps; return v; }
+function avgWorkoutMin(days) {
+  const from = addDays(today(), -(days - 1)), l = [];
+  for (const [d, x] of Object.entries(S.days)) {
+    if (d < from || !x.started_at || !x.finished_at) continue;
+    const ms = Date.parse(x.finished_at) - Date.parse(x.started_at);
+    if (ms > 10 * 60000 && ms < 4 * 3600000) l.push(ms);
+  }
+  return l.length ? Math.round(l.reduce((a, b) => a + b, 0) / l.length / 60000) : null;
+}
+/* גרף קו: הישן מימין, השבוע הנוכחי משמאל, כמו הגרף בהיסטוריה */
+function lineChart(vals) {
+  const W = 320, H = 120, n = vals.length, nums = vals.filter(v => v != null);
+  if (!nums.length) return '';
+  let lo = Math.min(...nums), hi = Math.max(...nums);
+  if (hi - lo < 12) { const md = (hi + lo) / 2; lo = md - 6; hi = md + 6; }
+  const x = i => W - 14 - i * (W - 28) / Math.max(1, n - 1), y = v => H - 18 - (v - lo) / (hi - lo) * (H - 38);
+  let path = '', pen = false, dots = '', lastI = -1;
+  vals.forEach((v, i) => { if (v == null) { pen = false; return; } path += `${pen ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`; pen = true; lastI = i; });
+  vals.forEach((v, i) => { if (v != null) dots += `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${i === lastI ? 6.5 : 4}" fill="${i === lastI ? 'var(--accent)' : 'var(--surface)'}" stroke="var(--accent)" stroke-width="3"/>`; });
+  const guide = [hi, lo].map(v => `<line x1="0" x2="${W}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="3 5"/>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${guide}<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;
+}
+function todayCard(t, tpl, counts, day, total) {
+  if (!tpl) return `<section class="card hero-w stack" aria-label="היום"><div class="kick">היום יום מנוחה</div><div class="big">רוצה בכל זאת?</div>
+    <div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost btn-block tplbtn" data-a="start" data-t="${k}">${tplLabel(k)}</button>`).join('')}</div>
+    ${total ? `<a class="btn btn-tinted btn-block" href="#/workout">${setsTxt(total)} היום</a>` : ''}</section>`;
+  const areas = TEMPLATES[tpl], mins = S.settings.minSets;
+  return `<section class="card hero-w" aria-label="האימון של היום"><div class="row"><div class="grow kick">האימון של היום</div>${day.finished_at ? `<span class="pill ok">${svg(I.check, 16, 3)}הסתיים</span>` : ''}</div>
+    <div class="big">אימון ${TPL_NAME[tpl]}</div>
+    ${areas.map(a => { const c = counts[a], mn = mins[a], met = c >= mn;
+      return `<a class="arow ${met ? 'met' : ''}" href="#/workout/${a}" aria-label="${areaName(a)}, ${c} מתוך ${mn} סטים"><div class="top"><span class="dot" style="background:${areaColor(a)}"></span><span>${areaName(a)}</span><span class="v ltr">${met ? svg(I.check, 20, 3.2) + ' ' : ''}${c}<small>/${mn}</small></span><span class="chev">${svg(I.fwd, 22, 2.4)}</span></div>
+      <div class="bar"><i style="width:${Math.min(100, Math.round(c / mn * 100))}%"></i></div></a>`; }).join('')}
+    <a class="btn btn-primary btn-big btn-block" href="#/workout">${total ? 'המשך אימון' : 'התחל אימון'}</a>
+    <button class="link" style="margin-top:6px;width:100%;justify-content:center" data-a="switchTpl">החלף אימון</button></section>`;
+}
+function weekCard() {
+  const { tg, upto, before } = weeklyTargets(), W = weeklyAreaCounts(8), cur = W[W.length - 1], wn = weekNums(today());
+  const areas = AREAS.filter(a => tg[a.k] > 0 || cur[a.k] > 0);
+  const tot = areas.reduce((s, a) => s + cur[a.k], 0), totT = areas.reduce((s, a) => s + tg[a.k], 0);
+  let h = `<section class="card wk" aria-label="סטים השבוע מול היעד"><div class="dash-h"><h2>סטים השבוע</h2><span class="dash-n num ltr">${tot}<small>/${totT}</small></span></div>
+    <div class="dash-sub">${wn.days === 1 ? 'אימון אחד' : wn.days + ' אימונים'} מתחילת השבוע</div>`;
+  h += areas.map(a => {
+    const k = a.k, c = cur[k], T = tg[k], met = T > 0 && c >= T, pct = T ? Math.min(100, c / T * 100) : 100;
+    const mk = T ? Math.min(100, upto[k] / T * 100) : null, behind = T ? Math.max(0, before[k] - c) : 0;
+    const spark = W.map((w, i) => { const v = w[k], f = T ? Math.min(1, v / T) : (v ? 1 : 0);
+      return `<i class="${T && v >= T ? 'met' : v ? 'part' : ''}${i === W.length - 1 ? ' now' : ''}" style="height:${Math.max(3, Math.round(f * 28))}px"></i>`; }).join('');
+    const lab = `${a.n}: ${c} מתוך ${T || 0} השבוע${behind ? `, בפיגור של ${behind}` : ''}`;
+    return `<div class="wr ${met ? 'met' : ''}" role="group" aria-label="${lab}"><div class="nm"><span class="dot" style="background:${a.c}"></span><span>${a.n}${behind ? `<small class="behind">${behind === 1 ? 'בפיגור של סט אחד' : `בפיגור של ${behind} סטים`}</small>` : ''}</span></div>
+      <span class="spark" aria-hidden="true">${spark}</span>
+      <span class="vv num ltr" aria-hidden="true">${met ? svg(I.check, 18, 3.2) : ''}${c}<small>/${T || '-'}</small></span>
+      <div class="tb2" aria-hidden="true"><div class="bar"><i style="width:${pct}%"></i></div>${mk != null && mk < 100 && !met ? `<span class="mk" style="right:calc(${mk.toFixed(1)}% - 1px)"></span>` : ''}</div></div>`;
+  }).join('');
+  return h + `<div class="wk-foot">עמודות: 8 שבועות אחרונים, השבוע משמאל. קו לבן: היעד עד סוף היום.</div></section>`;
+}
+function spinCard() {
+  const t = today(), r = rideOn(t), R = rideWeeks(12), wk = R[R.length - 1];
+  const a30 = avgWatts(addDays(t, -29), t), p30 = avgWatts(addDays(t, -59), addDays(t, -30)), vals = R.map(o => o.avg);
+  let h = `<section class="card spin" aria-label="ספינינג"><div class="top"><div class="ic" style="--c:var(--a-shoulders)">${svg(I.bike, 32, 2)}</div>
+    <div class="grow"><div class="h3">ספינינג</div><div class="sub">${r ? 'היום: ' + rideSummary(r) : 'טרם נרשמה היום'}</div></div>
+    <a class="btn btn-tinted btn-sm" href="#/ride/${t}">${r ? 'עריכה' : 'רשום'}</a></div>`;
+  if (a30 == null && !vals.some(v => v != null)) return h + `<div class="sub" style="margin-top:14px">כשיהיו רכיבות עם וואט, תופיע כאן המגמה של 12 השבועות האחרונים.</div></section>`;
+  const d = a30 != null && p30 != null ? Math.round(a30 - p30) : null;
+  h += `<div class="bigw"><span class="v num ltr">${a30 != null ? Math.round(a30) : '-'}</span><span class="u">וואט ממוצע<br>ב 30 הימים האחרונים</span></div>
+    ${d != null ? `<span class="delta ${d > 0 ? 'up' : d < 0 ? 'down' : ''}">${d === 0 ? 'ללא שינוי מהחודש הקודם' : `<span class="ltr num">${d > 0 ? '+' : ''}${d}</span>&nbsp;וואט מהחודש הקודם`}</span>` : ''}
+    <div class="spchart" role="img" aria-label="ממוצע וואט לפי שבוע, 12 השבועות האחרונים">${lineChart(vals)}</div>
+    <div class="spax" aria-hidden="true"><span>${shortDate(R[0].start)}</span><span>ממוצע לפי שבוע</span><span>השבוע</span></div>
+    <div class="spwk"><div><b class="num">${wk.n}</b><span>${wk.n === 1 ? 'רכיבה' : 'רכיבות'} השבוע</span></div><div><b class="num">${Math.round(wk.sec / 60)}</b><span>דקות</span></div><div><b class="num ltr">${fmtW(Math.round(wk.km * 10) / 10)}</b><span>ק״מ</span></div></div></section>`;
+  return h;
+}
+function statTiles() {
+  const t = today(), first = t.slice(0, 8) + '01', ws = weekStartOf(t);
+  let planned = 0, done = 0, rides = 0, days = 0;
+  for (let d = first; d <= t; d = addDays(d, 1)) { days++; if (templateFor(d)) planned++; if (setsOn(d).length) done++; if (rideOn(d)) rides++; }
+  const end = setsOn(t).length ? t : addDays(t, -1);
+  const vNow = end >= ws ? volumeKg(ws, end) : 0, vPrev = end >= ws ? volumeKg(addDays(ws, -7), addDays(end, -7)) : 0;
+  const pct = vPrev > 0 ? Math.round((vNow - vPrev) / vPrev * 100) : null, dur = avgWorkoutMin(30);
+  const tile = (v, k, s = '', cls = '') => `<div class="tile"><div class="v num">${v}</div><div class="k">${k}</div>${s ? `<div class="s ${cls}">${s}</div>` : ''}</div>`;
+  const tons = vNow < 50 ? '0' : (vNow / 1000).toFixed(1);
+  return `<div class="tiles">
+    ${tile(`<span class="ltr">${done}<small>/${planned}</small></span>`, 'אימוני כוח החודש', planned ? `${Math.round(done / planned * 100)}% מהמתוכנן` : '')}
+    ${tile(`<span class="ltr">${rides}<small>/${days}</small></span>`, 'ימי ספינינג החודש', days ? `${Math.round(rides / days * 100)}% מהימים` : '')}
+    ${tile(`<span class="ltr">${tons}</span>`, 'טון שהורמו השבוע', pct == null ? 'משקל כפול חזרות' : `<span class="ltr">${pct > 0 ? '+' : ''}${pct}%</span> מול אותם ימים בשבוע שעבר`, pct > 0 ? 'up' : '')}
+    ${tile(dur != null ? `${dur}<small> דקות</small>` : '-', 'משך אימון ממוצע', dur != null ? '30 הימים האחרונים' : 'נמדד מהסט הראשון ועד סיום האימון')}</div>`;
+}
 function vToday() {
   const t = today(), tpl = templateFor(t), counts = areaCountsOn(t), day = S.days[t] || {};
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
-  let h = pageHead('היום', { sub: fmtDate(t) });
+  let h = pageHead('בית', { sub: fmtDate(t) });
   h += weekStrip(t);
-  if (!S.loaded) return h + '<div class="empty">טוען נתונים</div>' + nav('today');
+  if (!S.loaded) return h + '<div class="empty">טוען נתונים</div>' + nav('home');
   if (!S.machines.length) {
     h += `<section class="card stack" style="margin:14px 0"><div class="h3">מתחילים: מוסיפים את המכשירים</div>
       <div class="sub">צלם כל מכשיר, תן לו שם, בחר אזור בגוף וקבע משקל פתיחה. אחרי זה האימון כבר מסודר.</div>
       <a class="btn btn-primary btn-block" href="#/edit/new">הוסף מכשיר ראשון</a></section>`;
   }
-  if (tpl) {
-    const going = total > 0 || (day.started_at && !day.finished_at), areas = TEMPLATES[tpl], mins = S.settings.minSets;
-    h += `<section class="card hero-w" aria-label="האימון של היום"><div class="row"><div class="grow kick">האימון של היום</div>${day.finished_at ? `<span class="pill ok">${svg(I.check, 16, 3)}הסתיים</span>` : ''}</div>
-      <div class="big">אימון ${TPL_NAME[tpl]}</div><div class="areas">${areas.map(areaName).join(', ')}</div>
-      ${areas.map(a => { const c = counts[a], mn = mins[a], met = c >= mn;
-        return `<div class="arow ${met ? 'met' : ''}"><div class="top"><span class="dot" style="background:${areaColor(a)}"></span><span>${areaName(a)}</span><span class="v ltr">${met ? svg(I.check, 20, 3.2) + ' ' : ''}${c}<small>/${mn}</small></span></div>
-        <div class="bar"><i style="width:${Math.min(100, Math.round(c / mn * 100))}%"></i></div></div>`; }).join('')}
-      <button class="btn btn-primary btn-big btn-block" data-a="start">${going ? 'המשך אימון' : 'התחל אימון'}</button>
-      <button class="link center" style="margin-top:6px;width:100%" data-a="switchTpl">החלף אימון</button></section>`;
-  } else {
-    h += `<section class="card hero-w stack"><div class="kick">היום יום מנוחה</div><div class="big">רוצה בכל זאת?</div>
-      <div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost btn-block" data-a="start" data-t="${k}">אימון ${TPL_NAME[k]}: ${TEMPLATES[k].map(areaName).join(', ')}</button>`).join('')}</div>
-      ${total ? `<a class="btn btn-tinted btn-block" href="#/workout">${setsTxt(total)} היום</a>` : ''}</section>`;
-  }
-  const w = weekNums(t);
-  h += `<div class="wkstats"><div class="s"><div class="v">${w.days}</div><div class="k">אימונים השבוע</div></div><div class="s"><div class="v">${w.sets}</div><div class="k">סטים השבוע</div></div></div>`;
-  const r = rideOn(t);
-  h += `<section class="card ride-card" style="margin-top:14px" aria-label="רכיבת ספינינג">
-    <div class="ic" style="--c:var(--a-shoulders)">${svg(I.bike, 34, 2)}</div>
-    <div class="grow"><div class="h3">ספינינג</div><div class="sub">${r ? rideSummary(r) : 'טרם נרשמה היום'}</div></div>
-    <a class="btn btn-tinted btn-sm" href="#/ride/${t}">${r ? 'עריכה' : 'רשום'}</a></section>`;
-  return h + nav('today');
+  h += todayCard(t, tpl, counts, day, total) + weekCard() + spinCard() + statTiles();
+  return h + nav('home');
 }
 function machineRow(m, t) {
   const ms = setsOn(t).filter(s => s.machine_id === m.id), n = ms.length, prev = prevSession(m.id, t);
@@ -1157,41 +1390,74 @@ function machineRow(m, t) {
 }
 function machineCard(m, t) {
   const ms = setsOn(t).filter(s => s.machine_id === m.id), n = ms.length, prev = prevSession(m.id, t), done = n >= m.default_sets;
+  const busy = !done && busyIds().includes(m.id);
   let sub;
   if (n) sub = `${setsTxt(n)}, עד ${ltr(fmtW(Math.max(...ms.map(s => s.weight))))} ק״ג`;
   else if (prev) sub = `קודם ${ltr(setStr(prev.sets[0]))}, ${setsTxt(prev.sets.length)}`;
   else sub = m.min_weight > 0 ? `פתיחה ${ltr(fmtW(m.min_weight))} ק״ג` : 'עוד לא נרשם';
+  if (busy) sub = `<span class="busy">תפוס</span>, ${sub}`;
   const dots = Array.from({ length: Math.max(m.default_sets, n) }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('');
-  return `<a class="xcard ${done ? 'done' : ''}" href="#/m/${m.id}" aria-label="${esc(m.name)}, ${n} מתוך ${m.default_sets} סטים">
+  return `<a class="xcard ${done ? 'done' : ''}" href="#/m/${m.id}" aria-label="${esc(m.name)}, ${n} מתוך ${m.default_sets} סטים${busy ? ', תפוס' : ''}">
     <div class="xt">${photoHtml(m, 34)}</div>
     <div class="grow"><div class="xn">${esc(m.name)}</div><div class="xs">${sub}</div><div class="xdots" aria-hidden="true">${dots}</div></div>
     <span class="xe">${done ? svg(I.check, 24, 3.2) : svg(I.fwd, 26, 2.4)}</span></a>`;
 }
 function sortMachines(l) { return l.sort((x, y) => (x.sort_order - y.sort_order) || x.name.localeCompare(y.name, 'he')); }
-function vWorkout() {
+/* ---------- 2.4: מסך האימון עם סינון לפי אזור ---------- */
+const BK = 'koach-busy-v1';
+function busyIds() { return S.busy && S.busy.date === today() ? S.busy.ids : []; }
+function saveBusy() { try { localStorage.setItem(BK, JSON.stringify(S.busy)); } catch (e) {} }
+/* האזור שמוצג: מה שבחרת היום, אחרת האזור שבו אתה נמצא, אחרת האזור הראשון שעוד לא הגיע ליעד */
+function wfArea(tpl, counts) {
+  const t = today(), areas = TEMPLATES[tpl];
+  if (S.wf && S.wf.date === t && (S.wf.area === 'all' || AREA[S.wf.area])) return S.wf.area;
+  const ts = sortSets(setsOn(t)), lm = ts.length ? machineById(ts[ts.length - 1].machine_id) : null;
+  if (lm && areas.includes(lm.area) && counts[lm.area] < S.settings.minSets[lm.area]) return lm.area;
+  return areas.find(a => counts[a] < S.settings.minSets[a]) || 'all';
+}
+/* בתוך אזור: מכשירים שהתחלת, אחר כך שלא נגעת בהם, אחר כך תפוסים, ובסוף מה שהושלם */
+function workoutOrder(list, t) {
+  const cnt = {}; setsOn(t).forEach(s => { cnt[s.machine_id] = (cnt[s.machine_id] || 0) + 1; });
+  const busy = busyIds();
+  const rank = m => { const n = cnt[m.id] || 0; return n >= m.default_sets ? 3 : busy.includes(m.id) ? 2 : n ? 0 : 1; };
+  return list.sort((x, y) => (rank(x) - rank(y)) || (x.sort_order - y.sort_order) || x.name.localeCompare(y.name, 'he'));
+}
+function vWorkout(arg) {
   const t = today(), tpl = templateFor(t);
+  if (arg && (arg === 'all' || AREA[arg])) S.wf = { date: t, area: arg };
   if (!tpl) {
-    return pageHead('אימון', { back: '#/', backLabel: 'היום' }) + `<div class="card stack"><div>היום מוגדר כיום מנוחה. בחר איזה אימון לעשות:</div>
-      <div class="grid3">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost" data-a="start" data-t="${k}">אימון ${TPL_NAME[k]}</button>`).join('')}</div></div>` + nav('today');
+    return pageHead('אימון', { sub: 'היום מוגדר כיום מנוחה' }) + `<section class="card stack"><div class="h3">איזה אימון לעשות?</div>
+      <div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost btn-block tplbtn" data-a="start" data-t="${k}">${tplLabel(k)}</button>`).join('')}</div></section>` + nav('workout');
   }
-  const counts = areaCountsOn(t), sets = setsOn(t), areas = TEMPLATES[tpl];
-  let h = pageHead(`אימון ${TPL_NAME[tpl]}`, { back: '#/', backLabel: 'היום', sub: areas.map(areaName).join(', '),
+  const counts = areaCountsOn(t), sets = setsOn(t), areas = TEMPLATES[tpl], mins = S.settings.minSets, sel = wfArea(tpl, counts);
+  const segAreas = sel !== 'all' && !areas.includes(sel) ? [...areas, sel] : areas;
+  let h = pageHead(`אימון ${TPL_NAME[tpl]}`, { sub: areas.map(areaName).join(', '),
     end: `<span class="nb-timer">${svg(I.timer, 20, 2.2)}<span class="ltr num" id="elapsed"></span></span>` });
-  areas.forEach((a, i) => {
-    const c = counts[a], min = S.settings.minSets[a], met = c >= min, pct = Math.min(100, Math.round(c / min * 100));
-    const list = sortMachines(S.machines.filter(m => !m.archived && m.area === a));
-    h += `<div class="xhead" style="${i === 0 ? 'margin-top:8px' : ''}"><span class="dot" style="background:${areaColor(a)}"></span><span class="n">${areaName(a)}</span>
+  const tot = areas.reduce((s, a) => s + Math.min(counts[a], mins[a]), 0), totT = areas.reduce((s, a) => s + mins[a], 0);
+  const seg = (k, name, c, mn) => { const met = c >= mn, on = k === sel;
+    return `<a role="tab" href="#/workout/${k}" class="${on ? 'on' : ''}${met ? ' met' : ''}${k === 'all' ? ' all' : ''}" aria-selected="${on}" aria-label="${name}, ${c} מתוך ${mn}"><span class="n">${name}</span><span class="c">${met ? svg(I.check, 16, 3.4) : ''}<span class="ltr">${c}/${mn}</span></span><span class="pt"><i class="p" style="width:${Math.min(100, Math.round(c / mn * 100))}%"></i></span></a>`; };
+  h += `<div class="wseg" role="tablist" aria-label="סינון לפי אזור" style="grid-template-columns:repeat(${segAreas.length},minmax(0,1fr)) auto">${segAreas.map(a => seg(a, areaName(a), counts[a], mins[a] || 1)).join('')}${seg('all', 'הכל', tot, totT)}</div>`;
+  const show = sel === 'all' ? areas : [sel];
+  show.forEach((a, i) => {
+    const c = counts[a], min = mins[a], met = c >= min, pct = Math.min(100, Math.round(c / min * 100));
+    const list = workoutOrder(S.machines.filter(m => !m.archived && m.area === a), t);
+    if (sel === 'all') h += `<div class="xhead" style="${i === 0 ? 'margin-top:8px' : ''}"><span class="dot" style="background:${areaColor(a)}"></span><span class="n">${areaName(a)}</span>
       <span class="c ${met ? 'met' : ''}"><span class="ltr">${c} / ${min}</span></span></div>
       <div class="bar" style="margin:0 4px 14px"><i style="width:${pct}%"></i></div>`;
-    h += `<div class="xlist">${list.length ? list.map(m => machineCard(m, t)).join('') : `<a class="xcard" href="#/edit/new/${a}"><div class="xt">${svg(I.plus, 34, 2.4)}</div><div class="grow"><div class="xn">הוסף מכשיר</div><div class="xs">${areaName(a)}</div></div></a>`}</div>`;
+    h += `<div class="xlist" ${sel !== 'all' ? 'style="margin-top:6px"' : ''}>${list.length ? list.map(m => machineCard(m, t)).join('') : `<a class="xcard" href="#/edit/new/${a}"><div class="xt">${svg(I.plus, 34, 2.4)}</div><div class="grow"><div class="xn">הוסף מכשיר</div><div class="xs">${areaName(a)}</div></div></a>`}</div>`;
   });
-  const off = [...new Set(sets.map(s => s.machine_id))].map(machineById).filter(m => m && !areas.includes(m.area));
-  if (off.length) h += `<div class="xhead"><span class="n">מחוץ לתוכנית</span></div><div class="xlist">${off.map(m => machineCard(m, t)).join('')}</div>`;
+  if (sel === 'all') {
+    const off = [...new Set(sets.map(s => s.machine_id))].map(machineById).filter(m => m && !areas.includes(m.area));
+    if (off.length) h += `<div class="xhead"><span class="n">מחוץ לתוכנית</span></div><div class="xlist">${off.map(m => machineCard(m, t)).join('')}</div>`;
+  } else if (counts[sel] >= (mins[sel] || 1)) {
+    const nextA = areas.find(a => a !== sel && counts[a] < mins[a]);
+    if (nextA) h += `<a class="btn btn-tinted btn-block" style="margin-top:16px" href="#/workout/${nextA}">סיימת ${areaName(sel)}. לאזור הבא: ${areaName(nextA)}</a>`;
+  }
   h += `<div class="actions" style="margin-top:30px">
     <a class="btn btn-ghost btn-block" href="#/pick/all">${svg(I.plus, 22, 2.4)}מכשיר מחוץ לתוכנית</a>
     <button class="btn btn-primary btn-big btn-block" data-a="finish">סיים אימון</button>
-    <a class="link center" href="#/sets">סטים לפי אזור</a></div>`;
-  return h + nav('today');
+    <div class="row" style="justify-content:center;gap:22px"><button class="link" data-a="switchTpl">החלף אימון</button><a class="link" href="#/sets">סטים לפי אזור</a></div></div>`;
+  return h + nav('workout');
 }
 function vPick(area) {
   const t = today(), tpl = templateFor(t), counts = areaCountsOn(t);
@@ -1232,29 +1498,58 @@ function nextDefaults(m, ts, prev) {
   const following = ps[n] && ts.every((s, i) => ps[i] && s.weight === ps[i].weight);
   return { w: following ? ps[n].weight : last.weight, r: ps[n]?.reps ?? last.reps };
 }
+/* המכשיר הבא: קודם באזור הנוכחי אם הוא עוד לא ביעד, אחר כך אזורים שלא הגיעו ליעד. מכשיר תפוס רק אם אין ברירה */
 function nextMachine(cur) {
   const t = today(), tpl = templateFor(t); if (!tpl) return null;
   const cnt = {}; setsOn(t).forEach(s => { cnt[s.machine_id] = (cnt[s.machine_id] || 0) + 1; });
-  const areas = TEMPLATES[tpl].slice();
-  if (areas.includes(cur.area)) { areas.splice(areas.indexOf(cur.area), 1); areas.unshift(cur.area); }
-  for (const a of areas) {
-    const l = sortMachines(S.machines.filter(m => !m.archived && m.area === a && m.id !== cur.id && (cnt[m.id] || 0) < m.default_sets));
+  const counts = areaCountsOn(t), unmet = a => counts[a] < S.settings.minSets[a], busy = busyIds(), tA = TEMPLATES[tpl];
+  const areas = [...(tA.includes(cur.area) && unmet(cur.area) ? [cur.area] : []), ...tA.filter(a => a !== cur.area && unmet(a)), ...tA.filter(a => !unmet(a))];
+  const order = [...new Set(areas)];
+  for (const skipBusy of [true, false]) for (const a of order) {
+    const l = sortMachines(S.machines.filter(m => !m.archived && m.area === a && m.id !== cur.id && (cnt[m.id] || 0) < m.default_sets && !(skipBusy && busy.includes(m.id))));
     if (l.length) return l[0];
   }
   return null;
 }
+/* הצעה להעלאת משקל: בפעם הקודמת הגעת למספר החזרות שקבעת בכל הסטים */
+function suggestion(m, prev) {
+  if (!prev || prev.sets.length < m.default_sets) return null;
+  const top = S.settings.repTop || 12, w0 = prev.sets[0].weight, l = prev.sets.slice(0, m.default_sets);
+  if (!l.every(s => s.reps >= top && s.weight >= w0)) return null;
+  return { w: round2(w0 + (m.weight_step || 5)), top };
+}
+const linkOf = m => (m && S.settings.machineLink?.[m.id]) || '';
+/* מכשיר שבו היית ב 60 הדקות האחרונות, לפתיחה מחדש של האפליקציה */
+function resumeTarget() {
+  const t = today(), day = S.days[t] || {}; if (day.finished_at) return null;
+  const ts = sortSets(setsOn(t)), last = ts[ts.length - 1]; if (!last) return null;
+  if (!last.created_at || Date.now() - Date.parse(last.created_at) > 60 * 60000) return null;
+  const m = machineById(last.machine_id); if (!m) return null;
+  if (ts.filter(s => s.machine_id === m.id).length < m.default_sets) return '#/m/' + m.id;
+  const nx = nextMachine(m); return nx ? '#/m/' + nx.id : '#/workout';
+}
+function touchDraft() {
+  if (S.route?.name !== 'm') return;
+  const d = S.draft[S.route.a]; if (!d || d.touched) return;
+  d.touched = true;
+  document.querySelectorAll('#app .ghost').forEach(x => x.classList.remove('ghost'));
+  const gh = $('.ghint'); if (gh) gh.remove();
+}
 function vMachine(id) {
   const m = machineById(id);
-  if (!m) return pageHead('מכשיר', { back: '#/workout', backLabel: 'אימון' }) + `<div class="empty">${S.loaded ? 'המכשיר לא נמצא.' : 'טוען'}</div>` + nav('today');
+  if (!m) return pageHead('מכשיר', { back: '#/workout', backLabel: 'אימון' }) + `<div class="empty">${S.loaded ? 'המכשיר לא נמצא.' : 'טוען'}</div>` + nav('workout');
   const t = today(), ts = sortSets(setsOn(t).filter(s => s.machine_id === id)), prev = prevSession(id, t);
   let d = S.draft[id];
-  if (!d || d.n !== ts.length) d = S.draft[id] = { ...nextDefaults(m, ts, prev), n: ts.length };
+  if (!d || d.n !== ts.length) d = S.draft[id] = { ...nextDefaults(m, ts, prev), n: ts.length, touched: false };
+  const g = d.touched ? '' : ' ghost', doneM = ts.length >= m.default_sets, nx = nextMachine(m);
   const c = areaCountsOn(t)[m.area], min = S.settings.minSets[m.area];
   let h = pageHead(esc(m.name), { back: '#/workout', backLabel: 'אימון', small: true,
-    end: `<span class="pill neutral"><span class="dot" style="background:${areaColor(m.area)}"></span>${areaName(m.area)} <span class="ltr num">${c}/${min}</span></span>` });
+    end: `<a class="pill neutral" style="text-decoration:none" href="#/workout/${m.area}" aria-label="${areaName(m.area)}, ${c} מתוך ${min}"><span class="dot" style="background:${areaColor(m.area)}"></span>${areaName(m.area)} <span class="ltr num">${c}/${min}</span></a>` });
   if (setupOf(m)) h += `<div class="setup">${svg(I.settings, 22, 2.2)}<span>${esc(setupOf(m))}</span></div>`;
   if (photoUrl(m)) h += `<div class="hero">${photoHtml(m)}</div>`;
   if (m.note) h += `<div class="note">${esc(m.note)}</div>`;
+  const link = linkOf(m);
+  if (link) h += `<a class="btn btn-ghost btn-block linkbtn" href="${esc(link)}" target="_blank" rel="noopener noreferrer">${svg(I.link, 22, 2.2)}פתח קישור</a>`;
   const rowsN = Math.max(m.default_sets, ts.length + 1), ps = prev ? prev.sets : [];
   const pv = i => ps[i] ? `${fmtW(ps[i].weight)}×${ps[i].reps}` : '';
   let tb = `<section class="card stable" aria-label="טבלת סטים"><div class="st-cap"><span>${prev ? `קודם מתאריך ${ltr(shortDate(prev.date))}` : 'פעם ראשונה על המכשיר'}</span>${!prev && m.min_weight > 0 ? `<span>פתיחה ${ltr(fmtW(m.min_weight))} ק״ג</span>` : ''}</div>
@@ -1263,24 +1558,33 @@ function vMachine(id) {
     if (i < ts.length) { const x = ts[i];
       tb += `<button class="st-r done" data-a="editSet" data-id="${x.id}" aria-label="סט ${i + 1}: ${fmtW(x.weight)} קילו, ${x.reps} חזרות. הקש לעריכה"><span class="sn">${i + 1}</span><span class="sp">${pv(i)}</span><span>${fmtW(x.weight)}</span><span>${x.reps}</span><span class="ck">${svg(I.check, 22, 3.4)}</span></button>`;
     } else if (i === ts.length) {
-      tb += `<div class="st-r cur" aria-hidden="true"><span class="sn">${i + 1}</span><span class="sp">${pv(i)}</span><span id="curW">${fmtW(d.w)}</span><span id="curR">${d.r}</span><span class="ck"></span></div>`;
+      tb += `<div class="st-r cur${g}" aria-hidden="true"><span class="sn">${i + 1}</span><span class="sp">${pv(i)}</span><span id="curW">${fmtW(d.w)}</span><span id="curR">${d.r}</span><span class="ck"></span></div>`;
     } else {
       tb += `<div class="st-r fut" aria-hidden="true"><span class="sn">${i + 1}</span><span class="sp">${pv(i)}</span><span>${ps[i] ? fmtW(ps[i].weight) : ''}</span><span>${ps[i] ? ps[i].reps : ''}</span><span class="ck"></span></div>`;
     }
   }
   h += tb + '</section>';
-  const last = ts[ts.length - 1];
+  const last = ts[ts.length - 1], sg = ts.length === 0 ? suggestion(m, prev) : null;
+  const u = S.undo && S.undo.mid === id && Date.now() - S.undo.at < 8000 ? S.undo : null;
+  const showSg = sg && !(d.touched && d.w >= sg.w);
   h += `<section class="card setcard" aria-label="סט ${ts.length + 1}">
-    <div class="sc-head"><span class="h3">סט ${ts.length + 1}</span><span class="sub sm">${ts.length >= m.default_sets ? 'סט נוסף מעבר לרגיל' : `מתוך ${m.default_sets}`}</span></div>
-    ${stepper('dw', 'משקל, ק״ג', d.w, m.weight_step, { draft: 'w' })}
-    ${stepper('dr', 'חזרות', d.r, 1, { int: true, draft: 'r', chips: [6, 8, 10, 12, 15] })}
-    ${last ? `<button class="btn btn-tinted btn-block" data-a="repeatSet" data-id="${id}">חזור על הסט ${ltr(fmtW(last.weight) + ' × ' + last.reps)}</button>` : ''}</section>
-  <div class="dock"><button class="btn btn-primary btn-big btn-block" data-a="saveSet" data-id="${id}">${svg(I.check, 26, 3)}בוצע</button></div>`;
-  const nx = nextMachine(m);
-  h += `<div class="actions">${nx ? `<a class="btn btn-ghost btn-block" href="#/m/${nx.id}">הבא: ${esc(nx.name)}</a>` : ''}
+    ${u ? `<div class="undo" role="status"><span>סט ${u.n} נשמר: <span class="ltr num">${fmtW(u.w)}×${u.r}</span></span><button type="button" data-a="undoSet">בטל</button></div>` : ''}
+    <div class="sc-head"><span class="h3">סט ${ts.length + 1}</span><span class="sub sm">${doneM ? 'סט נוסף מעבר לרגיל' : `מתוך ${m.default_sets}`}</span></div>
+    ${ts.length === 0 && !d.touched ? `<div class="ghint">${prev ? 'באפור: מהפעם הקודמת.' : 'באפור: משקל הפתיחה.'} נשמר רק בלחיצה על בוצע.</div>` : ''}
+    ${showSg ? `<button type="button" class="sugg" data-a="useSugg" data-id="${id}" data-w="${sg.w}"><span class="grow"><span class="sg-t">נסה היום <b class="ltr">${fmtW(sg.w)}</b> ק״ג</span><span class="sg-s">בפעם הקודמת ${sg.top} חזרות בכל הסטים</span></span><span class="sg-btn">השתמש</span></button>` : ''}
+    ${stepper('dw', 'משקל, ק״ג', d.w, m.weight_step, { draft: 'w', ghost: !d.touched })}
+    ${stepper('dr', 'חזרות', d.r, 1, { int: true, draft: 'r', chips: [6, 8, 10, 12, 15], ghost: !d.touched })}
+    ${last ? `<button class="btn btn-tinted btn-block" data-a="repeatSet" data-id="${id}">חזור על הסט ${ltr(fmtW(last.weight) + ' × ' + last.reps)}</button>` : ''}
+    ${doneM ? `<button class="btn btn-ghost btn-block" data-a="saveSet" data-id="${id}">${svg(I.plus, 22, 2.6)}רשום סט נוסף</button>` : ''}</section>`;
+  const dock = !doneM ? `<button class="btn btn-primary btn-big btn-block" data-a="saveSet" data-id="${id}">${svg(I.check, 26, 3)}בוצע</button>`
+    : nx ? `<a class="btn btn-primary btn-big btn-block" href="#/m/${nx.id}">הבא: ${esc(nx.name)}${svg(I.fwd, 24, 2.6)}</a>`
+    : `<button class="btn btn-primary btn-big btn-block" data-a="finish">סיים אימון</button>`;
+  h += `<div class="dock">${dock}</div>`;
+  h += `<div class="actions">${!doneM && nx ? `<a class="btn btn-ghost btn-block" href="#/m/${nx.id}">הבא: ${esc(nx.name)}</a>` : ''}
+    ${!doneM ? `<button class="btn btn-ghost btn-block" data-a="busy" data-id="${id}">המכשיר תפוס, העבר לסוף</button>` : ''}
     <a class="btn btn-ghost btn-block" href="#/workout">חזרה לאימון</a>
     <a class="link center" href="#/edit/${id}">עריכת המכשיר</a></div>`;
-  return h + nav('today');
+  return h + nav('workout');
 }
 function vSets() {
   const t = today(), tpl = templateFor(t), counts = areaCountsOn(t), sets = setsOn(t);
@@ -1378,6 +1682,8 @@ function vEdit(id, prefArea) {
     <div class="field"><label for="fsetup">כוונון המכשיר</label><input class="input" id="fsetup" value="${esc(isNew ? '' : setupOf(m))}" placeholder="לדוגמה: מושב 4, משענת 2, אחיזה רחבה" autocomplete="off" enterkeyhint="done">
       <div class="sub sm">מוצג תמיד מתחת לשם המכשיר כשרושמים סטים</div></div>
     <div class="field"><label for="fnote">הערה קבועה</label><input class="input" id="fnote" value="${esc(m.note || '')}" placeholder="לדוגמה: מושב בחריץ 4" autocomplete="off"></div>
+    <div class="field"><label for="flink">קישור, רשות</label><input class="input" id="flink" type="url" inputmode="url" dir="ltr" value="${esc(isNew ? '' : linkOf(m))}" placeholder="https://" autocomplete="off" autocapitalize="off" enterkeyhint="done">
+      <div class="sub sm">למשל סרטון הדגמה. יופיע ככפתור במסך המכשיר באימון</div></div>
     <div class="field"><span class="flabel">מנוחה אחרי כל סט</span>
       <div class="row"><div class="mini"><button type="button" data-a="frest" data-d="1" aria-label="הארך מנוחה">${svg(I.plus, 20, 2.4)}</button><span class="rest-val num" id="frestv">${restLabel()}</span><button type="button" data-a="frest" data-d="-1" aria-label="קצר מנוחה">${svg(I.minus, 20, 2.4)}</button></div>
       <button type="button" class="link" data-a="frest" data-d="0" id="frestreset" ${E.rest ? '' : 'hidden'}>לפי האזור</button></div></div>
@@ -1553,14 +1859,14 @@ function vHistoryArea(date, area, loading) {
     h += `<div class="empty">לא בוצעו סטים של ${areaName(area)} ביום הזה.${l ? `<br><a class="btn btn-ghost" href="#/history/${l}/${area}">לפעם הקודמת, ${shortDate(l)}</a>` : ''}</div>`;
   } else {
     const mids = [...new Set(sets.map(s => s.machine_id))];
-    h += '<div class="stack-sm">' + mids.map(id => {
+    h += '<div class="sub sm" style="margin:-4px 4px 12px">נגיעה בסט פותחת עריכה או מחיקה</div><div class="stack-sm">' + mids.map(id => {
       const m = machineById(id), ms = sets.filter(s => s.machine_id === id), cur = Math.max(...ms.map(s => s.weight));
       return `<section class="card stack-sm" style="padding:16px">
         <div class="row"><div class="thumb" style="width:48px;height:48px">${photoHtml(m, 20)}</div><div class="grow h3">${esc(m.name)}</div></div>
         <div class="stats3"><div class="stat"><div class="k">משקל</div><div class="v ltr num">${fmtW(cur)}</div></div>
           <div class="stat"><div class="k">מקסימום</div><div class="v ltr num">${fmtW(Math.max(cur, machineMax(id)))}</div></div>
           <div class="stat"><div class="k">סטים</div><div class="v num">${ms.length}</div></div></div>
-        <div class="prev-sets">${ms.map(s => `<span class="ps num ltr">${fmtW(s.weight)} × ${s.reps}</span>`).join('')}</div></section>`;
+        <div class="prev-sets">${ms.map(s => `<button type="button" class="ps num ltr" data-a="editSet" data-id="${s.id}" aria-label="${fmtW(s.weight)} קילו, ${s.reps} חזרות. הקש לעריכה">${fmtW(s.weight)} × ${s.reps}</button>`).join('')}</div></section>`;
     }).join('') + '</div>';
   }
   const dates = [...new Set(S.sets.filter(s => s.workout_date !== date && machineById(s.machine_id)?.area === area).map(s => s.workout_date))].sort().reverse().slice(0, 10);
@@ -1582,7 +1888,7 @@ function vRide(date) {
   const ph = (v, d) => esc(v != null && v !== '' ? v : d);
   const val = v => (v == null ? '' : esc(v));
   const pm = p ? Math.floor(p.duration_sec / 60) : 30, ps = p ? p.duration_sec % 60 : 0;
-  let h = pageHead('ספינינג', { back: date === today() ? '#/' : '#/history/' + date, backLabel: date === today() ? 'היום' : shortDate(date), sub: fmtDate(date) });
+  let h = pageHead('ספינינג', { back: date === today() ? '#/' : '#/history/' + date, backLabel: date === today() ? 'בית' : shortDate(date), sub: fmtDate(date) });
   h += `<div class="stack">
     ${r ? '' : `<div class="sub sm">${p ? 'הערכים באפור הם מהרכיבה הקודמת. ממלאים רק מה שהשתנה, שדה ריק יישמר כמו בפעם הקודמת.' : 'ממלאים את הנתונים מהצג של האופניים.'}</div>`}
     <div class="field"><span class="flabel">זמן</span><div class="grid2">
@@ -1629,6 +1935,8 @@ function vSettings() {
     <p class="sub sm">אפשר גם לקבוע מנוחה למכשיר מסוים, במסך עריכת המכשיר.</p>`;
   h += `<div class="section-title"><span>מינימום סטים ביום</span></div><div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}</div>${mini('min.' + a.k, st.minSets[a.k], 'מינימום ' + a.n)}</div>`).join('')}</div>
     <p class="sub sm">המינימום חל בימים שבהם האזור נמצא באימון.</p>`;
+  h += `<div class="section-title"><span>הצעה להעלאת משקל</span></div><div class="list"><div class="srow2"><div class="grow">חזרות בכל הסטים</div>${mini('repTop', st.repTop || 12, 'חזרות להעלאת משקל')}</div></div>
+    <p class="sub sm">כשמגיעים למספר הזה בכל הסטים, בפעם הבאה במכשיר מופיעה הצעה לעלות במשקל.</p>`;
   h += `<div class="section-title"><span>חלוקת האימונים בשבוע</span></div><div class="list">${DAY_NAMES.map((n, i) => `<div class="srow2"><label class="grow" for="sp${i}">יום ${n}</label>
     <select class="input" id="sp${i}" data-s="split" data-dow="${i}">${[['A', 'אימון א'], ['B', 'אימון ב'], ['C', 'אימון ג'], ['', 'מנוחה']].map(([k, l]) => `<option value="${k}" ${(st.split[String(i)] || '') === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`).join('')}</div>
     <p class="sub sm">אימון א: גב, יד קדמית, בטן. אימון ב: חזה, יד אחורית, כתפיים, בטן. אימון ג: רגליים, בטן.</p>`;
@@ -1664,7 +1972,7 @@ function render() {
   }
   let h;
   switch (r.name) {
-    case 'workout': h = vWorkout(); break;
+    case 'workout': h = vWorkout(r.a); break;
     case 'pick': h = vPick(r.a); break;
     case 'm': h = vMachine(r.a); break;
     case 'sets': h = vSets(); break;
@@ -1780,16 +2088,24 @@ async function fetchEverything() {
 }
 
 /* ---------- actions ---------- */
+function findSet(id) { return S.sets.find(x => x.id === id) || Object.values(S.daySets).flat().find(x => x.id === id) || null; }
+/* סטים של ימים ישנים נשמרים בנפרד, מעדכנים גם שם */
+function patchDaySets(id, fn) {
+  for (const l of Object.values(S.daySets)) { const i = l.findIndex(x => x.id === id); if (i >= 0) { const r = fn(l[i]); if (r) l[i] = r; else l.splice(i, 1); } }
+}
 function logSet(m, w, r) {
   const t = today(), day = S.days[t] || {};
-  const isPr = hasHistory(m.id) && w > machineMax(m.id);
-  enqueue({ table: 'sets', op: 'upsert', row: { id: uuid(), user_id: S.user.id, machine_id: m.id, workout_date: t, weight: w, reps: r, is_pr: isPr, created_at: new Date().toISOString() } });
+  const isPr = hasHistory(m.id) && w > machineMax(m.id), sid = uuid();
+  enqueue({ table: 'sets', op: 'upsert', row: { id: sid, user_id: S.user.id, machine_id: m.id, workout_date: t, weight: w, reps: r, is_pr: isPr, created_at: new Date().toISOString() } });
   if (!day.started_at || !day.template) enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: day.started_at || new Date().toISOString() } });
   delete S.draft[m.id];
   document.querySelectorAll('#app [data-dirty]').forEach(x => { delete x.dataset.dirty; });
   startTimer(restFor(m), m.name);
+  if (busyIds().includes(m.id)) { S.busy.ids = S.busy.ids.filter(x => x !== m.id); saveBusy(); }
+  S.undo = { id: sid, mid: m.id, at: Date.now(), w, r, n: setsOn(t).filter(s => s.machine_id === m.id).length, name: m.name };
+  setTimeout(() => { if (S.undo && S.undo.id === sid) { S.undo = null; const u = $('.undo'); if (u) u.remove(); } }, 8000);
   const c = areaCountsOn(t)[m.area], min = S.settings.minSets[m.area];
-  if (c === min && minFor(m.area, t) != null) toast(`עמדת ביעד של ${areaName(m.area)}: ${min} סטים`, 3500);
+  if (c === min && minFor(m.area, t) != null) { toast(`עמדת ביעד של ${areaName(m.area)}: ${min} סטים`, 3500); if (S.wf && S.wf.area === m.area) S.wf = null; }
   render();
   setTimeout(revealSetCard, 60);
 }
@@ -1801,23 +2117,25 @@ function revealSetCard() {
 }
 const A = {
   start(el) {
+    /* שעון האימון מתחיל בסט הראשון, לא בכניסה למסך */
     const t = today(), tpl = el.dataset.t || templateFor(t);
     if (!tpl) return;
     const day = S.days[t] || {};
-    const row = { user_id: S.user.id, workout_date: t, template: tpl };
-    if (!day.started_at) row.started_at = new Date().toISOString();
-    if (day.finished_at) row.finished_at = null;
-    enqueue({ table: 'workout_days', op: 'upsert', row });
-    go('#/workout');
+    if (day.template !== tpl || day.finished_at) {
+      const row = { user_id: S.user.id, workout_date: t, template: tpl };
+      if (day.finished_at) row.finished_at = null;
+      enqueue({ table: 'workout_days', op: 'upsert', row });
+    }
+    S.wf = null; go('#/workout');
   },
   switchTpl() {
     const cur = templateFor(today());
-    openModal(`<h2>איזה אימון היום?</h2><div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn ${k === cur ? 'btn-primary' : 'btn-ghost'} btn-block" data-a="setTpl" data-t="${k}">אימון ${TPL_NAME[k]}: ${TEMPLATES[k].map(areaName).join(', ')}</button>`).join('')}
+    openModal(`<h2>איזה אימון היום?</h2><div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn ${k === cur ? 'btn-primary' : 'btn-ghost'} btn-block tplbtn" data-a="setTpl" data-t="${k}">${tplLabel(k)}</button>`).join('')}
       <button class="btn btn-ghost btn-block" data-a="setTpl" data-t="R">יום מנוחה</button><button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
   },
   setTpl(el) {
     enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: today(), template: el.dataset.t } });
-    closeModal(); render();
+    S.wf = null; closeModal(); render();
   },
   closeModal() { closeModal(); },
   finish() {
@@ -1847,7 +2165,7 @@ const A = {
     const st = parseFloat(el.dataset.st) || 1, d = parseInt(el.dataset.d, 10);
     const v = Math.max(0, round2((num(inp.value) || 0) + d * st));
     inp.value = fmtW(v); inp.dataset.dirty = '1';
-    if (inp.dataset.draft && S.draft[S.route.a]) S.draft[S.route.a][inp.dataset.draft] = v;
+    if (inp.dataset.draft && S.draft[S.route.a]) { S.draft[S.route.a][inp.dataset.draft] = v; touchDraft(); }
     syncChips(inp);
   },
   saveSet(el) {
@@ -1864,21 +2182,47 @@ const A = {
     if (l) logSet(m, l.weight, l.reps);
   },
   editSet(el) {
-    const s = S.sets.find(x => x.id === el.dataset.id); if (!s) return;
+    const s = findSet(el.dataset.id); if (!s) return;
     const m = machineById(s.machine_id);
-    openModal(`<h2>עריכת סט</h2><div class="stack">${stepper('ew', 'משקל, ק״ג', s.weight, m?.weight_step || 2.5)}${stepper('er', 'חזרות', s.reps, 1, { int: true })}
+    openModal(`<h2>עריכת סט</h2><div class="sub" style="margin:-10px 0 16px">${esc(m?.name || '')}, ${fmtDate(s.workout_date)}</div><div class="stack">${stepper('ew', 'משקל, ק״ג', s.weight, m?.weight_step || 2.5)}${stepper('er', 'חזרות', s.reps, 1, { int: true })}
       <button class="btn btn-primary btn-block" data-a="updSet" data-id="${s.id}">שמור שינוי</button>
       <button class="btn btn-danger btn-block" data-a="delSet" data-id="${s.id}">${svg(I.trash, 20)}מחק את הסט</button>
       <button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
   },
   updSet(el) {
-    const s = S.sets.find(x => x.id === el.dataset.id); if (!s) return;
+    const s = findSet(el.dataset.id); if (!s) return;
     const w = Math.max(0, num($('#ew').value) || 0), r = Math.round(num($('#er').value) || 0);
     if (r <= 0) { toast('הזן מספר חזרות'); return; }
     enqueue({ table: 'sets', op: 'upsert', row: { ...s, weight: w, reps: r } });
-    closeModal(); render();
+    patchDaySets(s.id, x => ({ ...x, weight: w, reps: r }));
+    closeModal(); toast('הסט עודכן'); render();
   },
-  delSet(el) { enqueue({ table: 'sets', op: 'delete', id: el.dataset.id }); closeModal(); toast('הסט נמחק'); render(); },
+  delSet(el) {
+    const id = el.dataset.id;
+    enqueue({ table: 'sets', op: 'delete', id }); patchDaySets(id, () => null);
+    if (S.undo && S.undo.id === id) S.undo = null;
+    closeModal(); toast('הסט נמחק'); render();
+  },
+  undoSet() {
+    const u = S.undo; if (!u) return;
+    enqueue({ table: 'sets', op: 'delete', id: u.id });
+    if (S.timer && S.timer.name === u.name) stopTimer();
+    S.draft[u.mid] = { w: u.w, r: u.r, n: Math.max(0, u.n - 1), touched: true };
+    S.undo = null; document.querySelectorAll('#app [data-dirty]').forEach(x => { delete x.dataset.dirty; });
+    toast('הסט בוטל'); render();
+  },
+  useSugg(el) {
+    const d = S.draft[el.dataset.id]; if (!d) return;
+    d.w = Number(el.dataset.w); d.touched = true;
+    document.querySelectorAll('#app [data-dirty]').forEach(x => { delete x.dataset.dirty; });
+    render();
+  },
+  busy(el) {
+    const id = el.dataset.id, m = machineById(id); if (!m) return;
+    S.busy = { date: today(), ids: [...busyIds().filter(x => x !== id), id] }; saveBusy();
+    const nx = nextMachine(m); toast('הועבר לסוף הרשימה');
+    go(nx ? '#/m/' + nx.id : '#/workout');
+  },
   mfilter(el) { S.mfilter = el.dataset.k; render(); },
   toggleArch() { S.showArchived = !S.showArchived; render(); },
   farea(el) {
@@ -1898,7 +2242,7 @@ const A = {
     const inp = document.getElementById(el.dataset.t); if (!inp) return;
     const v = Number(el.dataset.v);
     inp.value = fmtW(v); inp.dataset.dirty = '1';
-    if (inp.dataset.draft && S.draft[S.route.a]) S.draft[S.route.a][inp.dataset.draft] = v;
+    if (inp.dataset.draft && S.draft[S.route.a]) { S.draft[S.route.a][inp.dataset.draft] = v; touchDraft(); }
     syncChips(inp);
   },
   syncNow() { flush(); },
@@ -1934,10 +2278,12 @@ const A = {
       sort_order: old?.sort_order ?? S.machines.length, archived: old?.archived ?? false };
     enqueue({ table: 'machines', op: 'upsert', row });
     const setup = ($('#fsetup')?.value || '').trim();
-    const ms = S.settings.machineSetup, mr = S.settings.machineRest;
-    if ((ms[E.id] || '') !== setup || (mr[E.id] || null) !== (E.rest || null)) {
+    let link = ($('#flink')?.value || '').trim(); if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
+    const ms = S.settings.machineSetup, mr = S.settings.machineRest, ml = S.settings.machineLink;
+    if ((ms[E.id] || '') !== setup || (mr[E.id] || null) !== (E.rest || null) || (ml[E.id] || '') !== link) {
       if (setup) ms[E.id] = setup; else delete ms[E.id];
       if (E.rest) mr[E.id] = E.rest; else delete mr[E.id];
+      if (link) ml[E.id] = link; else delete ml[E.id];
       saveSettings();
     }
     S.edit = null; toast('המכשיר נשמר');
@@ -1972,6 +2318,7 @@ const A = {
     const k = el.dataset.k, d = parseInt(el.dataset.d, 10);
     if (k === 'rest') S.settings.rest = Math.min(600, Math.max(15, S.settings.rest + d * 15));
     else if (k.startsWith('restA.')) { const a = k.slice(6), v = Math.min(600, Math.max(15, areaRest(a) + d * 15)); if (v === S.settings.rest) delete S.settings.restByArea[a]; else S.settings.restByArea[a] = v; }
+    else if (k === 'repTop') S.settings.repTop = Math.min(30, Math.max(4, (S.settings.repTop || 12) + d));
     else if (k.startsWith('min.')) { const a = k.slice(4); S.settings.minSets[a] = Math.min(40, Math.max(1, S.settings.minSets[a] + d)); }
     saveSettings(); render();
   },
@@ -2046,7 +2393,7 @@ document.addEventListener('click', e => {
 document.addEventListener('input', e => {
   const t = e.target;
   if (t.closest('#app') && t.tagName === 'INPUT') t.dataset.dirty = '1';
-  if (t.dataset.draft && S.draft[S.route.a]) { const v = num(t.value); if (v != null) S.draft[S.route.a][t.dataset.draft] = v; updCur(); }
+  if (t.dataset.draft && S.draft[S.route.a]) { const v = num(t.value); if (v != null) S.draft[S.route.a][t.dataset.draft] = v; updCur(); touchDraft(); }
   if (['rmin', 'rsec', 'rcal', 'rwatt'].includes(t.id)) updateWattEstimate();
 });
 document.addEventListener('change', async e => {
@@ -2127,6 +2474,14 @@ async function requestPersist() {
     updateSync();
   } catch (e) {}
 }
+/* פתיחה מחדש באמצע אימון: חוזרים למכשיר שבו היית */
+let resumed = false;
+function maybeResume() {
+  if (resumed || !S.loaded) return; resumed = true;
+  const h = location.hash; if (h && h !== '#/' && h !== '#') return;
+  const r = resumeTarget(); if (!r) return;
+  history.replaceState(null, '', r); S.curHash = r; log('ממשיך מאיפה שעצרת:', r);
+}
 /* ---------- boot ---------- */
 (function boot() {
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
@@ -2148,7 +2503,7 @@ async function requestPersist() {
     const u = session?.user || null;
     log('אירוע התחברות:', event, u ? 'משתמש ' + u.email : 'אין משתמש');
     if (u && (!S.user || S.user.id !== u.id)) {
-      S.user = u; loadCache(); render(); requestPersist();
+      S.user = u; loadCache(); maybeResume(); render(); requestPersist();
       setTimeout(() => { flush(); fetchAll(); }, 0);
     } else if (!u && S.user) {
       S.user = null; resetState(); render();
