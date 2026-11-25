@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0A0A0B">
+<meta name="theme-color" content="#17181C">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -866,6 +866,81 @@ a.wc:active{transform:scale(.94)}
 .ro .robtn button{width:52px;height:52px;border-radius:16px;border:0;background:var(--surface2);color:var(--accent);display:grid;place-items:center}
 .ro .robtn button:active{transform:scale(.94)}
 .ro .robtn button.hid{visibility:hidden}
+
+/* ===================== 2.8 ===================== */
+/* ספינינג: ציר אחוזים, היום מימין */
+.spchart svg{overflow:visible}
+.spax.one{justify-content:center;text-align:center}
+
+/* השבוע עד היום: כרטיסים עם אייקון */
+.tiles2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.t2{position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:186px;padding:16px 16px 14px;border-radius:24px;background:var(--surface)}
+.t2::after{content:"";position:absolute;left:-46px;top:-46px;width:120px;height:120px;border-radius:50%;background:var(--c);opacity:.07;pointer-events:none}
+.t2-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.t2-ic{position:relative;width:52px;height:52px;display:grid;place-items:center;color:var(--c);flex-shrink:0}
+.t2-ic .rg{position:absolute;inset:0;width:52px;height:52px}
+.t2-ic .in{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 16%,transparent)}
+.t2-top .pct{font:900 16px var(--round);color:var(--c);margin-top:4px}
+.t2 .v{font:900 38px/1 var(--round);letter-spacing:-1px;margin-top:14px}
+.t2 .v small{font-size:18px;color:var(--muted);font-weight:800;letter-spacing:0}
+.t2 .k{font-size:17px;font-weight:800;margin-top:6px}
+.t2-days{display:flex;justify-content:space-between;margin-top:auto;padding-top:12px;position:relative;z-index:1}
+.t2-days span{display:flex;flex-direction:column;align-items:center;gap:4px;font:800 11px var(--round);color:var(--faint)}
+.t2-days span.td{color:var(--text)}
+.t2-days i{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.07)}
+.t2-days i.on{background:var(--c)}
+.t2-days i.miss{background:transparent;box-shadow:inset 0 0 0 2px var(--warn)}
+.t2-days i.plan{background:transparent;box-shadow:inset 0 0 0 2px rgba(255,255,255,.22)}
+.t2-pill{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;margin-top:auto;padding:6px 11px;border-radius:999px;font-size:13.5px;font-weight:800;background:var(--surface2);color:var(--muted);position:relative;z-index:1}
+.t2-pill.up{background:rgba(74,222,128,.14);color:var(--a-legs)}
+.t2-pill.down{background:var(--warn-tint);color:var(--warn)}
+.t2-foot{margin-top:auto;display:flex;flex-direction:column;align-items:flex-start;gap:5px;position:relative;z-index:1}
+.t2-foot .t2-pill{margin-top:0}
+.t2-cap{font-size:13px;font-weight:700;color:var(--faint);line-height:1.25}
+
+/* ===================== 2.9 ===================== */
+/* צבעים: כהה רך יותר, גרפיט במקום שחור */
+:root,html[data-theme]{
+  --bg:#17181C; --surface:#23252B; --surface2:#2F323A; --fill:rgba(255,255,255,.09); --fill2:rgba(255,255,255,.16);
+  --sep:rgba(255,255,255,.09); --text:#F7F7F9; --muted:#B3B4BD; --faint:#777985; --on-accent:#16171A;
+  --glass:rgba(38,40,47,.8); --float:0 16px 40px rgba(0,0,0,.4);
+}
+.card,.list,.week,.t2,.tile,.xcard,.ipanel,.itab,.reo{box-shadow:inset 0 1px 0 rgba(255,255,255,.045)}
+body.scrolled .navbar{background:rgba(23,24,28,.96)}
+.navbar::after{background:linear-gradient(rgba(23,24,28,.9),rgba(23,24,28,0))}
+.nav{background:rgba(40,42,49,.97)}
+.tb{background:rgba(40,42,49,.96)}
+.toast,.sync{background:rgba(50,52,60,.97)}
+.xcard .xt,.ms .mt,.sheet .lrow .thumb{background:#fff}
+.wc.plan{border-color:rgba(255,255,255,.24)}
+.t2-days i{background:rgba(255,255,255,.1)}
+
+/* התקדמות */
+.ups{margin-top:12px;padding:6px 14px}
+.uprow{display:flex;align-items:center;gap:12px;padding:10px 0;color:var(--text);text-decoration:none;border-top:1px solid var(--sep)}
+.uprow:first-child{border-top:0}
+.uprow .thumb{width:48px;height:48px;background:#fff;color:#6b6b73}
+.uprow .t{font-size:18px;font-weight:800}
+.upd{display:inline-flex;align-items:center;gap:3px;padding:6px 11px;border-radius:999px;background:rgba(74,222,128,.14);color:var(--a-legs);font:900 15px var(--round)}
+.cons{margin-top:14px}
+.cons-b{display:flex;align-items:center;gap:18px;margin-top:14px}
+.cons-r{width:112px;height:112px;flex-shrink:0}
+.cons-l{display:flex;flex-direction:column;gap:14px;min-width:0}
+.cl{display:flex;gap:10px;align-items:flex-start}
+.cl i{width:12px;height:12px;border-radius:50%;margin-top:9px;flex-shrink:0}
+.cl b{display:block;font:900 28px/1.05 var(--round)}
+.cl span{display:block;font-size:15px;font-weight:700;color:var(--muted);margin-top:2px;line-height:1.3}
+.effc{margin-top:14px}
+.eff{display:grid;grid-template-columns:86px minmax(0,1fr) 40px 76px;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--sep)}
+.eff:first-of-type{border-top:0}
+.eff .nm{font-size:17px;font-weight:800}
+.ebar{position:relative;height:8px;border-radius:4px;background:linear-gradient(to left,rgba(255,90,95,.55) 0%,rgba(252,193,0,.75) 20%,rgba(252,193,0,.75) 60%,rgba(255,255,255,.14) 70%)}
+.ebar i{position:absolute;top:50%;width:16px;height:16px;margin-right:-8px;border-radius:50%;background:var(--text);transform:translateY(-50%);box-shadow:0 0 0 3px var(--surface)}
+.ev{font:900 20px var(--round);text-align:center}
+.et{font-size:13.5px;font-weight:800;text-align:center;padding:4px 6px;border-radius:999px;background:var(--surface2);color:var(--muted)}
+.et.good{background:var(--accent-tint);color:var(--accent)}
+.et.hard{background:var(--danger-tint);color:var(--danger)}
+.eff-scale{display:flex;justify-content:space-between;margin:6px 0 2px;font-size:12px;font-weight:700;color:var(--faint);padding-right:96px;padding-left:126px}
 </style>
 </head>
 <body>
@@ -918,7 +993,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '2.7';
+const APP_VERSION = '2.9';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -1551,27 +1626,43 @@ const SPIN3 = [
   { k: 'km', l: 'ק״מ', get: r => r.distance_km, dec: 1, c: 'var(--a-abs)' },
   { k: 'kcal', l: 'קלוריות', get: r => r.calories, dec: 0, c: 'var(--a-biceps)' }
 ];
-/* 14 ימים, היום משמאל. כל קו בסקאלה משלו, כדי שאפשר יהיה לראות את המגמה של כל מדד */
+/* 2.8: כל קו מראה סטייה באחוזים מהממוצע שלו. ציר קבוע של לפחות 10% לכל כיוון, כך ששינויים קטנים נראים קטנים.
+   הרכיבה הישנה משמאל והיום מימין, עם קו מקווקו ותאריך לכל רכיבה */
 function spinChart(t, first, sel) {
-  const W = 320, H = 132, n = 14;
-  const x = i => W - 14 - i * (W - 28) / (n - 1);
   const rides = S.rides.filter(r => r.ride_date >= first && r.ride_date <= t).sort((a, b) => (a.ride_date < b.ride_date ? -1 : 1));
-  let out = [H - 18, 24].map(y => `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="3 5"/>`).join('');
-  const order = SPIN3.filter(m => m.k !== sel).concat(SPIN3.filter(m => m.k === sel));
-  order.forEach(mk => {
-    const pts = rides.map(r => ({ i: dayDiff(r.ride_date, first), v: mk.get(r) })).filter(p => p.v != null && isFinite(Number(p.v))).map(p => ({ i: p.i, v: Number(p.v) }));
+  const n = rides.length, W = 340, H = 178, L = 40, R = 14, TOP = 12, BOT = 36, ph = H - TOP - BOT;
+  const x = i => (n === 1 ? (L + W - R) / 2 : L + i * (W - L - R) / (n - 1));
+  const series = SPIN3.map(mk => {
+    const pts = rides.map((r, i) => ({ i, v: mk.get(r) })).filter(p => p.v != null && isFinite(Number(p.v)) && Number(p.v) > 0).map(p => ({ i: p.i, v: Number(p.v) }));
+    const avg = pts.length ? pts.reduce((s, p) => s + p.v, 0) / pts.length : 0;
+    return { mk, pts: pts.map(p => ({ ...p, dv: avg ? (p.v / avg - 1) * 100 : 0 })) };
+  });
+  const mx = Math.max(0, ...series.flatMap(s => s.pts.map(p => Math.abs(p.dv))));
+  const rng = Math.max(10, Math.ceil(mx / 5) * 5);
+  const y = dv => TOP + (rng - dv) / (2 * rng) * ph;
+  let out = '';
+  rides.forEach((r, i) => { out += `<line x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${TOP}" y2="${TOP + ph}" stroke="rgba(255,255,255,.10)" stroke-width="1" stroke-dasharray="2 4"/>`; });
+  [[rng, `+${rng}%`], [0, 'ממוצע'], [-rng, `-${rng}%`]].forEach(([v, l]) => {
+    out += `<line x1="${L - 4}" x2="${W - R + 6}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="rgba(255,255,255,${v === 0 ? '.22' : '.08'})" stroke-width="1"${v === 0 ? '' : ' stroke-dasharray="3 5"'}/>`;
+    out += `<text x="${L - 8}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end" font-size="11" font-weight="700" fill="var(--faint)" style="font-family:var(--round)">${l}</text>`;
+  });
+  const dayOnly = n > 8;
+  rides.forEach((r, i) => {
+    const isT = r.ride_date === t, d = parseYmd(r.ride_date);
+    const lab = isT ? 'היום' : dayOnly ? String(d.getDate()) : shortDate(r.ride_date);
+    out += `<text x="${x(i).toFixed(1)}" y="${H - 12}" text-anchor="middle" font-size="${dayOnly ? 11.5 : 12}" font-weight="${isT ? 900 : 700}" fill="${isT ? 'var(--accent)' : 'var(--muted)'}" style="font-family:var(--round)">${lab}</text>`;
+  });
+  const order = series.filter(s => s.mk.k !== sel).concat(series.filter(s => s.mk.k === sel));
+  order.forEach(({ mk, pts }) => {
     if (!pts.length) return;
-    let lo = Math.min(...pts.map(p => p.v)), hi = Math.max(...pts.map(p => p.v));
-    if (hi - lo < 1e-9) { lo -= 1; hi += 1; }
-    const y = v => H - 18 - (v - lo) / (hi - lo) * (H - 46);
-    const on = !sel || sel === mk.k, op = on ? 1 : 0.22, sw = sel === mk.k ? 4 : 3;
-    const d = pts.map((p, j) => `${j ? 'L' : 'M'}${x(p.i).toFixed(1)} ${y(p.v).toFixed(1)}`).join('');
+    const on = !sel || sel === mk.k, op = on ? 1 : 0.18, sw = sel === mk.k ? 3.6 : 2.6;
+    const d = pts.map((p, j) => `${j ? 'L' : 'M'}${x(p.i).toFixed(1)} ${y(p.dv).toFixed(1)}`).join('');
     out += `<g opacity="${op}"><path d="${d}" fill="none" stroke="${mk.c}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"/>`;
-    pts.forEach((p, j) => { const last = j === pts.length - 1; out += `<circle cx="${x(p.i).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="${last ? 5.5 : 3.5}" fill="${last ? mk.c : 'var(--surface)'}" stroke="${mk.c}" stroke-width="2.5"/>`; });
-    if (sel === mk.k) pts.forEach(p => { out += `<text x="${x(p.i).toFixed(1)}" y="${(y(p.v) - 11).toFixed(1)}" text-anchor="middle" font-size="12.5" font-weight="800" fill="var(--text)" style="font-family:var(--round)">${fmtD(p.v, mk.dec)}</text>`; });
+    pts.forEach((p, j) => { const last = j === pts.length - 1; out += `<circle cx="${x(p.i).toFixed(1)}" cy="${y(p.dv).toFixed(1)}" r="${last ? 5 : 3.2}" fill="${last ? mk.c : 'var(--surface)'}" stroke="${mk.c}" stroke-width="2.2"/>`; });
+    if (sel === mk.k) pts.forEach(p => { out += `<text x="${x(p.i).toFixed(1)}" y="${(y(p.dv) - 10).toFixed(1)}" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--text)" style="font-family:var(--round)">${fmtD(p.v, mk.dec)}</text>`; });
     out += '</g>';
   });
-  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${out}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" style="direction:ltr" aria-hidden="true">${out}</svg>`;
 }
 function spinCard() {
   const t = today(), first = addDays(t, -13), sel = SPIN3.some(m => m.k === S.spinM) ? S.spinM : null;
@@ -1590,10 +1681,10 @@ function spinCard() {
   return `<section class="card spin" aria-label="ספינינג"><div class="dash-h"><h2>ספינינג</h2></div>
     <div class="dash-sub">ממוצע לרכיבה ב 7 הימים האחרונים, מול 7 הימים שלפניהם</div>
     <div class="sp3">${chips}</div>
-    <div class="spchart" role="img" aria-label="וואט, ק״מ וקלוריות, נקודה לכל רכיבה ב 14 הימים האחרונים">${spinChart(t, first, sel)}</div>
-    <div class="spax" aria-hidden="true"><span>${shortDate(first)}</span><span>${sel ? 'נגיעה נוספת מציגה הכל' : 'נקודה לכל רכיבה'}</span><span>היום</span></div></section>`;
+    <div class="spchart" role="img" aria-label="וואט, ק״מ וקלוריות, שינוי באחוזים מהממוצע, רכיבה לכל יום ב 14 הימים האחרונים, היום מימין">${spinChart(t, first, sel)}</div>
+    <div class="spax one" aria-hidden="true"><span>${sel ? 'נגיעה נוספת מציגה את כל המדדים' : 'שינוי באחוזים מהממוצע. נגיעה במדד מציגה ערכים'}</span></div></section>`;
 }
-/* ---------- 2.7: השבוע עד היום ---------- */
+/* ---------- 2.8: השבוע עד היום, עם אייקונים, טבעות התקדמות ונקודות לכל יום ---------- */
 function avgWorkoutMinRange(from, to) {
   const l = [];
   for (const [d, x] of Object.entries(S.days)) {
@@ -1601,26 +1692,106 @@ function avgWorkoutMinRange(from, to) {
     const ms = Date.parse(x.finished_at) - Date.parse(x.started_at);
     if (ms > 10 * 60000 && ms < 4 * 3600000) l.push(ms);
   }
-  return l.length ? Math.round(l.reduce((a, b) => a + b, 0) / l.length / 60000) : null;
+  return l.length ? { min: Math.round(l.reduce((a, b) => a + b, 0) / l.length / 60000), n: l.length } : null;
 }
 function statTiles() {
   const t = today(), ws = weekStartOf(t), dow = parseYmd(t).getDay();
+  const days = Array.from({ length: 7 }, (_, i) => addDays(ws, i));
   let planned = 0, plannedAll = 0, done = 0, rides = 0;
-  for (let i = 0; i < 7; i++) {
-    const d = addDays(ws, i), p = !!templateFor(d);
-    if (p) plannedAll++;
-    if (d <= t) { if (p) planned++; if (setsOn(d).length) done++; if (rideOn(d)) rides++; }
-  }
+  days.forEach(d => { const p = !!templateFor(d); if (p) plannedAll++; if (d <= t) { if (p) planned++; if (setsOn(d).length) done++; if (rideOn(d)) rides++; } });
   const end = setsOn(t).length ? t : addDays(t, -1);
   const vNow = end >= ws ? volumeKg(ws, end) : 0, vPrev = end >= ws ? volumeKg(addDays(ws, -7), addDays(end, -7)) : 0;
   const pct = vPrev > 0 ? Math.round((vNow - vPrev) / vPrev * 100) : null, dur = avgWorkoutMinRange(ws, t);
   const tons = vNow < 50 ? '0' : (vNow / 1000).toFixed(1);
-  const tile = (v, k, s = '', cls = '') => `<div class="tile"><div class="v num">${v}</div><div class="k">${k}</div>${s ? `<div class="s ${cls}">${s}</div>` : ''}</div>`;
-  return `<div class="section-title"><span>השבוע עד היום</span></div><div class="tiles" style="margin-top:0">
-    ${tile(`${done}<small> מתוך ${planned}</small>`, 'אימוני כוח שבוצעו', `${plannedAll} מתוכננים בשבוע כולו`)}
-    ${tile(`${rides}<small> מתוך ${dow + 1}</small>`, 'ימים עם רכיבה', 'מיום ראשון עד היום')}
-    ${tile(`${tons}<small> טון</small>`, 'הורמו השבוע', pct == null ? 'משקל כפול חזרות, בכל הסטים' : `<span class="ltr">${pct > 0 ? '+' : ''}${pct}%</span> מול אותם ימים בשבוע שעבר`, pct > 0 ? 'up' : '')}
-    ${tile(dur != null ? `${dur}<small> דקות</small>` : '-', 'משך ממוצע של אימון כוח', 'מהסט הראשון ועד סיום האימון')}</div>`;
+  const icon = (ic, c, f) => {
+    const C = 2 * Math.PI * 23;
+    const ring = f == null ? '' : `<svg class="rg" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="23" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4"/>${f > 0 ? `<circle cx="26" cy="26" r="23" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${(C * (1 - Math.min(1, f))).toFixed(2)}" transform="rotate(-90 26 26)"/>` : ''}</svg>`;
+    return `<span class="t2-ic">${ring}<span class="in">${svg(ic, 22, 2.3)}</span></span>`;
+  };
+  const dots = (isOn, isPlan) => `<div class="t2-days" aria-hidden="true">${days.map((d, i) => {
+    const on = d <= t && isOn(d), plan = isPlan(d), cls = on ? 'on' : !plan ? '' : d < t ? 'miss' : 'plan';
+    return `<span class="${d === t ? 'td' : ''}"><i class="${cls}"></i>${DAY_LETTERS[i]}</span>`; }).join('')}</div>`;
+  const pctTxt = (a, b) => (b ? `<span class="pct ltr">${Math.round(Math.min(a, b) / b * 100)}%</span>` : '');
+  const tile = (c, top, v, k, foot, lab) => `<div class="t2" style="--c:${c}" role="group" aria-label="${lab}"><div class="t2-top">${top}</div><div class="v num">${v}</div><div class="k">${k}</div>${foot}</div>`;
+  const tr = pct == null ? '' : pct > 0 ? 'up' : pct < 0 ? 'down' : '';
+  return `<div class="section-title"><span>השבוע עד היום</span></div><div class="tiles2">
+    ${tile('var(--accent)', icon(I.dumbbell, 'var(--accent)', planned ? done / planned : 0) + pctTxt(done, planned), `${done}<small> מתוך ${planned}</small>`, 'אימוני כוח',
+      dots(d => setsOn(d).length > 0, d => !!templateFor(d)), `אימוני כוח: ${done} מתוך ${planned} עד היום, ${plannedAll} מתוכננים בשבוע`)}
+    ${tile('var(--a-shoulders)', icon(I.bike, 'var(--a-shoulders)', rides / (dow + 1)) + pctTxt(rides, dow + 1), `${rides}<small> מתוך ${dow + 1}</small>`, 'ימים עם רכיבה',
+      dots(d => !!rideOn(d), () => true), `רכיבה: ${rides} מתוך ${dow + 1} ימים עד היום`)}
+    ${tile('var(--a-legs)', icon(I.up, 'var(--a-legs)', null), `${tons}<small> טון</small>`, 'הורמו השבוע',
+      (pct == null ? `<span class="t2-pill">משקל כפול חזרות</span>` : `<div class="t2-foot"><span class="t2-pill ${tr}">${svg(pct >= 0 ? I.up : I.down, 15, 2.6)}<span class="ltr">${pct > 0 ? '+' : ''}${pct}%</span></span><span class="t2-cap">מול אותם ימים בשבוע שעבר</span></div>`), `הורמו השבוע ${tons} טון`)}
+    ${tile('var(--a-triceps)', icon(I.timer, 'var(--a-triceps)', null), dur ? `${dur.min}<small> דקות</small>` : '-', 'אימון ממוצע',
+      `<span class="t2-pill">${dur ? (dur.n === 1 ? 'לפי אימון אחד' : `לפי ${dur.n} אימונים`) : 'מהסט הראשון עד הסיום'}</span>`, `משך אימון ממוצע ${dur ? dur.min + ' דקות' : 'לא ידוע'}`)}</div>`;
+}
+/* ---------- 2.9: התקדמות ---------- */
+/* עליות משקל: המשקל הגבוה באימון האחרון החודש, מול האימון האחרון לפני החודש, ואם אין כזה מול האימון הראשון החודש */
+function weightUps(t) {
+  const m0 = t.slice(0, 8) + '01', by = {};
+  for (const s of S.sets) { if (s.workout_date > t) continue; ((by[s.machine_id] = by[s.machine_id] || {})[s.workout_date] = Math.max(by[s.machine_id]?.[s.workout_date] || 0, s.weight)); }
+  const ups = [];
+  for (const [mid, days] of Object.entries(by)) {
+    const m = machineById(mid); if (!m) continue;
+    const ds = Object.keys(days).sort(), inM = ds.filter(d => d >= m0); if (!inM.length) continue;
+    const before = ds.filter(d => d < m0), baseD = before.length ? before[before.length - 1] : inM[0], lastD = inM[inM.length - 1];
+    if (baseD === lastD) continue;
+    const a = days[baseD], b = days[lastD];
+    if (b > a) ups.push({ m, from: a, to: b, d: round2(b - a) });
+  }
+  return ups.sort((x, y) => y.d - x.d);
+}
+function firstDataDate() {
+  let f = null;
+  for (const s of S.sets) if (!f || s.workout_date < f) f = s.workout_date;
+  for (const r of S.rides) if (!f || r.ride_date < f) f = r.ride_date;
+  return f;
+}
+const RIR_TXT = v => (v < 1 ? ['קרוב לכשל', 'hard'] : v <= 3 ? ['טווח טוב', 'good'] : ['קל מדי', 'easy']);
+function progressSection() {
+  const t = today(), m0 = t.slice(0, 8) + '01', ws = weekStartOf(t);
+  /* 1 + 2: עליות משקל, ק״מ מצטבר */
+  const ups = weightUps(t);
+  const km = (a, b) => S.rides.filter(r => r.ride_date >= a && r.ride_date <= b).reduce((s, r) => s + (Number(r.distance_km) || 0), 0);
+  const kmM = km(m0, t), kmW = km(ws, t), nM = S.rides.filter(r => r.ride_date >= m0 && r.ride_date <= t).length;
+  const icon = (ic, c) => `<span class="t2-ic"><span class="in">${svg(ic, 22, 2.3)}</span></span>`;
+  const top = ups[0];
+  let h = `<div class="section-title"><span>התקדמות</span></div><div class="tiles2">
+    <div class="t2" style="--c:var(--a-legs)" role="group" aria-label="עליות משקל החודש: ${ups.length} מכשירים"><div class="t2-top">${icon(I.up)}</div>
+      <div class="v num">${ups.length}<small> ${ups.length === 1 ? 'מכשיר' : 'מכשירים'}</small></div><div class="k">עלו במשקל החודש</div>
+      ${top ? `<div class="t2-foot"><span class="t2-pill up">${svg(I.up, 15, 2.6)}<span class="ltr">+${fmtW(top.d)}</span> ק״ג</span><span class="t2-cap">הכי הרבה: ${esc(top.m.name)}</span></div>` : `<span class="t2-pill">ההצעה לעלות מופיעה במסך המכשיר</span>`}</div>
+    <div class="t2" style="--c:var(--a-shoulders)" role="group" aria-label="ספינינג החודש: ${fmtW(round2(kmM))} קילומטר"><div class="t2-top">${icon(I.bike)}</div>
+      <div class="v num">${fmtD(kmM, kmM >= 100 ? 0 : 1)}<small> ק״מ</small></div><div class="k">ספינינג החודש</div>
+      <div class="t2-foot"><span class="t2-pill"><span class="ltr">${fmtD(kmW, 1)}</span> ק״מ השבוע</span><span class="t2-cap">${nM === 1 ? 'רכיבה אחת' : nM + ' רכיבות'} החודש</span></div></div></div>`;
+  if (ups.length) h += `<section class="card ups" aria-label="מכשירים שעלו במשקל החודש">${ups.slice(0, 6).map(u => `<a class="uprow" href="#/m/${u.m.id}"><div class="thumb">${photoHtml(u.m, 20)}</div><div class="grow"><div class="t">${esc(u.m.name)}</div><div class="sub sm">מ ${ltr(fmtW(u.from))} ל ${ltr(fmtW(u.to))} ק״ג</div></div><span class="upd">${svg(I.up, 16, 2.6)}<span class="ltr">+${fmtW(u.d)}</span></span></a>`).join('')}${ups.length > 6 ? `<div class="sub sm" style="padding:8px 4px 0">ועוד ${ups.length - 6} מכשירים</div>` : ''}</section>`;
+  /* 4: עקביות, 4 שבועות אחורה, אבל רק מהיום שבו התחלת לרשום */
+  const fd = firstDataDate(), from = fd && fd > addDays(t, -27) ? fd : addDays(t, -27);
+  let pl = 0, dn = 0, rd = 0, nd = 0;
+  for (let d = from; d <= t; d = addDays(d, 1)) {
+    nd++; const p = !!templateFor(d), has = setsOn(d).length > 0;
+    if (p && (d < t || has)) { pl++; if (has) dn++; }
+    if (rideOn(d)) rd++;
+  }
+  const pc = pl ? Math.round(dn / pl * 100) : 0, rc = nd ? Math.round(rd / nd * 100) : 0, C = 2 * Math.PI * 40;
+  const ring = (f, c, r) => `<circle cx="50" cy="50" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="9"/>${f > 0 ? `<circle cx="50" cy="50" r="${r}" fill="none" stroke="${c}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${(2 * Math.PI * r).toFixed(2)}" stroke-dashoffset="${(2 * Math.PI * r * (1 - Math.min(1, f))).toFixed(2)}" transform="rotate(-90 50 50)"/>` : ''}`;
+  const span = dayDiff(t, from) + 1;
+  h += `<section class="card cons" aria-label="עקביות: אימוני כוח ${pc} אחוז, רכיבה ${rc} אחוז">
+    <div class="dash-h"><h2>עקביות</h2><span class="dash-sub" style="margin:0">${span >= 28 ? '4 שבועות אחרונים' : `${span} ימים, מאז שהתחלת לרשום`}</span></div>
+    <div class="cons-b"><svg class="cons-r" viewBox="0 0 100 100" aria-hidden="true">${ring(pl ? dn / pl : 0, 'var(--accent)', 42)}${ring(nd ? rd / nd : 0, 'var(--a-shoulders)', 29)}</svg>
+      <div class="cons-l"><div class="cl"><i style="background:var(--accent)"></i><div><b class="num ltr">${pc}%</b><span>אימוני כוח, ${dn} מתוך ${pl} מתוכננים</span></div></div>
+      <div class="cl"><i style="background:var(--a-shoulders)"></i><div><b class="num ltr">${rc}%</b><span>ימים עם רכיבה, ${rd} מתוך ${nd}</span></div></div></div></div></section>`;
+  /* 3: מאמץ לפי אזור, ממוצע RIR ב 14 הימים האחרונים */
+  const f14 = addDays(t, -13), acc = {};
+  for (const s of S.sets) { if (s.workout_date < f14 || s.workout_date > t || s.rir == null) continue; const m = machineById(s.machine_id); if (!m) continue; const a = (acc[m.area] = acc[m.area] || { s: 0, n: 0 }); a.s += Number(s.rir); a.n++; }
+  const rows = AREAS.filter(a => acc[a.k] && acc[a.k].n);
+  let body;
+  if (S.rirCol === false) body = `<div class="sub">כדי להתחיל, צריך להריץ פעם אחת את פקודת SQL של גרסה 2.6, ואז לרשום RIR בסטים.</div>`;
+  else if (!rows.length) body = `<div class="sub">יופיע אחרי שתרשום RIR בכמה סטים. כפתורי RIR נמצאים במסך המכשיר, מתחת לחזרות.</div>`;
+  else body = rows.map(a => { const v = acc[a.k].s / acc[a.k].n, [l, c] = RIR_TXT(v);
+    return `<div class="eff"><span class="nm">${a.n}</span><span class="ebar" aria-hidden="true"><i style="right:${Math.min(100, v / 5 * 100).toFixed(0)}%"></i></span><span class="ev num ltr">${(Math.round(v * 10) / 10).toFixed(1)}</span><span class="et ${c}">${l}</span></div>`; }).join('')
+;
+  h += `<section class="card effc" aria-label="מאמץ לפי אזור"><div class="dash-h"><h2>מאמץ לפי אזור</h2><span class="dash-sub" style="margin:0">14 ימים</span></div>
+    <div class="dash-sub">ממוצע החזרות שנשארו במיכל. רוב ההמלצות לבניית שריר: בין 0 ל 3</div>${body}</section>`;
+  return h;
 }
 function vToday() {
   const t = today(), tpl = templateFor(t), counts = areaCountsOn(t), day = S.days[t] || {};
@@ -1633,7 +1804,7 @@ function vToday() {
       <div class="sub">צלם כל מכשיר, תן לו שם, בחר אזור בגוף וקבע משקל פתיחה. אחרי זה האימון כבר מסודר.</div>
       <a class="btn btn-primary btn-block" href="#/edit/new">הוסף מכשיר ראשון</a></section>`;
   }
-  h += weekCard() + spinCard() + statTiles();
+  h += weekCard() + spinCard() + statTiles() + progressSection();
   return h + nav('home');
 }
 function machineRow(m, t) {
