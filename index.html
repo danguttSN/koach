@@ -1106,6 +1106,10 @@ button.lrow{width:100%;border:0;background:transparent;color:inherit;text-align:
 .hl-h{min-height:30px;border-top:0;font-size:13px;font-weight:700;color:var(--faint)}
 .hl-h > span{color:var(--faint)}
 a.hl-r:active{background:var(--fill)}
+
+/* ===================== 3.5 ===================== */
+.ovr{display:flex;align-items:center;gap:12px;margin:-4px 0 14px;padding:12px 14px;border-radius:18px;background:var(--warn-tint);color:var(--warn);font-size:15px;font-weight:700;line-height:1.35}
+.ovr .btn{flex-shrink:0}
 </style>
 </head>
 <body>
@@ -1158,7 +1162,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '3.4';
+const APP_VERSION = '3.5';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -2211,6 +2215,8 @@ function vWorkout(arg) {
   const segAreas = sel !== 'all' && !areas.includes(sel) ? [...areas, sel] : areas;
   const tsel = `<div class="tsel2" role="group" aria-label="איזה אימון היום">${visibleTpls().map(k => `<button type="button" class="${k === tpl ? 'on' : ''}" data-a="${k === tpl ? 'switchTpl' : 'setTpl'}" data-t="${k}" aria-pressed="${k === tpl}" aria-label="אימון ${esc(TPL_NAME[k])} להיום">${esc(TPL_NAME[k])}</button>`).join('')}</div>`;
   let h = pageHead(`אימון ${esc(TPL_NAME[tpl])}`) + tsel;
+  { const dv = S.days[t]?.template, sp = S.settings.split[String(parseYmd(t).getDay())] || null;
+    if (dv && dv !== sp && (sp ? TEMPLATES[sp] : true)) h += `<div class="ovr"><span class="grow">שונה להיום בלבד. לפי החלוקה השבועית: ${sp ? `אימון ${esc(TPL_NAME[sp])}` : 'מנוחה'}</span><button type="button" class="btn btn-gray btn-sm" data-a="tplReset">${sp ? `חזור לאימון ${esc(TPL_NAME[sp])}` : 'חזור למנוחה'}</button></div>`; }
   h += sessCard(t);
   if (tpl === 'F') return h + freeBody(t, counts, sets) + rideCard(t) + nav('workout');
   const left = areas.filter(a => counts[a] < mins[a]), rem = left.reduce((s, a) => s + mins[a] - counts[a], 0);
@@ -3023,7 +3029,7 @@ function logSet(m, w, r, rir) {
   const row = { id: sid, user_id: S.user.id, machine_id: m.id, workout_date: t, weight: w, reps: r, is_pr: isPr, created_at: new Date().toISOString() };
   if (rirOn() && rir != null) row.rir = rir;
   enqueue({ table: 'sets', op: 'upsert', row });
-  if (!day.started_at || !day.template) enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: day.started_at || new Date().toISOString() } });
+  if (!day.started_at) enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, started_at: day.started_at || new Date().toISOString() } });
   delete S.draft[m.id];
   document.querySelectorAll('#app [data-dirty]').forEach(x => { delete x.dataset.dirty; });
   if (S.settings.autoTimer !== false) startTimer(restFor(m), m.name);
@@ -3083,12 +3089,17 @@ const A = {
   },
   sessStart() {
     const t = today(), day = S.days[t] || {};
-    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: new Date().toISOString(), finished_at: null } });
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, started_at: new Date().toISOString(), finished_at: null } });
     ensureAudio(); toast('האימון התחיל'); render();
+  },
+  tplReset() {
+    const t = today();
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: null } });
+    S.wf = null; const sp = templateFor(t); toast(sp ? `חזרת לאימון ${TPL_NAME[sp]}, לפי החלוקה השבועית` : 'היום יום מנוחה, לפי החלוקה השבועית', 3200); render();
   },
   sessNew() {
     const t = today(), day = S.days[t] || {};
-    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: new Date().toISOString(), finished_at: null } });
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, started_at: new Date().toISOString(), finished_at: null } });
     ensureAudio(); toast('אימון חדש התחיל'); render();
   },
   sessFix() {
@@ -3106,12 +3117,12 @@ const A = {
     const at = v => { const [H, M] = v.split(':').map(Number); const d = parseYmd(t); d.setHours(H, M, 0, 0); return d; };
     const s1 = at(a), e1 = at(b);
     if (e1 <= s1) { toast('שעת הסיום צריכה להיות אחרי ההתחלה'); return; }
-    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: s1.toISOString(), finished_at: e1.toISOString() } });
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, started_at: s1.toISOString(), finished_at: e1.toISOString() } });
     closeModal(); toast('השעות עודכנו'); render();
   },
   sessResume() {
     const t = today(), day = S.days[t] || {};
-    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, finished_at: null } });
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, finished_at: null } });
     toast('האימון ממשיך'); render();
   },
   finEnd(el) {
@@ -3208,7 +3219,7 @@ const A = {
         <div class="stack-sm"><button class="btn btn-primary btn-block" data-a="setTpl" data-t="${k}" data-ok="1">כן, החלף</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
       return;
     }
-    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: k } });
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: k === def ? null : k } });
     S.wf = null; closeModal();
     toast(k === 'R' ? 'היום יום מנוחה, רק להיום' : k === def ? `חזרת לאימון ${TPL_NAME[k]}, לפי החלוקה הקבועה` : `אימון ${TPL_NAME[k]} להיום בלבד. החלוקה הקבועה לא השתנתה`, 3400);
     render();
@@ -3242,7 +3253,7 @@ const A = {
     const t = today(), day = S.days[t] || {};
     const iv = id => { const v = num($('#' + id).value); return v == null ? null : Math.round(v); };
     const la = lastSetAt(t), end = S.finEnd === 'last' && la ? new Date(la) : new Date();
-    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: templateFor(t), started_at: day.started_at || new Date().toISOString(), finished_at: end.toISOString(), avg_hr: iv('whr'), max_hr: iv('whrm'), watch_kcal: iv('wkc') } });
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, started_at: day.started_at || new Date().toISOString(), finished_at: end.toISOString(), avg_hr: iv('whr'), max_hr: iv('whrm'), watch_kcal: iv('wkc') } });
     closeModal(); stopTimer(); toast('האימון נשמר'); go('#/');
   },
   step(el) {
@@ -3543,7 +3554,11 @@ document.addEventListener('change', async e => {
   const t = e.target;
   if (t.dataset.s) {
     const k = t.dataset.s;
-    if (k === 'split') S.settings.split[t.dataset.dow] = t.value || null;
+    if (k === 'split') {
+      S.settings.split[t.dataset.dow] = t.value || null;
+      const td = today(), dd = S.days[td];
+      if (String(parseYmd(td).getDay()) === t.dataset.dow && dd && dd.template) { enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: td, template: null } }); toast('השינוי חל גם על היום'); }
+    }
     else if (['wakeLock', 'sound', 'autoTimer', 'warmup', 'rirTrack', 'propagate'].includes(k)) S.settings[k] = t.checked;
     saveSettings(); render(); return;
   }
