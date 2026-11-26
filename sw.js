@@ -1,5 +1,5 @@
 /* כוח: service worker. כשמעלים גרסה חדשה מעלים את המספר כאן */
-const VERSION = 'koach-2.9';
+const VERSION = 'koach-3.0';
 const SHELL = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 const LIB = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js';
 
