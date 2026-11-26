@@ -1058,6 +1058,54 @@ button.lrow{width:100%;border:0;background:transparent;color:inherit;text-align:
 .splv i{width:64px;height:8px;border-radius:4px}
 .splv .num{font:900 13px var(--round);color:var(--muted)}
 .splv .nr{flex-basis:100%;font-weight:600}
+
+/* ===================== 3.4 ===================== */
+/* כותרת הבית: תאריך בנפרד, סיכום מתחת לכותרת */
+.dpill{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:var(--surface);font-size:14px;font-weight:800;color:var(--muted);white-space:nowrap}
+.lafter{font-size:18px;font-weight:700;color:var(--muted);margin-top:6px;line-height:1.4}
+.lafter b{color:var(--text);font-weight:900;font-family:var(--round)}
+
+/* שעון האימון */
+.sess-t{font-size:14px;font-weight:700;color:var(--muted);margin-top:2px}
+.sess-t .warn{color:var(--warn)}
+.sess-b{display:flex;flex-direction:column;gap:6px}
+.sess-b .btn{min-height:42px;padding:0 12px;font-size:15px}
+
+/* אזורים רבים באימון: שורה נגללת עם שמות מלאים */
+.wseg.many{display:flex;overflow-x:auto;scrollbar-width:none;gap:6px}
+.wseg.many::-webkit-scrollbar{display:none}
+.wseg.many a{flex:0 0 auto;min-width:86px;min-height:62px;padding:8px 16px 16px}
+.wseg.many .n{overflow:visible;text-overflow:clip;max-width:none;font-size:17px}
+.wseg.many .ok{top:6px;left:7px}
+
+/* היסטוריה */
+.msum{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 0;margin:2px 0 12px;font-size:15px;font-weight:700;color:var(--muted)}
+.msum b{font-size:19px;color:var(--text)}
+.msum .sep{width:1px;height:14px;background:var(--sep);margin:0 12px}
+.cal2{padding:14px 10px 14px}
+.c2-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px 0;text-align:center}
+.c2-head span{font:800 13px var(--round);color:var(--faint);padding-bottom:4px}
+.c2{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--text);padding:2px 0}
+.c2 .cn{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:800 16px var(--round)}
+.c2.w .cn{background:rgba(252,193,0,.16);color:var(--accent);font-weight:900}
+.c2.today .cn{box-shadow:inset 0 0 0 2px var(--accent)}
+.c2.fut .cn{color:var(--faint)}
+.c2 .rd{width:5px;height:5px;border-radius:50%;background:transparent}
+.c2 .rd.on{background:var(--warn)}
+.hl{padding:8px 14px}
+.hl-r{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.2fr) 52px 76px;align-items:center;min-height:48px;border-top:1px solid var(--sep);color:var(--text);text-decoration:none}
+.hl-r > span{text-align:center}
+.hl-r > .d{text-align:right}
+.hl-r .d b{font-size:15px;font-weight:800}
+.hl-r .tp{font-size:15px;font-weight:700;color:var(--muted);text-align:right}
+.hl-r .n{font:800 16px var(--round)}
+.hl-r .n small{font-size:12px;color:var(--faint);font-family:inherit}
+.hl-r .na{color:var(--faint)}
+.hl-r.td{background:rgba(252,193,0,.07);margin:0 -14px;padding:0 14px}
+.hl-r.td b{color:var(--accent)}
+.hl-h{min-height:30px;border-top:0;font-size:13px;font-weight:700;color:var(--faint)}
+.hl-h > span{color:var(--faint)}
+a.hl-r:active{background:var(--fill)}
 </style>
 </head>
 <body>
@@ -1110,7 +1158,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '3.3';
+const APP_VERSION = '3.4';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -1529,7 +1577,7 @@ function nav(active) {
 function pageHead(title, opts = {}) {
   const back = opts.back ? `<a class="nb-back" href="${opts.back}">${svg(I.back, 28, 2.6)}<span>${opts.backLabel || 'חזרה'}</span></a>` : '';
   return `<div class="navbar"><div class="nb-side">${back}</div><div class="nb-title" aria-hidden="true">${title}</div><div class="nb-side nb-end">${opts.end || ''}</div></div>
-    <header class="large">${opts.sub ? `<div class="lsub">${opts.sub}</div>` : ''}${opts.titleEnd ? `<div class="lhead"><h1 class="${opts.small ? 'sm' : ''}">${title}</h1>${opts.titleEnd}</div>` : `<h1 class="${opts.small ? 'sm' : ''}">${title}</h1>`}</header>`;
+    <header class="large">${opts.sub ? `<div class="lsub">${opts.sub}</div>` : ''}${opts.titleEnd ? `<div class="lhead"><h1 class="${opts.small ? 'sm' : ''}">${title}</h1>${opts.titleEnd}</div>` : `<h1 class="${opts.small ? 'sm' : ''}">${title}</h1>`}${opts.after ? `<div class="lafter">${opts.after}</div>` : ''}</header>`;
 }
 function rings(areas, counts, mins, size = 150) {
   const n = areas.length, gap = 3, sw = Math.min(20, Math.floor((size / 2 - 8) / n) - gap), cx = size / 2;
@@ -2011,7 +2059,14 @@ function progressSection() {
 function vToday() {
   const t = today(), tpl = templateFor(t), counts = areaCountsOn(t), day = S.days[t] || {};
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
-  let h = pageHead('השבוע', { sub: fmtDate(t) });
+  const pd = parseYmd(t), ws = weekStartOf(t), wn = weekNums(t), wr = S.rides.filter(r => r.ride_date >= ws && r.ride_date <= t);
+  const wkm = wr.reduce((s, r) => s + (Number(r.distance_km) || 0), 0), bits = [];
+  if (wn.days) bits.push(`<b>${wn.days}</b> ${wn.days === 1 ? 'אימון כוח' : 'אימוני כוח'}`);
+  if (wn.sets) bits.push(`<b>${wn.sets}</b> סטים`);
+  if (wr.length) bits.push(`<b>${wr.length}</b> ${wr.length === 1 ? 'רכיבה' : 'רכיבות'}`);
+  if (wkm) bits.push(`<b>${fmtD(wkm, wkm >= 100 ? 0 : 1)}</b> ק״מ`);
+  let h = pageHead('השבוע', { end: `<span class="dpill">יום ${DAY_NAMES[pd.getDay()]}, ${pd.getDate()} ב${HE_MONTHS[pd.getMonth()]}</span>`,
+    after: bits.length ? `עד עכשיו: ${bits.join(', ')}` : 'עוד לא נרשם אימון השבוע' });
   if (!S.loaded) return h + '<div class="empty">טוען נתונים</div>' + nav('home');
   if (!S.machines.length) {
     h += `<section class="card stack" style="margin:14px 0"><div class="h3">מתחילים: מוסיפים את המכשירים</div>
@@ -2084,10 +2139,25 @@ function rideCard(t) {
 }
 /* 2.7: רשימת המכשירים של אזור. מה שבוצע מתקפל לשורה אחת, ובאזור שהושלם השאר הם רשות */
 /* ---------- 3.0: שעון אימון הכוח. מתחילים ומסיימים בכפתור, בנפרד מרישום הסטים ---------- */
+/* ---------- 3.4: שעון האימון. שעות התחלה וסיום גלויות, תיקון ידני, ואימון חדש באותו יום ---------- */
+const hmOf = v => { const d = new Date(v); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 function sessCard(t) {
   const day = S.days[t] || {};
-  if (day.started_at && day.finished_at) return `<section class="sess done" aria-label="האימון הסתיים"><span class="sess-ic">${svg(I.check, 22, 3.2)}</span><div class="grow"><div class="k">אימון הכוח הסתיים</div><div class="v">${durTxt(Date.parse(day.finished_at) - Date.parse(day.started_at))}</div></div><button type="button" class="btn btn-gray btn-sm" data-a="sessResume">המשך אימון</button></section>`;
-  if (day.started_at) return `<section class="sess on" aria-label="אימון כוח פעיל"><span class="sess-dot" aria-hidden="true"></span><div class="grow"><div class="k">אימון כוח פעיל</div><div class="v num ltr" id="sessClock">${fmtClock(Date.now() - Date.parse(day.started_at))}</div></div><button type="button" class="btn btn-primary sess-stop" data-a="finish">סיים אימון</button></section>`;
+  if (day.started_at && day.finished_at) {
+    const st = Date.parse(day.started_at), en = Date.parse(day.finished_at), ms = en - st, odd = ms > 4 * 3600000 || ms < 5 * 60000;
+    const recent = Date.now() - en < 30 * 60000;
+    return `<section class="sess done" aria-label="אימון הכוח הסתיים"><span class="sess-ic">${svg(I.check, 22, 3.2)}</span><div class="grow">
+      <div class="k">אימון הכוח הסתיים</div><div class="v">${durTxt(ms)}</div>
+      <div class="sess-t"><span class="ltr">${hmOf(st)}</span> עד <span class="ltr">${hmOf(en)}</span>${odd ? '<span class="warn">, נראה לא נכון</span>' : ''}</div></div>
+      <div class="sess-b"><button type="button" class="btn btn-gray btn-sm" data-a="sessFix">תקן שעות</button>
+      <button type="button" class="btn btn-gray btn-sm" data-a="${recent ? 'sessResume' : 'sessNew'}">${recent ? 'המשך' : 'אימון חדש'}</button></div></section>`;
+  }
+  if (day.started_at) {
+    const st = Date.parse(day.started_at), long = Date.now() - st > 3 * 3600000, la = lastSetAt(t);
+    return `<section class="sess on" aria-label="אימון כוח פעיל"><span class="sess-dot" aria-hidden="true"></span><div class="grow"><div class="k">אימון כוח פעיל</div><div class="v num ltr" id="sessClock">${fmtClock(Date.now() - st)}</div>
+      <div class="sess-t">התחיל ב <span class="ltr">${hmOf(st)}</span>${long ? `<span class="warn">. שכחת לסיים?${la ? ` הסט האחרון ב <span class="ltr">${hmOf(la)}</span>` : ''}</span>` : ''}</div></div>
+      <button type="button" class="btn btn-primary sess-stop" data-a="finish">סיים</button></section>`;
+  }
   return `<button type="button" class="btn btn-primary btn-big btn-block sess-go" data-a="sessStart">${svg(I.play, 28, 2.4)}התחל אימון</button><div class="sub sm" style="text-align:center;margin:8px 0 14px">השעון סופר רק את אימון הכוח. ספינינג נרשם בנפרד</div>`;
 }
 function durTxt(ms) {
@@ -2144,12 +2214,13 @@ function vWorkout(arg) {
   h += sessCard(t);
   if (tpl === 'F') return h + freeBody(t, counts, sets) + rideCard(t) + nav('workout');
   const left = areas.filter(a => counts[a] < mins[a]), rem = left.reduce((s, a) => s + mins[a] - counts[a], 0);
-  const sum = rem ? `נשארו ${rem === 1 ? 'סט אחד' : rem + ' סטים'}: ${left.map(a => `<span class="nw">${areaName(a)} ${mins[a] - counts[a]}</span>`).join(', ')}`
+  const sum = rem ? (left.length > 3 ? `נשארו ${rem} סטים ב ${left.length} אזורים` : `נשארו ${rem === 1 ? 'סט אחד' : rem + ' סטים'}: ${left.map(a => `<span class="nw">${areaName(a)} ${mins[a] - counts[a]}</span>`).join(', ')}`)
     : `${svg(I.check, 20, 3.2)}<span>כל האזורים הגיעו ליעד</span>`;
   h += `<div class="wsum"><span class="grow${rem ? '' : ' done'}">${sum}</span><a class="wall${sel === 'all' ? ' on' : ''}" href="#/workout/${sel === 'all' ? 'auto' : 'all'}" aria-pressed="${sel === 'all'}">הכל</a></div>`;
   const seg = k => { const c = counts[k], mn = mins[k] || 1, met = c >= mn, on = k === sel;
     return `<a role="tab" href="#/workout/${k}" class="${on ? 'on' : ''}${met ? ' met' : ''}" aria-selected="${on}" aria-label="${areaName(k)}, ${c} מתוך ${mn}${met ? ', הושלם' : ''}">${met ? `<span class="ok">${svg(I.check, 15, 3.4)}</span>` : ''}<span class="n">${areaName(k)}</span><span class="pt"><i class="p" style="width:${Math.min(100, Math.round(c / mn * 100))}%"></i></span></a>`; };
-  h += `<div class="wseg" role="tablist" aria-label="בחירת אזור" style="grid-template-columns:repeat(${segAreas.length},minmax(0,1fr))">${segAreas.map(seg).join('')}</div>`;
+  const many = segAreas.length > 4;
+  h += `<div class="wseg${many ? ' many' : ''}" role="tablist" aria-label="בחירת אזור"${many ? '' : ` style="grid-template-columns:repeat(${segAreas.length},minmax(0,1fr))"`}>${segAreas.map(seg).join('')}</div>`;
   const allMet = !rem;
   const banner = a => {
     const nextA = a ? areas.find(x => x !== a && counts[x] < mins[x]) : null;
@@ -2573,6 +2644,7 @@ async function fetchMonth(ym) {
   S.monthLoading[ym] = false;
   render();
 }
+/* ---------- 3.4: היסטוריה בסגנון הטבלה: לוח נקי, סיכום חודשי וטבלת ימים ---------- */
 function vMonth(ym) {
   const t = today(), curYm = ymOf(t);
   if (ym > curYm) ym = curYm;
@@ -2585,36 +2657,40 @@ function vMonth(ym) {
     ${ym < curYm ? `<a class="iconbtn" href="#/history/${addMonths(ym, 1)}" aria-label="החודש הבא">${svg(I.fwd, 26, 2.4)}</a>` : '<span class="iconbtn" style="visibility:hidden"></span>'}</div>`;
   if (need) return h + '<div class="empty">טוען את החודש</div>' + nav('history');
   const days = []; for (let d = first; d <= last; d = addDays(d, 1)) days.push(d);
-  let workouts = 0, planned = 0, totalSets = 0, rides = 0, km = 0;
+  let workouts = 0, totalSets = 0, rides = 0, km = 0;
   const info = {};
   days.forEach(d => {
     const n = setsOn(d).length, r = rideOn(d);
-    if (d <= t && templateFor(d)) planned++;
     if (n) { workouts++; totalSets += n; }
-    if (r) { rides++; km += r.distance_km || 0; }
+    if (r) { rides++; km += Number(r.distance_km) || 0; }
     info[d] = { n, r, tpl: n ? dayTpl(d) : null };
   });
-  let cal = `<section class="card cal" aria-label="לוח החודש"><div class="cal-grid cal-head" aria-hidden="true">${DAY_LETTERS.map(l => `<span>${l}</span>`).join('')}</div><div class="cal-grid">`;
+  const bits = [];
+  if (workouts) bits.push(`<span><b class="num">${workouts}</b> ${workouts === 1 ? 'אימון כוח' : 'אימוני כוח'}</span>`);
+  if (totalSets) bits.push(`<span><b class="num">${totalSets}</b> סטים</span>`);
+  if (rides) bits.push(`<span><b class="num">${rides}</b> ${rides === 1 ? 'רכיבה' : 'רכיבות'}</span>`);
+  if (km) bits.push(`<span><b class="num">${fmtD(km, km >= 100 ? 0 : 1)}</b> ק״מ</span>`);
+  if (bits.length) h += `<div class="msum">${bits.join('<span class="sep" aria-hidden="true"></span>')}</div>`;
+  let cal = `<section class="card cal2" aria-label="לוח החודש"><div class="c2-grid c2-head" aria-hidden="true">${DAY_LETTERS.map(l => `<span>${l}</span>`).join('')}</div><div class="c2-grid">`;
   for (let i = 0; i < parseYmd(first).getDay(); i++) cal += '<span></span>';
   days.forEach(d => {
     const x = info[d], fut = d > t;
-    const cls = ['cd', x.n ? 'w' : '', d === t ? 'today' : '', fut ? 'fut' : ''].join(' ');
+    const cls = ['c2', x.n ? 'w' : '', d === t ? 'today' : '', fut ? 'fut' : ''].join(' ');
     const lab = `${fmtDate(d)}${x.n ? ', ' + (x.tpl ? 'אימון ' + TPL_NAME[x.tpl] : 'אימון כוח') : ''}${x.r ? ', ספינינג' : ''}`;
-    const inner = `<span class="cn num">${parseYmd(d).getDate()}</span><span class="rd ${x.r ? 'on' : ''}"></span>`;
-    cal += fut ? `<span class="${cls}" aria-label="${lab}">${inner}</span>` : `<a class="${cls}" style="--c:${tplColor(x.tpl)}" href="#/history/${d}" aria-label="${lab}">${inner}</a>`;
+    const inner = `<span class="cn num">${parseYmd(d).getDate()}</span><span class="rd${x.r ? ' on' : ''}"></span>`;
+    cal += fut ? `<span class="${cls}" aria-label="${lab}">${inner}</span>` : `<a class="${cls}" href="#/history/${d}" aria-label="${lab}">${inner}</a>`;
   });
-  cal += `</div><div class="legend-row">${visibleTpls().map(k => `<span><i style="background:${TPL_COLOR[k]}"></i>אימון ${esc(TPL_NAME[k])}</span>`).join('')}<span><i class="rdot"></i>ספינינג</span></div></section>`;
+  cal += `</div><div class="wk3-leg" style="text-align:center"><span class="ok">צהוב</span>: יום עם אימון כוח. <span class="mi">נקודה</span>: ספינינג</div></section>`;
   h += cal;
   const active = days.filter(d => info[d].n || info[d].r).reverse();
   if (active.length) {
-    h += `<div class="section-title"><span>ימי אימון</span></div><div class="list">${active.map(d => {
-      const x = info[d], bits = [];
-      if (x.n) bits.push(`${x.tpl ? 'אימון ' + TPL_NAME[x.tpl] + ', ' : ''}${setsTxt(x.n)}`);
-      if (x.r) bits.push(`ספינינג ${x.r.distance_km != null ? ltr(fmtW(x.r.distance_km)) + ' ק״מ' : ltr(fmtDur(x.r.duration_sec))}`);
-      const pd = parseYmd(d);
-      return `<a class="lrow" href="#/history/${d}"><span class="day-badge" style="--c:${x.n ? tplColor(x.tpl) : 'var(--a-shoulders)'}"><b>${pd.getDate()}</b><small>יום ${DAY_LETTERS[pd.getDay()]}</small></span>
-        <div class="grow"><div class="t">יום ${DAY_NAMES[pd.getDay()]}</div><div class="sub sm">${bits.join(', ')}</div></div><span class="chev">${svg(I.fwd, 22)}</span></a>`;
-    }).join('')}</div>`;
+    h += `<div class="section-title"><span>ימי אימון</span></div><section class="card hl" aria-label="ימי אימון"><div class="hl-r hl-h" aria-hidden="true"><span>יום</span><span>אימון</span><span>סטים</span><span>ספינינג</span></div>
+      ${active.map(d => {
+        const x = info[d], pd = parseYmd(d), isT = d === t;
+        const tp = x.n ? (x.tpl ? esc(TPL_NAME[x.tpl]) : 'כוח') : '<span class="na">-</span>';
+        const sp = x.r ? (x.r.distance_km != null ? `${fmtD(Number(x.r.distance_km), 1)} <small>ק״מ</small>` : fmtDur(x.r.duration_sec)) : '<span class="na">-</span>';
+        return `<a class="hl-r${isT ? ' td' : ''}" href="#/history/${d}" aria-label="${fmtDate(d)}"><span class="d"><b>${isT ? 'היום' : `${DAY_LETTERS[pd.getDay()]} <span class="ltr">${shortDate(d)}</span>`}</b></span><span class="tp">${tp}</span><span class="n num">${x.n || '<span class="na">-</span>'}</span><span class="n num">${sp}</span></a>`;
+      }).join('')}</section>`;
   } else if (S.monthLoaded[ym] !== 'err') h += `<div class="empty">אין אימונים רשומים בחודש הזה.</div>`;
   return h + nav('history');
 }
@@ -2830,6 +2906,7 @@ function render() {
   if (r.name !== 'machines') S.reorder = false;
   if (r.name === 'ride') updateWattEstimate();
   if (r.name === 'm') centerStrip();
+  if (r.name === 'workout') { const w = $('.wseg.many'), o = w && w.querySelector('a.on'); if (o) { const a = w.getBoundingClientRect(), b = o.getBoundingClientRect(); w.scrollLeft += (b.left + b.width / 2) - (a.left + a.width / 2); } }
   if (!isEditable(document.activeElement)) document.body.classList.remove('kb');
   updateSync(); updateWakeLock(); tick();
 }
@@ -3009,6 +3086,29 @@ const A = {
     enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: new Date().toISOString(), finished_at: null } });
     ensureAudio(); toast('האימון התחיל'); render();
   },
+  sessNew() {
+    const t = today(), day = S.days[t] || {};
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: new Date().toISOString(), finished_at: null } });
+    ensureAudio(); toast('אימון חדש התחיל'); render();
+  },
+  sessFix() {
+    const day = S.days[today()] || {}, la = lastSetAt(today());
+    const st = day.started_at ? hmOf(Date.parse(day.started_at)) : '', en = day.finished_at ? hmOf(Date.parse(day.finished_at)) : '';
+    openModal(`<h2>תיקון שעות האימון</h2><div class="grid2">
+      <div class="field"><label for="fxs">התחלה</label><input class="input big-input num" id="fxs" type="time" dir="ltr" value="${st}"></div>
+      <div class="field"><label for="fxe">סיום</label><input class="input big-input num" id="fxe" type="time" dir="ltr" value="${en}"></div></div>
+      ${la ? `<div class="sub sm" style="margin-top:8px">הסט האחרון היום נרשם ב <span class="ltr">${hmOf(la)}</span></div>` : ''}
+      <button class="btn btn-primary btn-block" style="margin-top:16px" data-a="sessFixSave">שמור</button><button class="link" style="align-self:center;margin-top:8px" data-a="closeModal">ביטול</button>`);
+  },
+  sessFixSave() {
+    const t = today(), day = S.days[t] || {}, a = $('#fxs').value, b = $('#fxe').value;
+    if (!a || !b) { toast('מלא שעת התחלה ושעת סיום'); return; }
+    const at = v => { const [H, M] = v.split(':').map(Number); const d = parseYmd(t); d.setHours(H, M, 0, 0); return d; };
+    const s1 = at(a), e1 = at(b);
+    if (e1 <= s1) { toast('שעת הסיום צריכה להיות אחרי ההתחלה'); return; }
+    enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: s1.toISOString(), finished_at: e1.toISOString() } });
+    closeModal(); toast('השעות עודכנו'); render();
+  },
   sessResume() {
     const t = today(), day = S.days[t] || {};
     enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, finished_at: null } });
@@ -3102,7 +3202,12 @@ const A = {
       <button class="btn btn-ghost btn-block" data-a="setTpl" data-t="R">יום מנוחה</button><button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
   },
   setTpl(el) {
-    const k = el.dataset.t, t = today(), def = S.settings.split[String(parseYmd(t).getDay())] || null;
+    const k = el.dataset.t, t = today(), def = S.settings.split[String(parseYmd(t).getDay())] || null, cur = templateFor(t), n = setsOn(t).length;
+    if (n && el.dataset.ok !== '1' && k !== (cur || 'R')) {
+      openModal(`<h2>להחליף את האימון של היום?</h2><div class="sub" style="margin:-8px 0 16px">כבר רשמת היום ${setsTxt(n)}${cur ? ` באימון ${esc(TPL_NAME[cur])}` : ''}. הסטים נשארים, ורק סוג האימון של היום ישתנה ל${k === 'R' ? 'יום מנוחה' : `אימון ${esc(TPL_NAME[k])}`}.</div>
+        <div class="stack-sm"><button class="btn btn-primary btn-block" data-a="setTpl" data-t="${k}" data-ok="1">כן, החלף</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
+      return;
+    }
     enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: k } });
     S.wf = null; closeModal();
     toast(k === 'R' ? 'היום יום מנוחה, רק להיום' : k === def ? `חזרת לאימון ${TPL_NAME[k]}, לפי החלוקה הקבועה` : `אימון ${TPL_NAME[k]} להיום בלבד. החלוקה הקבועה לא השתנתה`, 3400);
