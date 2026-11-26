@@ -1110,6 +1110,12 @@ a.hl-r:active{background:var(--fill)}
 /* ===================== 3.5 ===================== */
 .ovr{display:flex;align-items:center;gap:12px;margin:-4px 0 14px;padding:12px 14px;border-radius:18px;background:var(--warn-tint);color:var(--warn);font-size:15px;font-weight:700;line-height:1.35}
 .ovr .btn{flex-shrink:0}
+
+/* ===================== 3.6 ===================== */
+.htime{display:flex;align-items:center;gap:14px;margin:12px 0 4px;padding:14px 16px}
+.htime .grow{display:flex;flex-direction:column;gap:2px}
+.htime b{font-size:19px;font-weight:800}
+.htime .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--accent-tint);color:var(--accent);flex-shrink:0}
 </style>
 </head>
 <body>
@@ -1162,7 +1168,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '3.5';
+const APP_VERSION = '3.6';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -2168,6 +2174,9 @@ function durTxt(ms) {
   const m = Math.max(0, Math.round(ms / 60000)), h = Math.floor(m / 60);
   return h ? `${h === 1 ? 'שעה' : `<span class="ltr num">${h}</span> שעות`}${m % 60 ? ` ו <span class="ltr num">${m % 60}</span> דקות` : ''}` : `<span class="ltr num">${m}</span> דקות`;
 }
+function firstSetAt(t) {
+  let m = null; for (const s of setsOn(t)) { const v = s.created_at ? Date.parse(s.created_at) : null; if (v && (!m || v < m)) m = v; } return m;
+}
 function lastSetAt(t) {
   let m = null; for (const s of setsOn(t)) { const v = s.created_at ? Date.parse(s.created_at) : null; if (v && (!m || v > m)) m = v; } return m;
 }
@@ -2214,7 +2223,7 @@ function vWorkout(arg) {
   const counts = areaCountsOn(t), sets = setsOn(t), areas = TEMPLATES[tpl], mins = S.settings.minSets, sel = wfArea(tpl, counts);
   const segAreas = sel !== 'all' && !areas.includes(sel) ? [...areas, sel] : areas;
   const tsel = `<div class="tsel2" role="group" aria-label="איזה אימון היום">${visibleTpls().map(k => `<button type="button" class="${k === tpl ? 'on' : ''}" data-a="${k === tpl ? 'switchTpl' : 'setTpl'}" data-t="${k}" aria-pressed="${k === tpl}" aria-label="אימון ${esc(TPL_NAME[k])} להיום">${esc(TPL_NAME[k])}</button>`).join('')}</div>`;
-  let h = pageHead(`אימון ${esc(TPL_NAME[tpl])}`) + tsel;
+  let h = pageHead(`אימון ${esc(TPL_NAME[tpl])}`);
   { const dv = S.days[t]?.template, sp = S.settings.split[String(parseYmd(t).getDay())] || null;
     if (dv && dv !== sp && (sp ? TEMPLATES[sp] : true)) h += `<div class="ovr"><span class="grow">שונה להיום בלבד. לפי החלוקה השבועית: ${sp ? `אימון ${esc(TPL_NAME[sp])}` : 'מנוחה'}</span><button type="button" class="btn btn-gray btn-sm" data-a="tplReset">${sp ? `חזור לאימון ${esc(TPL_NAME[sp])}` : 'חזור למנוחה'}</button></div>`; }
   h += sessCard(t);
@@ -2714,8 +2723,13 @@ function vHistoryDay(date, loading) {
   const sets = sortSets(setsOn(date)), counts = areaCountsOn(date), tpl = sets.length ? dayTpl(date) : null, day = S.days[date] || {}, r = rideOn(date);
   const bits = [];
   if (sets.length) bits.push(`${tpl ? 'אימון ' + TPL_NAME[tpl] + ', ' : ''}${setsTxt(sets.length)}`);
-  if (day.started_at && day.finished_at) bits.push(`משך ${ltr(fmtClock(Date.parse(day.finished_at) - Date.parse(day.started_at)))}`);
   if (bits.length) h += `<div class="sub" style="margin:-8px 4px 4px">${bits.join(', ')}</div>`;
+  if (sets.length || day.started_at) {
+    const st = day.started_at ? Date.parse(day.started_at) : null, en = day.finished_at ? Date.parse(day.finished_at) : null;
+    const running = st && !en && date === today();
+    const txt = st && en ? `<b>${durTxt(en - st)}</b><span class="sub sm"><span class="ltr">${hmOf(st)}</span> עד <span class="ltr">${hmOf(en)}</span></span>` : running ? `<b>האימון עדיין פעיל</b><span class="sub sm">התחיל ב <span class="ltr">${hmOf(st)}</span></span>` : `<b>לא נמדד</b><span class="sub sm">אפשר להזין שעת התחלה ושעת סיום</span>`;
+    h += `<section class="card htime"><span class="ic" style="--c:var(--accent)">${svg(I.timer, 24, 2.2)}</span><div class="grow">${txt}</div>${running ? '' : `<button type="button" class="btn btn-gray btn-sm" data-a="sessFix" data-date="${date}">עריכה</button>`}</section>`;
+  }
   const trained = AREAS.filter(a => counts[a.k] > 0);
   if (trained.length) h += `<div class="sub sm" style="margin:6px 4px 0">נגיעה בסט פותחת עריכה או מחיקה. כפתור הפלוס מוסיף סט.</div>`;
   trained.forEach(a => {
@@ -3102,17 +3116,17 @@ const A = {
     enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, started_at: new Date().toISOString(), finished_at: null } });
     ensureAudio(); toast('אימון חדש התחיל'); render();
   },
-  sessFix() {
-    const day = S.days[today()] || {}, la = lastSetAt(today());
-    const st = day.started_at ? hmOf(Date.parse(day.started_at)) : '', en = day.finished_at ? hmOf(Date.parse(day.finished_at)) : '';
-    openModal(`<h2>תיקון שעות האימון</h2><div class="grid2">
+  sessFix(el) {
+    const date = el?.dataset?.date || today(), day = S.days[date] || {}, la = lastSetAt(date), fa = firstSetAt(date);
+    const st = day.started_at ? hmOf(Date.parse(day.started_at)) : fa ? hmOf(fa) : '', en = day.finished_at ? hmOf(Date.parse(day.finished_at)) : la && date !== today() ? hmOf(la) : '';
+    openModal(`<h2>שעות אימון הכוח</h2><div class="sub" style="margin:-10px 0 14px">${fmtDate(date)}</div><div class="grid2">
       <div class="field"><label for="fxs">התחלה</label><input class="input big-input num" id="fxs" type="time" dir="ltr" value="${st}"></div>
       <div class="field"><label for="fxe">סיום</label><input class="input big-input num" id="fxe" type="time" dir="ltr" value="${en}"></div></div>
-      ${la ? `<div class="sub sm" style="margin-top:8px">הסט האחרון היום נרשם ב <span class="ltr">${hmOf(la)}</span></div>` : ''}
-      <button class="btn btn-primary btn-block" style="margin-top:16px" data-a="sessFixSave">שמור</button><button class="link" style="align-self:center;margin-top:8px" data-a="closeModal">ביטול</button>`);
+      ${fa ? `<div class="sub sm" style="margin-top:8px">הסט הראשון נרשם ב <span class="ltr">${hmOf(fa)}</span>, והאחרון ב <span class="ltr">${hmOf(la)}</span></div>` : ''}
+      <button class="btn btn-primary btn-block" style="margin-top:16px" data-a="sessFixSave" data-date="${date}">שמור</button><button class="link" style="align-self:center;margin-top:8px" data-a="closeModal">ביטול</button>`);
   },
-  sessFixSave() {
-    const t = today(), day = S.days[t] || {}, a = $('#fxs').value, b = $('#fxe').value;
+  sessFixSave(el) {
+    const t = el?.dataset?.date || today(), a = $('#fxs').value, b = $('#fxe').value;
     if (!a || !b) { toast('מלא שעת התחלה ושעת סיום'); return; }
     const at = v => { const [H, M] = v.split(':').map(Number); const d = parseYmd(t); d.setHours(H, M, 0, 0); return d; };
     const s1 = at(a), e1 = at(b);
