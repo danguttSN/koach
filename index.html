@@ -981,6 +981,68 @@ body.scrolled .navbar{background:rgba(23,24,28,.96)}
 .btleg span{display:inline-flex;align-items:center;gap:6px}
 .btleg i{width:14px;height:14px;border-radius:5px}
 .rtypes{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ===================== 3.1 ===================== */
+/* סטים השבוע: טבלה נקייה */
+.wk3{padding:20px 16px 16px}
+.wk3-n{font-size:15px;font-weight:700;color:var(--muted)}
+.wk3-n b{font:900 26px var(--round);color:var(--text)}
+.wk3-g{display:grid;grid-template-columns:74px repeat(7,minmax(0,1fr)) 52px;align-items:stretch;margin-top:12px}
+.wk3-g > *{display:flex;align-items:center;justify-content:center;min-height:42px;border-top:1px solid var(--sep);text-decoration:none;color:var(--text)}
+.wk3-g .th{border-top:0;min-height:28px;font:800 14px var(--round);color:var(--faint)}
+.wk3-g .th.now{color:var(--accent)}
+.wk3-g .td{background:rgba(252,193,0,.07)}
+.wk3-g .th.td{border-radius:10px 10px 0 0}
+.wk3-g .tn{justify-content:flex-start;font-size:15px;font-weight:800;line-height:1.15}
+.wk3-g .tc{font:800 16px var(--round)}
+.wk3-g .tc.ok{color:var(--accent)}
+.wk3-g .tc.lo{color:var(--text)}
+.wk3-g .tc.mi{color:var(--warn)}
+.wk3-g .tc.pl{color:var(--faint);font-weight:700}
+.wk3-g a.tc:active{background:var(--fill)}
+.wk3-g .tt{justify-content:flex-end;font:900 15px var(--round);color:var(--text)}
+.wk3-g .tt.ok{color:var(--accent)}
+.wk3-leg{margin-top:12px;font-size:13px;font-weight:600;color:var(--faint);line-height:1.5}
+.wk3-leg .ok{color:var(--accent)}
+.wk3-leg .mi{color:var(--warn)}
+
+/* בורר סוג האימון */
+.tsel2{display:flex;gap:8px;overflow-x:auto;margin:-6px -18px 14px;padding:2px 18px 4px;scrollbar-width:none}
+.tsel2::-webkit-scrollbar{display:none}
+.tsel2 button{flex:0 0 auto;min-width:48px;min-height:46px;padding:0 16px;border:0;border-radius:14px;background:var(--surface2);color:var(--text);font-size:18px;font-weight:900;white-space:nowrap}
+.tsel2 button.on{background:var(--accent);color:var(--on-accent)}
+.tsel2 button:active{transform:scale(.95)}
+.fchips{margin-bottom:6px}
+
+/* הגדרות: סוגי אימונים */
+button.lrow{width:100%;border:0;background:transparent;color:inherit;text-align:right;font:inherit}
+.tbadge{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;font:900 17px var(--round);color:var(--on-accent);background:var(--c)}
+
+/* ===================== 3.2 ===================== */
+/* ספינינג: ממוצעים ויומן רכיבות */
+.sp4{padding:20px 16px 16px}
+.sp4-s{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px;border-top:1px solid var(--sep);border-bottom:1px solid var(--sep)}
+.sp4-m{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 4px}
+.sp4-m + .sp4-m{border-right:1px solid var(--sep)}
+.sp4-m .l{font-size:14px;font-weight:700;color:var(--muted)}
+.sp4-m .v{font:900 28px/1.1 var(--round);letter-spacing:-.5px}
+.sp4-m .d{font-size:13px;font-weight:800;color:var(--faint)}
+.sp4-m .d.up{color:var(--a-legs)}
+.sp4-m .d.down{color:var(--warn)}
+.sp4-t{margin:16px 2px 2px;font-size:15px;font-weight:800;color:var(--muted)}
+.sp4-g{display:grid;grid-template-columns:minmax(0,1.5fr) 44px repeat(3,minmax(0,1fr))}
+.sp4-g > *{display:flex;align-items:center;justify-content:center;min-height:44px;border-top:1px solid var(--sep);color:var(--text);text-decoration:none}
+.sp4-g .sh{border-top:0;min-height:28px;font-size:13px;font-weight:700;color:var(--faint)}
+.sp4-g .sd{flex-direction:column;align-items:flex-start;justify-content:center;line-height:1.15}
+.sp4-g .sd b{font-size:15px;font-weight:800}
+.sp4-g .sd small{font-size:12px;font-weight:600;color:var(--faint)}
+.sp4-g .td{background:rgba(252,193,0,.07)}
+.sp4-g .td b{color:var(--accent)}
+.sp4-g .sc{font:800 16px var(--round)}
+.sp4-g .sc.top{color:var(--accent)}
+.sp4-g .sc.na{color:var(--faint)}
+.sp4-g .lvl{min-width:30px;padding:2px 6px;border-radius:8px;background:var(--surface2);font:900 14px var(--round);text-align:center}
+.sp4-g a.sd:active{background:var(--fill)}
 </style>
 </head>
 <body>
@@ -1033,7 +1095,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '3.0';
+const APP_VERSION = '3.2';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -1068,8 +1130,31 @@ const AREAS = [
   { k:'abs',       n:'בטן',       c:'var(--a-abs)' }
 ];
 const AREA = Object.fromEntries(AREAS.map(a => [a.k, a]));
-const TEMPLATES = { A:['back','biceps','abs'], B:['chest','triceps','shoulders','abs'], C:['legs','abs'] };
-const TPL_NAME = { A:'א', B:'ב', C:'ג' };
+const TEMPLATES = { A:['back','biceps','abs'], B:['chest','triceps','shoulders','abs'], C:['legs','abs'], F:[] };
+const TPL_NAME = { A:'א', B:'ב', C:'ג', F:'חופשי' };
+/* ---------- 3.1: סוגי אימונים. א, ב, ג ניתנים לעריכה, אפשר להוסיף סוגים, ויש אימון חופשי בלי אזורים קבועים ---------- */
+const TPL_BASE = { A:['back','biceps','abs'], B:['chest','triceps','shoulders','abs'], C:['legs','abs'] }, TPL_BASE_NAME = { A:'א', B:'ב', C:'ג' };
+const TPL_SHORT = { A:'א', B:'ב', C:'ג', F:'ח' };
+const TPL_COLOR = { A:'var(--a-back)', B:'var(--a-chest)', C:'var(--a-legs)', F:'#9EA3AE' };
+const TPL_HIDDEN = new Set(), TPL_EXTRA_C = ['var(--a-triceps)', 'var(--a-shoulders)', 'var(--a-abs)', 'var(--a-biceps)'];
+function syncTemplates() {
+  const w = (S && S.settings && S.settings.wtypes) || {};
+  [TEMPLATES, TPL_NAME, TPL_SHORT, TPL_COLOR].forEach(o => Object.keys(o).forEach(k => { delete o[k]; }));
+  TPL_HIDDEN.clear();
+  const keys = ['A', 'B', 'C', ...Object.keys(w).filter(k => !['A', 'B', 'C', 'F'].includes(k))], used = new Set();
+  keys.forEach((k, i) => {
+    const x = w[k] || {}, ar = (Array.isArray(x.areas) && x.areas.length ? x.areas : TPL_BASE[k] || []).filter(a => AREA[a]);
+    TEMPLATES[k] = ar; TPL_NAME[k] = String(x.name || TPL_BASE_NAME[k] || 'אימון').trim();
+    let sh = TPL_NAME[k] === TPL_BASE_NAME[k] ? TPL_BASE_NAME[k] : TPL_NAME[k].slice(0, 1);
+    if (used.has(sh)) sh = TPL_NAME[k].slice(0, 2);
+    used.add(sh); TPL_SHORT[k] = sh;
+    TPL_COLOR[k] = { A: 'var(--a-back)', B: 'var(--a-chest)', C: 'var(--a-legs)' }[k] || TPL_EXTRA_C[(i - 3) % TPL_EXTRA_C.length];
+    if (x.hidden) TPL_HIDDEN.add(k);
+  });
+  TEMPLATES.F = []; TPL_NAME.F = 'חופשי'; TPL_SHORT.F = 'ח'; TPL_COLOR.F = '#9EA3AE';
+}
+const visibleTpls = () => Object.keys(TEMPLATES).filter(k => k !== 'F' && !TPL_HIDDEN.has(k)).concat('F');
+
 const DAY_NAMES = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
 const DAY_LETTERS = ['א','ב','ג','ד','ה','ו','ש'];
 const DEFAULT_SETTINGS = {
@@ -1079,7 +1164,7 @@ const DEFAULT_SETTINGS = {
   wakeLock: true, sound: true, theme: 'dark',
   restByArea: {}, machineRest: {}, machineSetup: {}, machineLink: {}, repTop: 12,
   machineReps: {}, autoTimer: true, warmup: true, rirTrack: true, propagate: true,
-  bikeTypes: ['ספינינג']
+  bikeTypes: ['ספינינג'], wtypes: {}
 };
 const CONFLICT = { sets:'id', machines:'id', rides:'id', workout_days:'user_id,workout_date', settings:'user_id' };
 
@@ -1149,7 +1234,7 @@ const S = {
   timer: null, route: { name: 'today' }, prevHash: '', curHash: location.hash,
   wf: null, busy: null, undo: null, spinM: null,
   plan: null, itab: null, rirCol: null, edRir: null,
-  doneOpen: false, reorder: false, lastLogAt: 0,
+  doneOpen: false, reorder: false, lastLogAt: 0, wtEdit: null,
   btCol: null, finEnd: 'now'
 };
 
@@ -1158,7 +1243,7 @@ function mergeSettings(d) {
   return { ...DEFAULT_SETTINGS, ...d,
     minSets: { ...DEFAULT_SETTINGS.minSets, ...(d.minSets || {}) },
     split: { ...DEFAULT_SETTINGS.split, ...(d.split || {}) },
-    restByArea: { ...(d.restByArea || {}) }, machineRest: { ...(d.machineRest || {}) }, machineSetup: { ...(d.machineSetup || {}) }, machineLink: { ...(d.machineLink || {}) }, machineReps: { ...(d.machineReps || {}) }, bikeTypes: Array.isArray(d.bikeTypes) && d.bikeTypes.length ? [...d.bikeTypes] : ['ספינינג'] };
+    restByArea: { ...(d.restByArea || {}) }, machineRest: { ...(d.machineRest || {}) }, machineSetup: { ...(d.machineSetup || {}) }, machineLink: { ...(d.machineLink || {}) }, machineReps: { ...(d.machineReps || {}) }, bikeTypes: Array.isArray(d.bikeTypes) && d.bikeTypes.length ? [...d.bikeTypes] : ['ספינינג'], wtypes: JSON.parse(JSON.stringify(d.wtypes || {})) };
 }
 const normSet = s => ({ ...s, weight: Number(s.weight) || 0, reps: Number(s.reps) || 0 });
 const normMachine = m => ({ ...m, min_weight: Number(m.min_weight) || 0, weight_step: Number(m.weight_step) || 5, default_sets: Number(m.default_sets) || 3 });
@@ -1180,7 +1265,8 @@ function templateFor(date) {
   const t = S.days[date]?.template;
   if (t === 'R') return null;
   if (t && TEMPLATES[t]) return t;
-  return S.settings.split[String(parseYmd(date).getDay())] || null;
+  const sp = S.settings.split[String(parseYmd(date).getDay())];
+  return sp && TEMPLATES[sp] ? sp : null;
 }
 function minFor(area, date) {
   const t = templateFor(date);
@@ -1201,7 +1287,7 @@ function hasHistory(mid) { return S.maxByMachine[mid] != null || S.sets.some(s =
 const rideOn = date => S.rides.find(r => r.ride_date === date) || null;
 function daysForArea(a) {
   const l = [];
-  for (let i = 0; i < 7; i++) { const t = S.settings.split[String(i)]; if (t && TEMPLATES[t].includes(a)) l.push(DAY_LETTERS[i]); }
+  for (let i = 0; i < 7; i++) { const t = S.settings.split[String(i)]; if (t && TEMPLATES[t] && TEMPLATES[t].includes(a)) l.push(DAY_LETTERS[i]); }
   return l.length ? `ימים ${l.join(', ')}` : 'לא בחלוקה';
 }
 function lastDateForArea(a, before) {
@@ -1418,7 +1504,7 @@ function nav(active) {
     const tg = areas.reduce((s, a) => s + mn[a], 0), dn = areas.reduce((s, a) => s + Math.min(c[a], mn[a]), 0);
     const f = tg ? dn / tg : 0, C = 2 * Math.PI * 35;
     ring = `<svg class="fab-r" viewBox="0 0 78 78" aria-hidden="true"><circle cx="39" cy="39" r="35" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="4"/>${f > 0 ? `<circle cx="39" cy="39" r="35" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${(C * (1 - f)).toFixed(2)}" transform="rotate(-90 39 39)"/>` : ''}</svg>`;
-    aria = `אימון ${TPL_NAME[tpl]}, ${dn} מתוך ${tg} סטים`;
+    aria = tg ? `אימון ${TPL_NAME[tpl]}, ${dn} מתוך ${tg} סטים` : (setsOn(t).length ? `אימון ${TPL_NAME[tpl]}, ${setsTxt(setsOn(t).length)}` : `אימון ${TPL_NAME[tpl]}`);
   }
   const dy = S.days[t] || {}, live = !!(dy.started_at && !dy.finished_at);
   if (live) aria += ', אימון פעיל';
@@ -1532,7 +1618,7 @@ function weekStrip(t) {
     const d = addDays(start, i), has = setsOn(d).length > 0, isT = d === t, plan = templateFor(d);
     const tp = has ? dayTpl(d) : plan;
     const cls = ['wd', has ? 'done' : '', isT ? 'today' : '', !has && plan ? 'plan' : ''].join(' ');
-    const letter = (has || plan) && tp ? TPL_NAME[tp] : '';
+    const letter = (has || plan) && tp ? (TPL_SHORT[tp] || '') : '';
     const style = has && tp ? ` style="--c:${TPL_COLOR[tp]}"` : '';
     const inner = `<span>${DAY_LETTERS[i]}</span><span class="c">${has && !letter ? svg(I.check, 18, 3) : letter}</span><span class="rd ${rideOn(d) ? 'on' : ''}"></span>`;
     const label = `${fmtDate(d)}${has ? ', בוצע אימון' : ''}${rideOn(d) ? ', רכיבה' : ''}`;
@@ -1546,7 +1632,7 @@ function weekNums(t) {
   return { days, sets };
 }
 /* ---------- 2.4: מסך הבית ---------- */
-const tplLabel = k => `<b>אימון ${TPL_NAME[k]}</b><small>${TEMPLATES[k].map(areaName).join(', ')}</small>`;
+const tplLabel = k => `<b>אימון ${esc(TPL_NAME[k])}</b><small>${k === 'F' ? 'כל מכשיר, בלי יעדים' : TEMPLATES[k].map(areaName).join(', ')}</small>`;
 const weekStartOf = d => addDays(d, -parseYmd(d).getDay());
 const dayDiff = (a, b) => Math.round((parseYmd(a) - parseYmd(b)) / 864e5);
 function weeklyTargets() {
@@ -1618,7 +1704,7 @@ function lineChart(vals, dec = 0) {
 }
 function todayCard(t, tpl, counts, day, total) {
   if (!tpl) return `<section class="card hero-w stack" aria-label="היום"><div class="kick">היום יום מנוחה</div><div class="big">רוצה בכל זאת?</div>
-    <div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost btn-block tplbtn" data-a="start" data-t="${k}">${tplLabel(k)}</button>`).join('')}</div>
+    <div class="stack-sm">${visibleTpls().map(k => `<button class="btn btn-ghost btn-block tplbtn" data-a="start" data-t="${k}">${tplLabel(k)}</button>`).join('')}</div>
     ${total ? `<a class="btn btn-tinted btn-block" href="#/workout">${setsTxt(total)} היום</a>` : ''}</section>`;
   const areas = TEMPLATES[tpl], mins = S.settings.minSets;
   return `<section class="card hero-w" aria-label="האימון של היום"><div class="row"><div class="grow kick">האימון של היום</div>${day.finished_at ? `<span class="pill ok">${svg(I.check, 16, 3)}הסתיים</span>` : ''}</div>
@@ -1629,7 +1715,7 @@ function todayCard(t, tpl, counts, day, total) {
     <a class="btn btn-primary btn-big btn-block" href="#/workout">${total ? 'המשך אימון' : 'התחל אימון'}</a>
     <button class="link" style="margin-top:6px;width:100%;justify-content:center" data-a="switchTpl">החלף אימון</button></section>`;
 }
-/* ---------- 3.0: סטים השבוע. כל אזור בשורה משלו, תמיד 7 ימים, כך שיום אימון נוסף לא מצופף את הטבלה ---------- */
+/* ---------- 3.1: סטים השבוע, טבלה נקייה: מספרים בלבד, שבעה ימים, עמודת היום מסומנת ---------- */
 function weekCard() {
   const t = today(), ws = weekStartOf(t), mm = Object.fromEntries(S.machines.map(m => [m.id, m]));
   const days = Array.from({ length: 7 }, (_, i) => addDays(ws, i));
@@ -1637,34 +1723,32 @@ function weekCard() {
   for (const d of days) for (const s of setsOn(d)) { const m = mm[s.machine_id]; if (m) cnt[d][m.area]++; }
   const used = (a, d) => minFor(a, d) != null || cnt[d][a] > 0;
   const rows = AREAS.filter(a => days.some(d => used(a.k, d)));
-  if (!rows.length) return `<section class="card wk2" aria-label="סטים השבוע"><div class="dash-h"><h2>סטים השבוע</h2></div><div class="sub" style="margin-top:8px">אין ימי אימון מתוכננים השבוע. אפשר לקבוע אותם בהגדרות.</div></section>`;
+  if (!rows.length) return `<section class="card wk3" aria-label="סטים השבוע"><div class="dash-h"><h2>סטים השבוע</h2></div><div class="sub" style="margin-top:8px">אין ימי אימון מתוכננים השבוע. אפשר לקבוע אותם בהגדרות.</div></section>`;
   const wn = weekNums(t);
   let tot = 0, totT = 0;
   const cell = (a, d) => {
-    const c = cnt[d][a], mn = minFor(a, d), fut = d > t;
-    let cls, txt;
+    const c = cnt[d][a], mn = minFor(a, d), fut = d > t, td = d === t ? ' td' : '';
+    let cls = '', txt = '';
     if (mn != null) {
-      if (c >= mn) { cls = 'met'; txt = c; }
-      else if (fut) { cls = 'plan'; txt = mn; }
-      else if (c > 0) { cls = 'part'; txt = c; }
-      else if (d === t) { cls = 'now'; txt = 0; }
-      else { cls = 'miss'; txt = 0; }
-    } else if (c > 0) { cls = 'extra'; txt = c; }
-    else return '<span class="wc none" aria-hidden="true"></span>';
-    const lab = `${areaName(a)}, ${fmtDate(d)}: ${fut ? `מתוכננים ${mn} סטים` : `${c} סטים${mn != null ? ` מתוך ${mn}` : ''}`}`;
-    return fut ? `<span class="wc ${cls}" role="img" aria-label="${lab}">${txt}</span>` : `<a class="wc ${cls}" href="#/history/${d}" aria-label="${lab}">${txt}</a>`;
+      if (c >= mn) { cls = 'ok'; txt = c; }
+      else if (fut || (d === t && c === 0)) { cls = 'pl'; txt = mn; }
+      else if (c > 0) { cls = 'lo'; txt = c; }
+      else { cls = 'mi'; txt = 0; }
+    } else if (c > 0) { cls = 'lo'; txt = c; }
+    if (txt === '') return `<span class="tc${td}"></span>`;
+    const lab = `${areaName(a)}, ${fmtDate(d)}: ${cls === 'pl' ? `מתוכננים ${mn} סטים` : `${c} סטים${mn != null ? ` מתוך ${mn}` : ''}`}`;
+    return d > t ? `<span class="tc ${cls}${td}" role="img" aria-label="${lab}">${txt}</span>` : `<a class="tc ${cls}${td}" href="#/history/${d}" aria-label="${lab}">${txt}</a>`;
   };
-  const head = `<div class="wg-days" aria-hidden="true">${days.map((d, i) => `<span class="${d === t ? 'td' : ''}${templateFor(d) ? '' : ' off'}"><b>${DAY_LETTERS[i]}</b><small>${parseYmd(d).getDate()}</small></span>`).join('')}</div>`;
-  const body = rows.map(a => {
+  let g = `<span class="th"></span>${days.map((d, i) => `<span class="th${d === t ? ' td now' : ''}">${DAY_LETTERS[i]}</span>`).join('')}<span class="th"></span>`;
+  rows.forEach(a => {
     const C = days.reduce((s, d) => s + cnt[d][a.k], 0), T = days.reduce((s, d) => s + (minFor(a.k, d) || 0), 0);
     tot += C; totT += T;
-    return `<div class="wg-row"><div class="wg-h"><span class="wn"><span class="dot" style="background:${a.c}"></span>${a.n}</span><span class="wt num ltr${T > 0 && C >= T ? ' met' : ''}" aria-label="${a.n}: ${C} מתוך ${T} השבוע">${C}${T > 0 ? `<small>/${T}</small>` : ''}</span></div><div class="wg-cells">${days.map(d => cell(a.k, d)).join('')}</div></div>`;
-  }).join('');
-  const leg = [['met', 'ביעד'], ['part', 'חלקי'], ['miss', 'פוספס'], ['now', 'היום'], ['plan', 'מתוכנן']];
-  return `<section class="card wk2" aria-label="סטים השבוע לפי יום ואזור"><div class="dash-h"><h2>סטים השבוע</h2><span class="dash-n num ltr">${tot}<small>/${totT}</small></span></div>
-    <div class="dash-sub">${wn.days === 1 ? 'אימון אחד' : wn.days + ' אימונים'} מתחילת השבוע. נגיעה במשבצת פותחת את היום</div>
-    ${head}${body}
-    <div class="wleg" aria-hidden="true">${leg.map(([c, l]) => `<span><i class="wc ${c}"></i>${l}</span>`).join('')}</div></section>`;
+    g += `<span class="tn">${a.n}</span>${days.map(d => cell(a.k, d)).join('')}<span class="tt num ltr${T > 0 && C >= T ? ' ok' : ''}" aria-label="${a.n}: ${C} מתוך ${T} השבוע">${C}${T > 0 ? `/${T}` : ''}</span>`;
+  });
+  return `<section class="card wk3" aria-label="סטים השבוע לפי יום ואזור"><div class="dash-h"><h2>סטים השבוע</h2><span class="wk3-n"><b class="num">${tot}</b> מתוך <span class="num">${totT}</span></span></div>
+    <div class="dash-sub">${wn.days === 1 ? 'אימון אחד' : wn.days + ' אימונים'} מתחילת השבוע. נגיעה במספר פותחת את היום</div>
+    <div class="wk3-g">${g}</div>
+    <div class="wk3-leg"><span class="ok">צהוב</span>: הגעת ליעד היומי. לבן: פחות מהיעד. <span class="mi">כתום</span>: פוספס. אפור: מתוכנן</div></section>`;
 }
 /* ---------- 2.7: ספינינג, שלושה מדדים בגרף אחד ---------- */
 const SPIN3 = [
@@ -1725,25 +1809,39 @@ function bikeLegend(t, first) {
   if (ts.length < 2) return '';
   return `<div class="btleg" aria-hidden="true">${ts.map(n => { const [bg, fg] = BT_STYLE[btIdx(n)]; return `<span><i style="background:${bg};box-shadow:inset 0 0 0 2px ${fg}"></i>${esc(n)}</span>`; }).join('')}</div>`;
 }
+/* ---------- 3.2: ספינינג, באותו סגנון של טבלת הסטים: ממוצעים של 7 ימים ויומן רכיבות ---------- */
 function spinCard() {
-  const t = today(), first = addDays(t, -13), sel = SPIN3.some(m => m.k === S.spinM) ? S.spinM : null;
-  const recent = S.rides.filter(r => r.ride_date >= first && r.ride_date <= t);
-  if (!recent.length) return `<section class="card spin" aria-label="ספינינג"><div class="dash-h"><h2>ספינינג</h2></div><div class="sub" style="margin-top:8px">אין רכיבות בשבועיים האחרונים. רושמים רכיבה בלשונית אימון.</div></section>`;
-  const chips = SPIN3.map(mk => {
+  const t = today();
+  const all = S.rides.filter(r => r.ride_date <= t).sort((a, b) => (a.ride_date < b.ride_date ? 1 : -1));
+  if (!all.length) return `<section class="card sp4" aria-label="ספינינג"><div class="dash-h"><h2>ספינינג</h2></div><div class="sub" style="margin-top:8px">עוד אין רכיבות. רושמים רכיבה בלשונית אימון.</div></section>`;
+  const n7 = all.filter(r => r.ride_date >= addDays(t, -6)).length;
+  const sum = SPIN3.map(mk => {
     const a = rideAvg(addDays(t, -6), t, mk.get), p = rideAvg(addDays(t, -13), addDays(t, -7), mk.get);
-    let dl = 'אין רכיבות השבוע', cls = '';
+    let dl = 'אין רכיבות', cls = '';
     if (a != null) {
       if (p == null) dl = 'אין עוד השוואה';
-      else { const d = Number(fmtD(a - p, mk.dec)); cls = d > 0 ? 'up' : d < 0 ? 'down' : ''; dl = d ? `<span class="ltr">${d > 0 ? '+' : ''}${fmtD(d, mk.dec)}</span> מהשבוע הקודם` : 'כמו בשבוע הקודם'; }
+      else { const d = Number(fmtD(a - p, mk.dec)); cls = d > 0 ? 'up' : d < 0 ? 'down' : ''; dl = d ? `<span class="ltr">${d > 0 ? '+' : ''}${fmtD(d, mk.dec)}</span>` : 'ללא שינוי'; }
     }
-    const on = sel === mk.k;
-    return `<button type="button" class="${sel && !on ? 'dim' : ''}" style="--c:${mk.c}" data-a="spinM" data-k="${mk.k}" aria-pressed="${on}"><span class="v num ltr">${a == null ? '-' : fmtD(a, mk.dec)}</span><span class="l">${mk.l}</span><span class="d ${cls}">${dl}</span></button>`;
+    return `<div class="sp4-m"><span class="l">${mk.l}</span><span class="v num ltr">${a == null ? '-' : fmtD(a, mk.dec)}</span><span class="d ${cls}">${dl}</span></div>`;
   }).join('');
-  return `<section class="card spin" aria-label="ספינינג"><div class="dash-h"><h2>ספינינג</h2></div>
-    <div class="dash-sub">ממוצע לרכיבה ב 7 הימים האחרונים, מול 7 הימים שלפניהם</div>
-    <div class="sp3">${chips}</div>
-    <div class="spchart" role="img" aria-label="וואט, ק״מ וקלוריות, שינוי באחוזים מהממוצע, עם רמת הקושי של כל רכיבה ב 14 הימים האחרונים, היום מימין">${spinChart(t, first, sel)}</div>
-    ${bikeLegend(t, first)}<div class="spax one" aria-hidden="true"><span>${sel ? 'נגיעה נוספת מציגה את כל המדדים' : 'שינוי באחוזים מהממוצע. נגיעה במדד מציגה ערכים'}</span></div></section>`;
+  const rows = all.slice(0, 10), types = new Set(rows.map(r => r.bike_type || '')), many = types.size > 1;
+  const best = mk => { const v = rows.map(mk.get).filter(x => x != null && isFinite(Number(x))).map(Number); return v.length > 1 ? Math.max(...v) : null; };
+  const bw = best(SPIN3[0]), bk = best(SPIN3[1]), bc = best(SPIN3[2]);
+  const cellv = (v, dec, b) => v == null || v === '' ? '<span class="sc na">-</span>' : `<span class="sc${b != null && Number(v) === b ? ' top' : ''}">${fmtD(Number(v), dec)}</span>`;
+  let g = `<span class="sh"></span><span class="sh">רמה</span><span class="sh">וואט</span><span class="sh">ק״מ</span><span class="sh">קלוריות</span>`;
+  rows.forEach(r => {
+    const isT = r.ride_date === t, d = parseYmd(r.ride_date), td = isT ? ' td' : '';
+    const lv = lvlOf(r);
+    g += `<a class="sd${td}" href="#/ride/${r.ride_date}"><b>${isT ? 'היום' : `${DAY_LETTERS[d.getDay()]} <span class="ltr">${shortDate(r.ride_date)}</span>`}</b>${many && r.bike_type ? `<small>${esc(r.bike_type)}</small>` : ''}</a>`
+      + `<span class="sl${td}">${lv == null ? '<span class="sc na">-</span>' : `<span class="lvl">${fmtW(lv)}</span>`}</span>`
+      + [[r.avg_watts, 0, bw], [r.distance_km, 1, bk], [r.calories, 0, bc]].map(([v, dec, b]) => `<span class="sv${td}">${cellv(v, dec, b)}</span>`).join('');
+  });
+  return `<section class="card sp4" aria-label="ספינינג"><div class="dash-h"><h2>ספינינג</h2><span class="wk3-n"><b class="num">${n7}</b> רכיבות ב 7 ימים</span></div>
+    <div class="dash-sub">ממוצע לרכיבה ב 7 הימים האחרונים, והשינוי מ 7 הימים שלפניהם</div>
+    <div class="sp4-s">${sum}</div>
+    <div class="sp4-t">רכיבות אחרונות</div>
+    <div class="sp4-g">${g}</div>
+    <div class="wk3-leg"><span class="ok">צהוב</span>: הערך הגבוה ביותר ברשימה. נגיעה ברכיבה פותחת אותה לעריכה</div></section>`;
 }
 /* ---------- 2.8: השבוע עד היום, עם אייקונים, טבעות התקדמות ונקודות לכל יום ---------- */
 function avgWorkoutMinRange(from, to) {
@@ -1944,7 +2042,19 @@ function durTxt(ms) {
 function lastSetAt(t) {
   let m = null; for (const s of setsOn(t)) { const v = s.created_at ? Date.parse(s.created_at) : null; if (v && (!m || v > m)) m = v; } return m;
 }
-function areaBlock(a, t, met) {
+/* 3.1: אימון חופשי. כל האזורים זמינים, בלי יעדים, והאזורים שאימנת נספרים */
+function freeBody(t, counts, sets) {
+  const fa = AREAS.map(a => a.k).filter(a => S.machines.some(m => !m.archived && m.area === a));
+  const ts = sortSets(sets), lm = ts.length ? machineById(ts[ts.length - 1].machine_id) : null;
+  const sel = S.wf && S.wf.date === t && (S.wf.area === 'all' || fa.includes(S.wf.area)) ? S.wf.area : (lm && fa.includes(lm.area) ? lm.area : (fa[0] || 'all'));
+  const nA = fa.filter(a => counts[a] > 0).length;
+  let h = `<div class="wsum"><span class="grow">${sets.length ? `${setsTxt(sets.length)} היום${nA ? `, ${nA === 1 ? 'אזור אחד' : nA + ' אזורים'}` : ''}` : 'בוחרים כל מכשיר, בלי יעדים'}</span><a class="wall${sel === 'all' ? ' on' : ''}" href="#/workout/${sel === 'all' ? 'auto' : 'all'}" aria-pressed="${sel === 'all'}">הכל</a></div>`;
+  h += `<div class="chips fchips" role="tablist" aria-label="בחירת אזור">${fa.map(a => `<a role="tab" class="chip ${a === sel ? 'on' : ''}" href="#/workout/${a}" aria-selected="${a === sel}">${areaName(a)}${counts[a] ? ` <span class="ltr num">${counts[a]}</span>` : ''}</a>`).join('')}</div>`;
+  if (sel === 'all') fa.forEach(a => { h += `<div class="xhead"><span class="dot" style="background:${areaColor(a)}"></span><span class="n">${areaName(a)}</span>${counts[a] ? `<span class="c"><span class="ltr">${counts[a]}</span></span>` : ''}</div>${areaBlock(a, t, false, true)}`; });
+  else h += areaBlock(sel, t, false, true);
+  return h + `<div class="actions" style="margin-top:30px"><div class="row" style="justify-content:center;gap:22px"><button class="link" data-a="switchTpl">החלף אימון</button><a class="link" href="#/sets">סטים לפי אזור</a></div></div>`;
+}
+function areaBlock(a, t, met, free) {
   const list = workoutOrder(S.machines.filter(m => !m.archived && m.area === a), t);
   if (!list.length) return `<div class="xlist" style="margin-top:6px"><a class="xcard" href="#/edit/new/${a}"><div class="xt">${svg(I.plus, 34, 2.4)}</div><div class="grow"><div class="xn">הוסף מכשיר</div><div class="xs">${areaName(a)}</div></div></a></div>`;
   const cnt = {}; setsOn(t).forEach(s => { cnt[s.machine_id] = (cnt[s.machine_id] || 0) + 1; });
@@ -1953,7 +2063,7 @@ function areaBlock(a, t, met) {
   let h = '';
   if (todo.length) h += `${met ? `<div class="xopt">עוד מכשירים ב${areaName(a)}, רשות</div>` : ''}<div class="xlist" style="margin-top:6px">${todo.map(m => machineCard(m, t)).join('')}</div>`;
   /* אזור שעוד לא ביעד, וכל המכשירים בו כבר בוצעו: לא מקפלים, כי צריך להוסיף סט באחד מהם */
-  if (done.length && !todo.length && !met && AREA[a] && S.settings.minSets[a]) {
+  if (!free && done.length && !todo.length && !met && AREA[a] && S.settings.minSets[a]) {
     const left = S.settings.minSets[a] - setsOn(t).filter(s => machineById(s.machine_id)?.area === a).length;
     return `<div class="xopt">כל המכשירים בוצעו. ${left === 1 ? 'חסר עוד סט אחד' : `חסרים עוד ${left} סטים`}, אפשר להוסיף באחד מהם</div><div class="xlist" style="margin-top:6px">${done.map(m => machineCard(m, t)).join('')}</div>`;
   }
@@ -1970,13 +2080,14 @@ function vWorkout(arg) {
   else if (arg && (arg === 'all' || AREA[arg])) S.wf = { date: t, area: arg };
   if (!tpl) {
     return pageHead('אימון', { sub: 'היום מוגדר כיום מנוחה' }) + `<section class="card stack"><div class="h3">איזה אימון לעשות?</div>
-      <div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn btn-ghost btn-block tplbtn" data-a="start" data-t="${k}">${tplLabel(k)}</button>`).join('')}</div></section>` + rideCard(t) + nav('workout');
+      <div class="stack-sm">${visibleTpls().map(k => `<button class="btn btn-ghost btn-block tplbtn" data-a="start" data-t="${k}">${tplLabel(k)}</button>`).join('')}</div></section>` + rideCard(t) + nav('workout');
   }
   const counts = areaCountsOn(t), sets = setsOn(t), areas = TEMPLATES[tpl], mins = S.settings.minSets, sel = wfArea(tpl, counts);
   const segAreas = sel !== 'all' && !areas.includes(sel) ? [...areas, sel] : areas;
-  const tsel = `<div class="tsel" role="group" aria-label="איזה אימון היום">${Object.keys(TEMPLATES).map(k => `<button type="button" class="${k === tpl ? 'on' : ''}" data-a="${k === tpl ? 'switchTpl' : 'setTpl'}" data-t="${k}" aria-pressed="${k === tpl}" aria-label="אימון ${TPL_NAME[k]} להיום">${TPL_NAME[k]}</button>`).join('')}</div>`;
-  let h = pageHead(`אימון ${TPL_NAME[tpl]}`, { titleEnd: tsel });
+  const tsel = `<div class="tsel2" role="group" aria-label="איזה אימון היום">${visibleTpls().map(k => `<button type="button" class="${k === tpl ? 'on' : ''}" data-a="${k === tpl ? 'switchTpl' : 'setTpl'}" data-t="${k}" aria-pressed="${k === tpl}" aria-label="אימון ${esc(TPL_NAME[k])} להיום">${esc(TPL_NAME[k])}</button>`).join('')}</div>`;
+  let h = pageHead(`אימון ${esc(TPL_NAME[tpl])}`) + tsel;
   h += sessCard(t);
+  if (tpl === 'F') return h + freeBody(t, counts, sets) + rideCard(t) + nav('workout');
   const left = areas.filter(a => counts[a] < mins[a]), rem = left.reduce((s, a) => s + mins[a] - counts[a], 0);
   const sum = rem ? `נשארו ${rem === 1 ? 'סט אחד' : rem + ' סטים'}: ${left.map(a => `<span class="nw">${areaName(a)} ${mins[a] - counts[a]}</span>`).join(', ')}`
     : `${svg(I.check, 20, 3.2)}<span>כל האזורים הגיעו ליעד</span>`;
@@ -2064,7 +2175,7 @@ function nextMachine(cur) {
   const t = today(), tpl = templateFor(t); if (!tpl) return null;
   const cnt = {}; setsOn(t).forEach(s => { cnt[s.machine_id] = (cnt[s.machine_id] || 0) + 1; });
   const counts = areaCountsOn(t), unmet = a => counts[a] < S.settings.minSets[a], busy = busyIds(), tA = TEMPLATES[tpl];
-  const areas = [...(tA.includes(cur.area) && unmet(cur.area) ? [cur.area] : []), ...tA.filter(a => a !== cur.area && unmet(a)), ...tA.filter(a => !unmet(a))];
+  const areas = tA.length ? [...(tA.includes(cur.area) && unmet(cur.area) ? [cur.area] : []), ...tA.filter(a => a !== cur.area && unmet(a)), ...tA.filter(a => !unmet(a))] : [cur.area];
   const order = [...new Set(areas)];
   for (const skipBusy of [true, false]) for (const a of order) {
     const l = sortMachines(S.machines.filter(m => !m.archived && m.area === a && m.id !== cur.id && (cnt[m.id] || 0) < plannedOf(m) && !(skipBusy && busy.includes(m.id))));
@@ -2294,7 +2405,7 @@ function vMachines() {
 }
 function tplHint(area) {
   if (!area) return 'בחר אזור כדי לשייך את המכשיר לאימונים';
-  const tpls = Object.keys(TEMPLATES).filter(k => TEMPLATES[k].includes(area)).map(k => 'אימון ' + TPL_NAME[k]);
+  const tpls = Object.keys(TEMPLATES).filter(k => !TPL_HIDDEN.has(k) && TEMPLATES[k].includes(area)).map(k => 'אימון ' + TPL_NAME[k]);
   return `יופיע ב${tpls.join(' וב')}, ${daysForArea(area)}`;
 }
 function repsBox() {
@@ -2367,7 +2478,6 @@ function dataDates() {
   return [...set].sort();
 }
 const HE_MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
-const TPL_COLOR = { A:'var(--a-back)', B:'var(--a-chest)', C:'var(--a-legs)' };
 const isYm = s => /^\d{4}-\d{2}$/.test(s || '');
 const ymOf = d => d.slice(0, 7);
 const addMonths = (ym, n) => { const [y, m] = ym.split('-').map(Number); const d = new Date(y, m - 1 + n, 1); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`; };
@@ -2438,7 +2548,7 @@ function vMonth(ym) {
     const inner = `<span class="cn num">${parseYmd(d).getDate()}</span><span class="rd ${x.r ? 'on' : ''}"></span>`;
     cal += fut ? `<span class="${cls}" aria-label="${lab}">${inner}</span>` : `<a class="${cls}" style="--c:${tplColor(x.tpl)}" href="#/history/${d}" aria-label="${lab}">${inner}</a>`;
   });
-  cal += `</div><div class="legend-row">${Object.keys(TEMPLATES).map(k => `<span><i style="background:${TPL_COLOR[k]}"></i>אימון ${TPL_NAME[k]}</span>`).join('')}<span><i class="rdot"></i>ספינינג</span></div></section>`;
+  cal += `</div><div class="legend-row">${visibleTpls().map(k => `<span><i style="background:${TPL_COLOR[k]}"></i>אימון ${esc(TPL_NAME[k])}</span>`).join('')}<span><i class="rdot"></i>ספינינג</span></div></section>`;
   h += cal;
   const active = days.filter(d => info[d].n || info[d].r).reverse();
   if (active.length) {
@@ -2567,6 +2677,10 @@ function rideTypeField(r, p) {
   const cur = r?.bike_type || p?.bike_type || types[0];
   return `<div class="field"><span class="flabel">סוג אופניים</span><input type="hidden" id="rtype" value="${esc(cur)}"><div class="rtypes" id="rtypes">${rtypeChips(types, cur)}</div></div>`;
 }
+function wtAreaChips() {
+  const E = S.wtEdit || { areas: [] };
+  return AREAS.map(a => `<button type="button" class="chip${E.areas.includes(a.k) ? ' on' : ''}" data-a="wtArea" data-v="${a.k}" aria-pressed="${E.areas.includes(a.k)}">${a.n}</button>`).join('');
+}
 function rtypeChips(types, cur) {
   return types.map(n => `<button type="button" class="chip${n === cur ? ' on' : ''}" data-a="rtype" data-v="${esc(n)}" aria-pressed="${n === cur}">${esc(n)}</button>`).join('') + `<button type="button" class="chip" data-a="rtypeAdd">${svg(I.plus, 18, 2.6)}סוג חדש</button>`;
 }
@@ -2602,9 +2716,13 @@ function vSettings() {
     <p class="sub sm">אפשר גם לקבוע מנוחה למכשיר מסוים, במסך עריכת המכשיר.</p>`;
   h += `<div class="section-title"><span>מינימום סטים ביום</span></div><div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}</div>${mini('min.' + a.k, st.minSets[a.k], 'מינימום ' + a.n)}</div>`).join('')}</div>
     <p class="sub sm">המינימום חל בימים שבהם האזור נמצא באימון.</p>`;
+  h += `<div class="section-title"><span>סוגי אימונים</span></div><div class="list">${visibleTpls().map(k => k === 'F'
+      ? `<div class="lrow"><span class="tbadge" style="--c:${TPL_COLOR.F}">${TPL_SHORT.F}</span><div class="grow"><div class="t">אימון חופשי</div><div class="sub sm">כל מכשיר, בלי אזורים קבועים ובלי יעדים</div></div></div>`
+      : `<button type="button" class="lrow" data-a="wtEdit" data-k="${k}"><span class="tbadge" style="--c:${TPL_COLOR[k]}">${esc(TPL_SHORT[k])}</span><div class="grow"><div class="t">אימון ${esc(TPL_NAME[k])}</div><div class="sub sm">${TEMPLATES[k].map(areaName).join(', ')}</div></div><span class="chev">${svg(I.fwd, 20)}</span></button>`).join('')}</div>
+    <button type="button" class="btn btn-tinted btn-block" style="margin-top:10px" data-a="wtEdit" data-k="">${svg(I.plus, 22, 2.6)}הוסף סוג אימון</button>`;
   h += `<div class="section-title"><span>חלוקת האימונים בשבוע</span></div><div class="list">${DAY_NAMES.map((n, i) => `<div class="srow2"><label class="grow" for="sp${i}">יום ${n}</label>
-    <select class="input" id="sp${i}" data-s="split" data-dow="${i}">${[['A', 'אימון א'], ['B', 'אימון ב'], ['C', 'אימון ג'], ['', 'מנוחה']].map(([k, l]) => `<option value="${k}" ${(st.split[String(i)] || '') === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`).join('')}</div>
-    <p class="sub sm">אימון א: גב, יד קדמית, בטן. אימון ב: חזה, יד אחורית, כתפיים, בטן. אימון ג: רגליים, בטן.</p>`;
+    <select class="input" id="sp${i}" data-s="split" data-dow="${i}">${[...visibleTpls().map(k => [k, 'אימון ' + TPL_NAME[k]]), ['', 'מנוחה']].map(([k, l]) => `<option value="${k}" ${(st.split[String(i)] || '') === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`).join('')}</div>
+    <p class="sub sm">את האזורים של כל אימון עורכים בסוגי אימונים.</p>`;
   h += `<div class="section-title"><span>מסך</span></div><div class="list">
     
     <div class="srow2"><div class="grow">המסך נשאר דלוק באימון<div class="sub sm">תלוי בתמיכת הדפדפן</div></div><label class="toggle"><input type="checkbox" data-s="wakeLock" ${st.wakeLock ? 'checked' : ''} aria-label="המסך נשאר דלוק באימון"><span></span></label></div></div>`;
@@ -2625,6 +2743,7 @@ function parseRoute() {
 }
 let lastRenderKey = '';
 function render() {
+  syncTemplates();
   const app = $('#app');
   if (!configured) { app.innerHTML = vSetup(); return; }
   if (!S.user) { app.innerHTML = vLogin(); updateSync(); return; }
@@ -2798,6 +2917,37 @@ function addDefaults(m, date) {
 const A = {
   spinM(el) { S.spinM = S.spinM === el.dataset.k ? null : el.dataset.k; render(); },
   toggleDone() { S.doneOpen = !S.doneOpen; render(); },
+  wtEdit(el) {
+    const k = el.dataset.k || '', base = ['A', 'B', 'C'].includes(k);
+    S.wtEdit = { k, areas: k ? [...TEMPLATES[k]] : [] };
+    openModal(`<h2>${k ? 'עריכת סוג אימון' : 'סוג אימון חדש'}</h2>
+      <div class="field"><label for="wtn">שם</label><input class="input" id="wtn" maxlength="16" value="${k ? esc(TPL_NAME[k]) : ''}" placeholder="לדוגמה: גב וכתפיים"></div>
+      <div class="field" style="margin-top:14px"><span class="flabel">אזורים</span><div class="rtypes" id="wta">${wtAreaChips()}</div><div class="sub sm">היעד לכל אזור נלקח מהמינימום שבהגדרות</div></div>
+      <button class="btn btn-primary btn-block" style="margin-top:18px" data-a="wtSave">שמור</button>
+      ${k && !base ? `<button class="btn btn-danger btn-block" style="margin-top:10px" data-a="wtDel">${svg(I.trash, 20)}מחק את סוג האימון</button>` : ''}
+      <button class="link" style="align-self:center;margin-top:8px" data-a="closeModal">ביטול</button>`);
+  },
+  wtArea(el) {
+    const E = S.wtEdit; if (!E) return; const v = el.dataset.v;
+    E.areas = E.areas.includes(v) ? E.areas.filter(a => a !== v) : [...E.areas, v];
+    $('#wta').innerHTML = wtAreaChips();
+  },
+  wtSave() {
+    const E = S.wtEdit; if (!E) return;
+    const name = ($('#wtn').value || '').trim().replace(/^אימון\s+/, '');
+    if (!name) { toast('כתוב שם לסוג האימון'); $('#wtn').focus(); return; }
+    if (!E.areas.length) { toast('בחר לפחות אזור אחד'); return; }
+    const w = S.settings.wtypes || (S.settings.wtypes = {}), k = E.k || ('T' + Date.now().toString(36));
+    w[k] = { ...(w[k] || {}), name, areas: AREAS.map(a => a.k).filter(a => E.areas.includes(a)), hidden: false };
+    syncTemplates(); saveSettings(); closeModal(); S.wtEdit = null; toast('נשמר'); render();
+  },
+  wtDel() {
+    const E = S.wtEdit; if (!E || !E.k || ['A', 'B', 'C'].includes(E.k)) return;
+    const w = S.settings.wtypes || {}; w[E.k] = { ...(w[E.k] || {}), hidden: true };
+    let moved = false; Object.keys(S.settings.split).forEach(d => { if (S.settings.split[d] === E.k) { S.settings.split[d] = null; moved = true; } });
+    syncTemplates(); saveSettings(); closeModal(); S.wtEdit = null;
+    toast(moved ? 'סוג האימון נמחק, וגם הוסר מהחלוקה השבועית. ימים שכבר נרשמו נשארו כמו שהיו' : 'סוג האימון נמחק. ימים שכבר נרשמו נשארו כמו שהיו', 3800); render();
+  },
   sessStart() {
     const t = today(), day = S.days[t] || {};
     enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, template: day.template || templateFor(t) || null, started_at: new Date().toISOString(), finished_at: null } });
@@ -2892,7 +3042,7 @@ const A = {
   },
   switchTpl() {
     const cur = templateFor(today());
-    openModal(`<h2>איזה אימון היום?</h2><div class="stack-sm">${Object.keys(TEMPLATES).map(k => `<button class="btn ${k === cur ? 'btn-primary' : 'btn-ghost'} btn-block tplbtn" data-a="setTpl" data-t="${k}">${tplLabel(k)}</button>`).join('')}
+    openModal(`<h2>איזה אימון היום?</h2><div class="stack-sm">${visibleTpls().map(k => `<button class="btn ${k === cur ? 'btn-primary' : 'btn-ghost'} btn-block tplbtn" data-a="setTpl" data-t="${k}">${tplLabel(k)}</button>`).join('')}
       <button class="btn btn-ghost btn-block" data-a="setTpl" data-t="R">יום מנוחה</button><button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
   },
   setTpl(el) {
@@ -2916,7 +3066,7 @@ const A = {
       <div class="sub sm">עברו יותר מ 15 דקות מהסט האחרון. כדי שהמשך יספור רק את אימון הכוח, הסיום נקבע לזמן הסט האחרון.</div></div>` : '';
     const hasWatch = day.avg_hr || day.max_hr || day.watch_kcal;
     openModal(`<h2>סיום אימון${tpl ? ' ' + TPL_NAME[tpl] : ''}</h2>
-      ${tpl ? `<div class="fin-rings">${rings(TEMPLATES[tpl], counts, S.settings.minSets, 124)}${legend(TEMPLATES[tpl], counts, S.settings.minSets)}</div>` : ''}
+      ${tpl && TEMPLATES[tpl].length ? `<div class="fin-rings">${rings(TEMPLATES[tpl], counts, S.settings.minSets, 124)}${legend(TEMPLATES[tpl], counts, S.settings.minSets)}</div>` : ''}
       <div class="stats2"><div class="stat"><div class="k">סטים</div><div class="v num">${sets.length}</div></div>
         <div class="stat"><div class="k">משך</div><div class="v ltr num" id="finDur">${dur || '-'}</div></div></div>${endSeg}
       <details class="more" ${hasWatch ? 'open' : ''} style="margin-bottom:12px"><summary>${svg(I.watch, 22)}<span class="grow">נתוני שעון, רשות</span>${svg(I.down, 20)}</summary>
