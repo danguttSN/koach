@@ -1370,7 +1370,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '4.5';
+const APP_VERSION = '4.6';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -1921,6 +1921,75 @@ function vHeart(date) {
       <div class="hr-bars">${cols}</div></section>`;
   }
   return h + nav('home');
+}
+
+
+/* ---------- 4.6: דופק ברכיבות, בהתקדמות הספינינג ובמאמן ---------- */
+/* מצמיד לכל רכיבה את מקטע המאמץ מאותו יום שהאורך שלו הכי קרוב לאורך הרכיבה, ולא חופף לאימון הכוח */
+function rideHr(r) {
+  if (!r || !S.hrSessions.length) return null;
+  const ses = S.hrSessions.filter(x => x.day === r.ride_date);
+  if (!ses.length) return null;
+  const win = workoutWindow(r.ride_date), dur = (Number(r.duration_sec) || 0) / 60;
+  const made = r.created_at ? Date.parse(r.created_at) : null;
+  let best = null, bs = Infinity;
+  for (const x of ses) {
+    const a = Date.parse(x.started_at), b = Date.parse(x.ended_at), mn = Number(x.minutes);
+    if (dur && (mn < dur * 0.5 || mn > dur * 1.6)) continue;
+    if (win) { const ov = Math.max(0, Math.min(b, win[1]) - Math.max(a, win[0])); if (ov > (b - a) * 0.5) continue; }
+    let sc = dur ? Math.abs(mn - dur) / dur : 0.5;
+    if (made && b <= made + 15 * 60000 && made - b < 3 * 3600e3) sc -= 0.3;
+    if (sc < bs) { bs = sc; best = x; }
+  }
+  return best ? { avg: Number(best.avg_bpm), max: Number(best.max_bpm), at: best.started_at } : null;
+}
+/* כמה פעימות יותר או פחות עלו אותם וואטים, מול 14 הימים שלפני תחילת התקופה */
+function spinHrDelta(rides, periodStart) {
+  const now = rides.map(r => ({ r, h: rideHr(r) })).filter(x => x.h);
+  if (now.length < 2) return null;
+  const wNow = now.reduce((a, x) => a + Number(x.r.avg_watts), 0) / now.length;
+  const prev = S.rides.filter(r => r.ride_date < periodStart && r.ride_date >= addDays(periodStart, -14) && r.avg_watts && Math.abs(r.avg_watts - wNow) <= 6)
+    .map(r => rideHr(r)).filter(Boolean);
+  if (prev.length < 2) return null;
+  const avg = l => l.reduce((a, x) => a + x, 0) / l.length;
+  return Math.round(avg(now.map(x => x.h.avg)) - avg(prev.map(h => h.avg)));
+}
+/* שלוש הרכיבות האחרונות, כל אחת עם דופק גבוה ב 6 ומעלה מהרגיל באותם וואטים */
+function spinHrStrain(last3) {
+  return last3.every(r => {
+    const h = rideHr(r); if (!h || !r.avg_watts) return false;
+    const base = S.rides.filter(x => x.ride_date < last3[2].ride_date && x.ride_date >= addDays(last3[2].ride_date, -21) && x.avg_watts && Math.abs(x.avg_watts - r.avg_watts) <= 6)
+      .map(x => rideHr(x)).filter(Boolean);
+    if (base.length < 2) return false;
+    return h.avg >= base.reduce((a, x) => a + x.avg, 0) / base.length + 6;
+  });
+}
+function rideHrNote(date) {
+  const r = rideOn(date), h = rideHr(r);
+  if (!h) return '';
+  const base = S.rides.filter(x => x !== r && x.ride_date < date && x.ride_date >= addDays(date, -21) && x.avg_watts && r.avg_watts && Math.abs(x.avg_watts - r.avg_watts) <= 6)
+    .map(x => rideHr(x)).filter(Boolean);
+  let cmp = '';
+  if (base.length >= 2) {
+    const d = Math.round(h.avg - base.reduce((a, x) => a + x.avg, 0) / base.length);
+    cmp = d <= -2 ? `. נמוך ב ${-d} מהרגיל שלך באותם וואטים` : d >= 2 ? `. גבוה ב ${d} מהרגיל שלך באותם וואטים` : '. כמו הרגיל שלך באותם וואטים';
+  }
+  return `<div class="hr-note" style="margin:0 8px 14px"><span class="hr-ic" style="display:inline-flex;vertical-align:-5px;margin-inline-end:6px">${svg(I.heart, 22, 2.4)}</span>דופק ברכיבה: ממוצע <b>${h.avg}</b>, הגבוה <b>${h.max}</b>${cmp}</div>`;
+}
+/* סיכום קצר שנשלח למאמן עם כל שאלה */
+function healthNote() {
+  const t = today(), since = addDays(t, -14);
+  const rides = S.rides.filter(r => r.ride_date >= since && r.ride_date <= t).map(r => ({ r, h: rideHr(r) })).filter(x => x.h);
+  const lines = rides.map(({ r, h }) => `${shortDate(r.ride_date)}: ${r.avg_watts ? Math.round(r.avg_watts) + ' וואט, ' : ''}${Math.round((r.duration_sec || 0) / 60)} דקות, דופק ממוצע ${h.avg}, הגבוה ${h.max}`);
+  const lows = S.hrDaily.filter(x => x.day >= since).map(x => `${shortDate(x.day)}: ${x.min_bpm}`);
+  if (!lines.length && !lows.length) return '';
+  const sp = coachOn() ? spinTarget(t) : null;
+  return ['נתוני דופק מהשעון (Amazfit דרך Apple Health):',
+    lines.length ? 'רכיבות אחרונות עם דופק:\n' + lines.join('\n') : '',
+    lows.length ? 'הדופק הנמוך שנקלט בכל יום: ' + lows.join(', ') : '',
+    sp && sp.hrDelta != null ? `שינוי הדופק באותם וואטים מול השבועיים הקודמים: ${sp.hrDelta > 0 ? '+' : ''}${sp.hrDelta} פעימות.` : '',
+    'כלל ההתקדמות בספינינג: היעד עולה ב 5 וואט כל שבועיים רק אם רוב הרכיבות עמדו ביעד, לא הרגישו קשות, והדופק באותם וואטים לא עלה ב 5 פעימות או יותר. דופק שיורד באותם וואטים הוא סימן לשיפור בכושר.'
+  ].filter(Boolean).join('\n');
 }
 
 /* ---------- ui primitives ---------- */
@@ -3183,7 +3252,7 @@ function vRide(date) {
   const val = v => (v == null ? '' : esc(v));
   const pm = p ? Math.floor(p.duration_sec / 60) : 30, ps = p ? p.duration_sec % 60 : 0;
   let h = pageHead('ספינינג', { back: date === today() ? '#/workout' : '#/history/' + date, backLabel: date === today() ? 'אימון' : shortDate(date), sub: fmtDate(date) });
-  h += spinTgtCard(date);
+  h += spinTgtCard(date) + rideHrNote(date);
   h += `<div class="stack">
     ${r ? '' : `<div class="sub sm">${p ? 'הערכים באפור הם מהרכיבה הקודמת. ממלאים רק מה שהשתנה, שדה ריק יישמר כמו בפעם הקודמת.' : 'ממלאים את הנתונים מהצג של האופניים.'}</div>`}
     <div class="field"><span class="flabel">זמן</span><div class="grid2">
@@ -4185,16 +4254,22 @@ function spinTarget(date = today()) {
   while (addDays(s, c.every) <= date) {
     const e = addDays(s, c.every - 1), rs = S.rides.filter(r => r.ride_date >= s && r.ride_date <= e && r.avg_watts);
     const met = rs.filter(r => r.avg_watts >= w - 3).length, hard = rs.filter(r => (r.feel || 0) >= 3).length;
-    if (rs.length >= 4 && met >= Math.ceil(rs.length / 2) && hard <= rs.length / 2 && w < c.cap) w = Math.min(c.cap, w + c.step);
+    const hd = spinHrDelta(rs.filter(r => r.avg_watts >= w - 3), s);
+    if (rs.length >= 4 && met >= Math.ceil(rs.length / 2) && hard <= rs.length / 2 && w < c.cap && !(hd != null && hd >= 5)) w = Math.min(c.cap, w + c.step);
     s = addDays(s, c.every);
   }
   const last3 = S.rides.filter(r => r.ride_date < date).sort((a, b) => (a.ride_date < b.ride_date ? 1 : -1)).slice(0, 3);
-  const strain = last3.length === 3 && last3.every(r => (r.feel || 0) >= 3 || (r.avg_watts && r.avg_watts < w - 3));
-  return { w, next: addDays(s, c.every), cap: w >= c.cap, strain, min: 30 };
+  const oldStrain = last3.length === 3 && last3.every(r => (r.feel || 0) >= 3 || (r.avg_watts && r.avg_watts < w - 3));
+  const hrStrain = last3.length === 3 && spinHrStrain(last3);
+  const hrDelta = spinHrDelta(S.rides.filter(r => r.ride_date >= s && r.ride_date < date && r.avg_watts >= w - 3), s);
+  return { w, next: addDays(s, c.every), cap: w >= c.cap, strain: oldStrain || hrStrain, hrStrain: hrStrain && !oldStrain, hrDelta, min: 30 };
 }
 function spinWhy(sp) {
   if (sp.cap) return 'הגעת לכ 195 וואט, קרוב לסף שלך. כדאי לעשות מבחן של 20 דקות לפני שממשיכים לעלות';
+  if (sp.hrStrain) return 'בשלוש הרכיבות האחרונות הדופק היה גבוה מהרגיל שלך באותם וואטים. זה סימן לעייפות, ולכן היעד לא יעלה בבדיקה הקרובה';
   if (sp.strain) return 'שלוש רכיבות ברצף היו קשות או מתחת ליעד, ולכן היעד לא יעלה בבדיקה הקרובה';
+  if (sp.hrDelta != null && sp.hrDelta >= 5) return `באותם וואטים הדופק שלך עלה ב ${sp.hrDelta} פעימות לעומת השבועיים הקודמים. אם זה יישאר כך, היעד לא יעלה בבדיקה ב ${shortDate(sp.next)}`;
+  if (sp.hrDelta != null && sp.hrDelta <= -3) return `באותם וואטים הדופק שלך ירד ב ${-sp.hrDelta} פעימות לעומת השבועיים הקודמים, סימן טוב לשיפור בכושר. בדיקת עלייה הבאה ב ${shortDate(sp.next)}`;
   return `בדיקת עלייה הבאה ב ${shortDate(sp.next)}: אם רוב הרכיבות יעמדו ביעד וירגישו קל או בינוני, היעד יעלה ב ${S.settings.coach.spin.step} וואט`;
 }
 function spinTgtLine(t, r) {
@@ -4282,8 +4357,10 @@ async function coachSummary(date) {
   } catch (e) { log('המאמן: סיכום נכשל', errInfo(e)); }
 }
 function coachCtxNote(ctx) {
-  if (ctx && ctx.machine_id) { const m = machineById(ctx.machine_id); if (m) { const tg = coachTarget(m); return `יעד היום לפי האפליקציה ב${m.name}: ${fmtW(tg.w)} ק״ג, ${tg.lo} עד ${tg.hi} חזרות. ${tg.why}`; } }
-  return '';
+  let n = '';
+  if (ctx && ctx.machine_id) { const m = machineById(ctx.machine_id); if (m) { const tg = coachTarget(m); n = `יעד היום לפי האפליקציה ב${m.name}: ${fmtW(tg.w)} ק״ג, ${tg.lo} עד ${tg.hi} חזרות. ${tg.why}`; } }
+  const hn = healthNote();
+  return [n, hn].filter(Boolean).join('\n\n');
 }
 async function coachAsk(text, ctx) {
   text = String(text || '').trim().slice(0, 1000); if (!text || S.coach.busy) return;
