@@ -1177,6 +1177,27 @@ a.hl-r:active{background:var(--fill)}
 .seg.sm2 button{min-height:44px;padding:0 14px;border:0;border-radius:11px;background:transparent;font-size:16px;font-weight:800;color:var(--text)}
 .cstale{margin:0 0 12px;padding:12px 14px;border-radius:14px;background:var(--accent-tint);color:var(--accent);font-size:16px;font-weight:700;line-height:1.4}
 .cpoff{color:var(--muted);font-weight:700}
+
+/* תפריט צד */
+.nb-menu{color:var(--text)}
+.drawer{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,0);transition:background-color .22s}
+.drawer[hidden]{display:none}
+.drawer.show{background:rgba(0,0,0,.5)}
+.dr-panel{position:absolute;top:0;bottom:0;right:0;width:min(340px,86vw);background:var(--surface);display:flex;flex-direction:column;padding:calc(var(--st) + 8px) 14px calc(var(--sb) + 16px);box-shadow:-12px 0 40px rgba(0,0,0,.35);transform:translateX(100%);transition:transform .24s cubic-bezier(.2,.8,.2,1);overflow-y:auto}
+.drawer.show .dr-panel{transform:none}
+.dr-head{display:flex;align-items:center;justify-content:space-between;min-height:56px;padding:0 6px 6px}
+.dr-head b{font-size:26px;font-weight:800}
+.dr-head .nb-icon{color:var(--muted)}
+.dr-list{display:flex;flex-direction:column;gap:4px}
+.dr-item{display:flex;align-items:center;gap:14px;min-height:60px;padding:8px 10px;border-radius:16px;color:var(--text);text-decoration:none;font-size:18px;font-weight:600}
+.dr-item:active{background:var(--fill)}
+.dr-item.on{background:var(--accent-tint)}
+.dr-item.on .dr-ic{background:var(--accent);color:var(--on-accent)}
+.dr-ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--fill);color:var(--accent);flex-shrink:0}
+.dr-sep{height:1px;background:var(--sep);margin:8px 10px}
+.dr-foot{margin-top:auto;padding:18px 10px 0;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);align-items:flex-start}
+body.dr-open{overflow:hidden}
+@media (prefers-reduced-motion:reduce){.drawer,.dr-panel{transition:none}}
 </style>
 </head>
 <body>
@@ -1186,6 +1207,7 @@ a.hl-r:active{background:var(--fill)}
 <div id="flash" aria-hidden="true"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div id="modal" class="modal" hidden></div>
+<div id="drawer" class="drawer" hidden></div>
 
 <div id="tb" class="tb" hidden>
   <button type="button" class="tb-main" data-a="tFull" aria-label="הצג טיימר במסך מלא">
@@ -1229,7 +1251,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '4.1';
+const APP_VERSION = '4.2';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -1329,6 +1351,9 @@ const I = {
   play:'<circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/>',
   chup:'<path d="M6 15l6-6 6 6"/>',
   sort:'<path d="M8 4v16M4 8l4-4 4 4M16 20V4M12 16l4 4 4-4"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  data:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',
+  close:'<path d="M6 6l12 12M18 6L6 18"/>',
   flame:'<path d="M12 3c.8 3 5 5.2 5 10.2A5 5 0 0 1 7 13.2c0-2 .9-3.5 2-4.6.2 1.8 1 2.9 2.2 3.2-.4-3.1-.2-5.9.8-8.8z"/>'
 };
 function svg(p, s = 24, w = 2) {
@@ -1517,7 +1542,7 @@ async function flush() {
       if (res.error) {
         if (!res.error.code) break;           /* בעיית רשת: ננסה שוב אחר כך */
         log('שמירה נכשלה:', op.table, errInfo(res.error));
-        toast('השמירה בשרת נכשלה. הפעולה נשמרה בטלפון, אפשר לנסות שוב בהגדרות', 5000);
+        toast('השמירה בשרת נכשלה. הפעולה נשמרה בטלפון, אפשר לנסות שוב בתפריט, במסך נתונים', 5000);
         S.failed.push({ ...op, err: res.error.message, at: Date.now() });
       }
       S.queue.shift(); saveQueue();
@@ -1651,10 +1676,11 @@ function nav(active) {
   const dy = S.days[t] || {}, live = !!(dy.started_at && !dy.finished_at);
   if (live) aria += ', אימון פעיל';
   const tab = (k, h, ic, l) => `<a href="${h}" class="${k === active ? 'on' : ''}" ${k === active ? 'aria-current="page"' : ''}>${svg(ic, 30, 2)}<span>${l}</span></a>`;
-  return `<nav class="nav" aria-label="ניווט ראשי">${tab('home', '#/', I.home, 'בית')}${tab('machines', '#/machines', I.grid, 'מכשירים')}<a href="#/workout" class="fab ${active === 'workout' ? 'on' : ''}${live ? ' live' : ''}" aria-label="${aria}" ${active === 'workout' ? 'aria-current="page"' : ''}><span class="fab-w">${ring}<span class="fab-c">${svg(I.dumbbell, 34, 2.6)}</span></span>${live ? `<span class="fab-t" id="fabClock">${fmtClock(Date.now() - Date.parse(dy.started_at))}</span>` : '<span>אימון</span>'}</a>${tab('history', '#/history', I.history, 'היסטוריה')}${tab('settings', '#/settings', I.settings, 'הגדרות')}</nav>`;
+  return `<nav class="nav" aria-label="ניווט ראשי">${tab('home', '#/', I.home, 'בית')}${tab('machines', '#/machines', I.grid, 'מכשירים')}<a href="#/workout" class="fab ${active === 'workout' ? 'on' : ''}${live ? ' live' : ''}" aria-label="${aria}" ${active === 'workout' ? 'aria-current="page"' : ''}><span class="fab-w">${ring}<span class="fab-c">${svg(I.dumbbell, 34, 2.6)}</span></span>${live ? `<span class="fab-t" id="fabClock">${fmtClock(Date.now() - Date.parse(dy.started_at))}</span>` : '<span>אימון</span>'}</a>${tab('history', '#/history', I.history, 'היסטוריה')}${tab('coach', '#/coach', I.spark, 'מאמן')}</nav>`;
 }
 function pageHead(title, opts = {}) {
-  const back = opts.back ? `<a class="nb-back" href="${opts.back}">${svg(I.back, 28, 2.6)}<span>${opts.backLabel || 'חזרה'}</span></a>` : '';
+  const back = opts.back ? `<a class="nb-back" href="${opts.back}">${svg(I.back, 28, 2.6)}<span>${opts.backLabel || 'חזרה'}</span></a>`
+    : opts.menu === false ? '' : `<button type="button" class="nb-icon nb-menu" data-a="menu" aria-label="תפריט" aria-haspopup="dialog" aria-expanded="false">${svg(I.menu, 28, 2.4)}</button>`;
   return `<div class="navbar"><div class="nb-side">${back}</div><div class="nb-title" aria-hidden="true">${title}</div><div class="nb-side nb-end">${opts.end || ''}</div></div>
     <header class="large">${opts.sub ? `<div class="lsub">${opts.sub}</div>` : ''}${opts.titleEnd ? `<div class="lhead"><h1 class="${opts.small ? 'sm' : ''}">${title}</h1>${opts.titleEnd}</div>` : `<h1 class="${opts.small ? 'sm' : ''}">${title}</h1>`}${opts.after ? `<div class="lafter">${opts.after}</div>` : ''}</header>`;
 }
@@ -1865,7 +1891,7 @@ function weekCard() {
   for (const d of days) for (const s of setsOn(d)) { const m = mm[s.machine_id]; if (m) cnt[d][m.area]++; }
   const used = (a, d) => minFor(a, d) != null || cnt[d][a] > 0;
   const rows = AREAS.filter(a => days.some(d => used(a.k, d)));
-  if (!rows.length) return `<section class="card wk3" aria-label="סטים השבוע"><div class="dash-h"><h2>סטים השבוע</h2></div><div class="sub" style="margin-top:8px">אין ימי אימון מתוכננים השבוע. אפשר לקבוע אותם בהגדרות.</div></section>`;
+  if (!rows.length) return `<section class="card wk3" aria-label="סטים השבוע"><div class="dash-h"><h2>סטים השבוע</h2></div><div class="sub" style="margin-top:8px">אין ימי אימון מתוכננים השבוע. אפשר לקבוע אותם ב<a href="#/settings/split">חלוקת האימונים בשבוע</a>.</div></section>`;
   const wn = weekNums(t);
   let tot = 0, totT = 0;
   const cell = (a, d) => {
@@ -2152,7 +2178,7 @@ function vToday() {
       <div class="sub">צלם כל מכשיר, תן לו שם, בחר אזור בגוף וקבע משקל פתיחה. אחרי זה האימון כבר מסודר.</div>
       <a class="btn btn-primary btn-block" href="#/edit/new">הוסף מכשיר ראשון</a></section>`;
   }
-  h += coachHomeCard() + weekCard() + spinCard() + statTiles() + progressSection();
+  h += weekCard() + spinCard() + statTiles() + progressSection();
   return h + nav('home');
 }
 function machineRow(m, t) {
@@ -2595,7 +2621,7 @@ function vSets() {
   h += `<div class="section-title"><span>שאר האזורים</span></div><div class="list">`;
   h += others.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}<div class="sub sm">${daysForArea(a.k)}</div></div>
     <span class="num ltr" style="font-weight:700">${counts[a.k]}</span></div>`).join('');
-  h += `</div><p class="sub sm">המינימום היומי חל בימים שבהם האזור נמצא באימון. אפשר לשנות אותו ב<a href="#/settings">הגדרות</a>.</p>`;
+  h += `</div><p class="sub sm">המינימום היומי חל בימים שבהם האזור נמצא באימון. אפשר לשנות אותו ב<a href="#/settings/min">מינימום סטים ביום</a>.</p>`;
   return h + nav('today');
 }
 
@@ -2938,13 +2964,46 @@ function updateWattEstimate() {
   el.textContent = $('#rwatt').value.trim() ? '' : (sec > 0 && cal ? `משוער: ${Math.round(cal * 1000 / sec)} וואט` : '');
 }
 
-function vSettings() {
-  const st = S.settings;
-  const mini = (k, v, label) => `<div class="mini"><button type="button" data-a="sStep" data-k="${k}" data-d="1" aria-label="הוסף ל${label}">${svg(I.plus, 20, 2.4)}</button><span class="val num ltr">${v}</span><button type="button" data-a="sStep" data-k="${k}" data-d="-1" aria-label="הפחת מ${label}">${svg(I.minus, 20, 2.4)}</button></div>`;
-  const tg = (k, label, sub, on) => `<div class="srow2"><div class="grow">${label}${sub ? `<div class="sub sm">${sub}</div>` : ''}</div><label class="toggle"><input type="checkbox" data-s="${k}" ${on ? 'checked' : ''} aria-label="${label}"><span></span></label></div>`;
-  let h = pageHead('הגדרות');
-  h += coachSettingsHtml(mini, tg);
-  h += `<div class="section-title"><span>הגדרות אימון</span></div><div class="list">
+/* ---------- תפריט צד והגדרות ---------- */
+function sMini(k, v, label) { return `<div class="mini"><button type="button" data-a="sStep" data-k="${k}" data-d="1" aria-label="הוסף ל${label}">${svg(I.plus, 20, 2.4)}</button><span class="val num ltr">${v}</span><button type="button" data-a="sStep" data-k="${k}" data-d="-1" aria-label="הפחת מ${label}">${svg(I.minus, 20, 2.4)}</button></div>`; }
+function sToggle(k, label, sub, on) { return `<div class="srow2"><div class="grow">${label}${sub ? `<div class="sub sm">${sub}</div>` : ''}</div><label class="toggle"><input type="checkbox" data-s="${k}" ${on ? 'checked' : ''} aria-label="${label}"><span></span></label></div>`; }
+const MENU = [
+  ['', 'הגדרות כלליות', 'settings'],
+  ['rest', 'מנוחה לפי אזור', 'timer'],
+  ['min', 'מינימום סטים ביום', 'target'],
+  ['types', 'סוגי אימונים', 'dumbbell'],
+  ['split', 'חלוקת האימונים בשבוע', 'calendar'],
+  ['data', 'נתונים', 'data']
+];
+function drawerHtml() {
+  const cur = S.route?.name === 'settings' ? (S.route.a || '') : null;
+  return `<div class="dr-panel" role="dialog" aria-modal="true" aria-label="תפריט">
+    <div class="dr-head"><b>תפריט</b><button type="button" class="nb-icon" data-a="menuClose" aria-label="סגירת התפריט">${svg(I.close, 26, 2.4)}</button></div>
+    <nav class="dr-list" aria-label="הגדרות">${MENU.map(([k, l, ic]) => `<a class="dr-item${cur === k ? ' on' : ''}" href="#/settings${k ? '/' + k : ''}" ${cur === k ? 'aria-current="page"' : ''}><span class="dr-ic">${svg(I[ic], 24, 2.2)}</span><span class="grow">${l}</span><span class="chev">${svg(I.fwd, 20)}</span></a>${k ? '' : '<div class="dr-sep" role="separator"></div>'}`).join('')}</nav>
+    <div class="dr-foot"><span class="ltr">${esc(S.user?.email || '')}</span><span>גרסה ${esc(APP_VERSION)}</span></div></div>`;
+}
+let drawerFrom = null;
+function openDrawer(btn) {
+  const d = $('#drawer'); d.innerHTML = drawerHtml(); d.hidden = false; drawerFrom = btn || null;
+  if (btn) btn.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('dr-open');
+  requestAnimationFrame(() => d.classList.add('show'));
+  setTimeout(() => d.querySelector('.dr-item')?.focus({ preventScroll: true }), 60);
+}
+function closeDrawer(silent) {
+  const d = $('#drawer'); if (!d || d.hidden) return;
+  d.classList.remove('show'); document.body.classList.remove('dr-open');
+  if (drawerFrom) { drawerFrom.setAttribute('aria-expanded', 'false'); if (!silent) drawerFrom.focus({ preventScroll: true }); }
+  drawerFrom = null;
+  setTimeout(() => { if (!d.classList.contains('show')) { d.hidden = true; d.innerHTML = ''; } }, 220);
+}
+function vSettings(sec) {
+  const st = S.settings, mini = sMini, tg = sToggle;
+  const item = MENU.find(x => x[0] === (sec || ''));
+  if (!item) { go('#/settings'); return ''; }
+  let h = pageHead(item[1], { small: true });
+  if (!sec) {
+    h += `<div class="section-title"><span>אימון</span></div><div class="list">
     <div class="srow2"><div class="grow">זמן מנוחה ברירת מחדל</div>${mini('rest', fmtDur(st.rest), 'זמן המנוחה')}</div>
     ${tg('autoTimer', 'טיימר מנוחה מתחיל לבד', 'כשלוחצים בוצע', st.autoTimer !== false)}
     ${tg('sound', 'צליל בסוף המנוחה', '', st.sound)}
@@ -2952,28 +3011,33 @@ function vSettings() {
     ${tg('warmup', 'הצעת סטי חימום', 'לשונית חימום במסך המכשיר', st.warmup !== false)}
     ${tg('rirTrack', 'מעקב RIR', S.rirCol === false ? 'כדי להפעיל צריך להריץ פעם אחת את פקודת SQL של גרסה 2.6' : 'כמה חזרות נשארו במיכל, בכל סט', st.rirTrack !== false)}
     ${tg('propagate', 'שינוי בסט עובר לסטים הבאים', 'משקל או חזרות, רק בסטים שעוד לא בוצעו', st.propagate !== false)}</div>
-    <p class="sub sm">טווח חזרות ויעד RIR קובעים לכל מכשיר בנפרד, במסך עריכת המכשיר.</p>
-    <div class="section-title"><span>מנוחה לפי אזור</span></div><div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}${st.restByArea[a.k] ? '<div class="sub sm">מותאם</div>' : ''}</div>${mini('restA.' + a.k, fmtDur(areaRest(a.k)), 'מנוחה ' + a.n)}</div>`).join('')}</div>
-    <p class="sub sm">אפשר גם לקבוע מנוחה למכשיר מסוים, במסך עריכת המכשיר.</p>`;
-  h += `<div class="section-title"><span>מינימום סטים ביום</span></div><div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}</div>${mini('min.' + a.k, st.minSets[a.k], 'מינימום ' + a.n)}</div>`).join('')}</div>
+    <p class="sub sm">טווח חזרות ויעד RIR קובעים לכל מכשיר בנפרד, במסך עריכת המכשיר.</p>`;
+    h += `<div class="section-title"><span>מסך</span></div><div class="list">
+    ${tg('wakeLock', 'המסך נשאר דלוק באימון', 'תלוי בתמיכת הדפדפן', st.wakeLock)}</div>`;
+    h += `<div class="section-title"><span>חשבון</span></div><div class="stack-sm"><div class="sub ltr" style="align-self:flex-end">${esc(S.user?.email || '')}</div>
+    <button class="btn btn-danger btn-block" data-a="signOut">התנתקות</button></div>`;
+  } else if (sec === 'rest') {
+    h += `<div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}${st.restByArea[a.k] ? '<div class="sub sm">מותאם</div>' : ''}</div>${mini('restA.' + a.k, fmtDur(areaRest(a.k)), 'מנוחה ' + a.n)}</div>`).join('')}</div>
+    <p class="sub sm">אפשר גם לקבוע מנוחה למכשיר מסוים, במסך עריכת המכשיר. כשהמאמן פעיל, המנוחה לפי סוג התרגיל נקבעת ב<a href="#/coach/settings">הגדרות המאמן</a>.</p>`;
+  } else if (sec === 'min') {
+    h += `<div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}</div>${mini('min.' + a.k, st.minSets[a.k], 'מינימום ' + a.n)}</div>`).join('')}</div>
     <p class="sub sm">המינימום חל בימים שבהם האזור נמצא באימון.</p>`;
-  h += `<div class="section-title"><span>סוגי אימונים</span></div><div class="list">${visibleTpls().map(k => k === 'F'
+  } else if (sec === 'types') {
+    h += `<div class="list">${visibleTpls().map(k => k === 'F'
       ? `<div class="lrow"><span class="tbadge" style="--c:${TPL_COLOR.F}">${TPL_SHORT.F}</span><div class="grow"><div class="t">אימון חופשי</div><div class="sub sm">כל מכשיר, בלי אזורים קבועים ובלי יעדים</div></div></div>`
       : `<button type="button" class="lrow" data-a="wtEdit" data-k="${k}"><span class="tbadge" style="--c:${TPL_COLOR[k]}">${esc(TPL_SHORT[k])}</span><div class="grow"><div class="t">אימון ${esc(TPL_NAME[k])}</div><div class="sub sm">${TEMPLATES[k].map(areaName).join(', ')}</div></div><span class="chev">${svg(I.fwd, 20)}</span></button>`).join('')}</div>
     <button type="button" class="btn btn-tinted btn-block" style="margin-top:10px" data-a="wtEdit" data-k="">${svg(I.plus, 22, 2.6)}הוסף סוג אימון</button>`;
-  h += `<div class="section-title"><span>חלוקת האימונים בשבוע</span></div><div class="list">${DAY_NAMES.map((n, i) => `<div class="srow2"><label class="grow" for="sp${i}">יום ${n}</label>
+  } else if (sec === 'split') {
+    h += `<div class="list">${DAY_NAMES.map((n, i) => `<div class="srow2"><label class="grow" for="sp${i}">יום ${n}</label>
     <select class="input" id="sp${i}" data-s="split" data-dow="${i}">${[...visibleTpls().map(k => [k, 'אימון ' + TPL_NAME[k]]), ['', 'מנוחה']].map(([k, l]) => `<option value="${k}" ${(st.split[String(i)] || '') === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`).join('')}</div>
-    <p class="sub sm">את האזורים של כל אימון עורכים בסוגי אימונים.</p>`;
-  h += `<div class="section-title"><span>מסך</span></div><div class="list">
-    
-    <div class="srow2"><div class="grow">המסך נשאר דלוק באימון<div class="sub sm">תלוי בתמיכת הדפדפן</div></div><label class="toggle"><input type="checkbox" data-s="wakeLock" ${st.wakeLock ? 'checked' : ''} aria-label="המסך נשאר דלוק באימון"><span></span></label></div></div>`;
-  h += `<div class="section-title"><span>נתונים</span></div><div class="stack-sm">
+    <p class="sub sm">את האזורים של כל אימון עורכים ב<a href="#/settings/types">סוגי אימונים</a>.</p>`;
+  } else if (sec === 'data') {
+    h += `<div class="stack-sm">
     ${syncBox()}
     <button class="btn btn-ghost btn-block" data-a="exportJson">ייצוא גיבוי מלא, JSON</button>
     <button class="btn btn-ghost btn-block" data-a="exportCsv">ייצוא סטים לאקסל, CSV</button>
-    <button class="btn btn-ghost btn-block" data-a="refresh">רענון נתונים מהשרת</button></div>`;
-  h += `<div class="section-title"><span>חשבון</span></div><div class="stack-sm"><div class="sub ltr" style="align-self:flex-end">${esc(S.user?.email || '')}</div>
-    <button class="btn btn-danger btn-block" data-a="signOut">התנתקות</button></div>${diagPanel()}`;
+    <button class="btn btn-ghost btn-block" data-a="refresh">רענון נתונים מהשרת</button></div>${diagPanel()}`;
+  }
   return h + nav('settings');
 }
 
@@ -3005,7 +3069,7 @@ function render() {
     case 'edit': h = vEdit(r.a || 'new', r.b); break;
     case 'history': h = vHistory(r.a, r.b); break;
     case 'ride': h = vRide(r.a); break;
-    case 'settings': h = vSettings(); break;
+    case 'settings': h = vSettings(r.a); break;
     case 'coach': h = vCoach(r.a, r.b); break;
     default: h = vToday();
   }
@@ -3172,7 +3236,7 @@ const A = {
     S.wtEdit = { k, areas: k ? [...TEMPLATES[k]] : [] };
     openModal(`<h2>${k ? 'עריכת סוג אימון' : 'סוג אימון חדש'}</h2>
       <div class="field"><label for="wtn">שם</label><input class="input" id="wtn" maxlength="16" value="${k ? esc(TPL_NAME[k]) : ''}" placeholder="לדוגמה: גב וכתפיים"></div>
-      <div class="field" style="margin-top:14px"><span class="flabel">אזורים</span><div class="rtypes" id="wta">${wtAreaChips()}</div><div class="sub sm">היעד לכל אזור נלקח מהמינימום שבהגדרות</div></div>
+      <div class="field" style="margin-top:14px"><span class="flabel">אזורים</span><div class="rtypes" id="wta">${wtAreaChips()}</div><div class="sub sm">היעד לכל אזור נלקח ממסך מינימום סטים ביום</div></div>
       <button class="btn btn-primary btn-block" style="margin-top:18px" data-a="wtSave">שמור</button>
       ${k && !base ? `<button class="btn btn-danger btn-block" style="margin-top:10px" data-a="wtDel">${svg(I.trash, 20)}מחק את סוג האימון</button>` : ''}
       <button class="link" style="align-self:center;margin-top:8px" data-a="closeModal">ביטול</button>`);
@@ -3583,6 +3647,8 @@ const A = {
     openModal(`<h2>למחוק את הרכיבה?</h2><div class="stack-sm"><button class="btn btn-danger btn-block" data-a="delRideYes" data-id="${el.dataset.id}">כן, מחק</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
   },
   delRideYes(el) { enqueue({ table: 'rides', op: 'delete', id: el.dataset.id }); closeModal(); toast('הרכיבה נמחקה'); const rd = S.route.a; go(isDate(rd) && rd !== today() ? '#/history/' + rd : '#/workout'); },
+  menu(el) { openDrawer(el); },
+  menuClose() { closeDrawer(); },
   sStep(el) {
     const k = el.dataset.k, d = parseInt(el.dataset.d, 10);
     if (k === 'rest') S.settings.rest = Math.min(600, Math.max(15, S.settings.rest + d * 15));
@@ -3893,20 +3959,6 @@ function coachAfterRender() {
 }
 
 /* ---------- מסכים ---------- */
-function coachHomeCard() {
-  if (!coachOn() || !S.loaded || !S.machines.length) return '';
-  const t = today(), d = cpDay(t), sp = spinTarget(t);
-  const sm = S.coach.msgs.filter(x => x.kind === 'summary' && x.ctx && x.ctx.date === t).pop();
-  let line;
-  if (S.coach.tables === false) line = 'המאמן עוד לא הותקן. ההוראות בקובץ README';
-  else if (S.coach.busy === 'plan') line = 'המאמן בונה עכשיו את התוכנית לשבוע';
-  else if (d && d.items && d.items.length) line = `היום: אימון ${esc(TPL_NAME[d.template] || d.name || '')}, ${d.items.length} מכשירים, כ&nbsp;${d.est} דקות`;
-  else if (S.coach.plan) line = 'היום אין אימון כוח בתוכנית';
-  else line = 'עוד אין תוכנית לשבוע הזה';
-  return `<a class="card chome" href="#/coach" aria-label="המאמן"><div class="ch-h"><span class="ch-ic">${svg(I.spark, 26, 2.2)}</span><span class="grow"><b>המאמן</b><small>${line}</small></span><span class="chev">${svg(I.fwd, 22)}</span></div>
-    <div class="ch-s">ספינינג: יעד ${ltr(sp.w)} וואט ב ${sp.min} דקות</div>
-    ${sm ? `<div class="ch-sum">${coachTxt(sm.content)}</div>` : ''}</a>`;
-}
 function coachTxt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
 function coachPlanHtml() {
   const P = S.coach.plan, t = today();
@@ -3939,15 +3991,16 @@ function coachChatHtml(ctx) {
 }
 function vCoach(a, b) {
   if (a === 'prompt') return vCoachPrompt();
+  if (a === 'settings') return vCoachSettings();
   const ctx = a === 'm' && machineById(b) ? { machine_id: b } : a === 'a' && AREA[b] ? { area: b } : null;
   if (ctx) {
     const title = ctx.machine_id ? esc(machineById(b).name) : areaName(b);
     let h = pageHead(`שאל על ${title}`, { back: ctx.machine_id ? '#/m/' + b : '#/workout/' + b, backLabel: ctx.machine_id ? 'מכשיר' : 'אימון', small: true });
     if (ctx.machine_id) h += coachTgtHtml(machineById(b), today());
-    return h + coachChatHtml(ctx) + nav('home');
+    return h + coachChatHtml(ctx) + nav('coach');
   }
-  let h = pageHead('המאמן', { back: '#/', backLabel: 'בית' });
-  if (!coachOn()) return h + `<section class="card stack-sm"><div>המאמן כבוי.</div><a class="btn btn-tinted btn-block" href="#/settings">להפעלה בהגדרות</a></section>` + nav('home');
+  let h = pageHead('המאמן', { end: `<a class="nb-icon" href="#/coach/settings" aria-label="הגדרות המאמן">${svg(I.settings, 28, 2.2)}</a>` });
+  if (!coachOn()) return h + `<section class="card stack-sm"><div>המאמן כבוי.</div><a class="btn btn-tinted btn-block" href="#/coach/settings">להפעלה בהגדרות המאמן</a></section>` + nav('coach');
   if (S.coach.tables === false) h += `<section class="card stack-sm cwarn"><b>המאמן עוד לא הותקן</b><div class="sub">צריך להריץ את קובץ ה SQL של גרסה 4.0 ולהעלות את פונקציית המאמן ל Supabase. ההוראות המלאות בקובץ README. היעדים במכשירים ויעד הספינינג כבר עובדים גם בלי זה.</div></section>`;
   h += `<div class="section-title"><span>התוכנית לשבוע</span></div>` + coachPlanHtml();
   const sp = spinTarget(today());
@@ -3955,12 +4008,12 @@ function vCoach(a, b) {
   h += `<div class="section-title"><span>שאל את המאמן</span></div>`;
   const tpl = templateFor(today()), areas = tpl ? TEMPLATES[tpl] : [];
   h += `<div class="chips" style="margin-bottom:4px">${AREAS.filter(x => S.machines.some(m => !m.archived && m.area === x.k)).map(x => `<a class="chip${areas.includes(x.k) ? '' : ' dim'}" href="#/coach/a/${x.k}"><span class="dot" style="background:${x.c}"></span>${x.n}</a>`).join('')}</div>`;
-  return h + coachChatHtml(null) + nav('home');
+  return h + coachChatHtml(null) + nav('coach');
 }
 function vCoachPrompt() {
   const c = S.settings.coach, def = S.coach.promptDefault;
   const val = c.prompt || def || '';
-  let h = pageHead('הנחיות למאמן', { back: '#/settings', backLabel: 'הגדרות', small: true });
+  let h = pageHead('הנחיות למאמן', { back: '#/coach/settings', backLabel: 'הגדרות', small: true });
   h += `<div class="stack"><div class="sub">זה הטקסט שהמאמן מקבל לפני כל תוכנית ותשובה: המטרה שלך, העקרונות והסגנון. אפשר לשנות בחופשיות. כללי הבטיחות, ההיצמדות לנתונים ומבנה התוכנית קבועים בפונקציה ולא נמחקים מכאן.</div>
     ${S.coach.promptLoading && !c.prompt ? '<div class="sub sm">טוען את ההנחיות המקוריות</div>' : ''}
     ${!c.prompt && def == null && !S.coach.promptLoading && S.coach.err ? `<div class="cerr">${esc(S.coach.err)}</div>` : ''}
@@ -3970,20 +4023,24 @@ function vCoachPrompt() {
     <div class="field"><label for="ceffort">עומק חשיבה</label><select class="input" id="ceffort">${[['low', 'נמוך, זול'], ['medium', 'בינוני'], ['high', 'גבוה, יקר'], ['none', 'בלי הגדרה']].map(([k, l]) => `<option value="${k}" ${(c.effort || 'low') === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div></div>
     <button class="btn btn-primary btn-block" data-a="cPromptSave">שמור</button>
     <button class="btn btn-ghost btn-block" data-a="cPromptReset">חזרה להנחיות המקוריות</button></div>`;
-  return h + nav('settings');
+  return h + nav('coach');
 }
-function coachSettingsHtml(mini, tg) {
-  const c = S.settings.coach;
-  return `<div class="section-title"><span>המאמן</span></div><div class="list">
+function vCoachSettings() {
+  const c = S.settings.coach, mini = sMini, tg = sToggle;
+  let h = pageHead('הגדרות המאמן', { back: '#/coach', backLabel: 'המאמן', small: true });
+  h += `<div class="list">
     ${tg('coach.on', 'מאמן חכם', 'יעד לכל מכשיר, תוכנית שבועית, סיכום ושאלות', c.on !== false)}
     ${tg('coach.auto', 'תוכנית שבועית אוטומטית', 'נבנית בפתיחה הראשונה של כל שבוע', c.auto !== false)}
     ${tg('coach.usePlan', 'האימון לפי התוכנית', 'סדר המכשירים ומספר הסטים מהתוכנית', c.usePlan !== false)}
-    ${tg('coach.absSS', 'בטן בזמן המנוחות', 'כפתור לסט בטן בזמן מנוחה בין סטים', c.absSS !== false)}
+    ${tg('coach.absSS', 'בטן בזמן המנוחות', 'כפתור לסט בטן בזמן מנוחה בין סטים', c.absSS !== false)}</div>
+    <div class="section-title"><span>מנוחה ויעדים</span></div><div class="list">
     <div class="srow2"><div class="grow">מנוחה בתרגיל מורכב</div>${mini('cRestC', fmtDur(c.restC), 'מנוחה בתרגיל מורכב')}</div>
     <div class="srow2"><div class="grow">מנוחה בתרגיל מבודד</div>${mini('cRestI', fmtDur(c.restI), 'מנוחה בתרגיל מבודד')}</div>
-    <div class="srow2"><div class="grow">יעד ספינינג התחלתי<div class="sub sm">וואט ממוצע, עולה ב ${c.spin.step} כל שבועיים</div></div>${mini('spinBase', c.spin.base, 'יעד ספינינג')}</div>
+    <div class="srow2"><div class="grow">יעד ספינינג התחלתי<div class="sub sm">וואט ממוצע, עולה ב ${c.spin.step} כל שבועיים</div></div>${mini('spinBase', c.spin.base, 'יעד ספינינג')}</div></div>
+    <div class="section-title"><span>הנחיות וחיבור</span></div><div class="list">
     <a class="lrow" href="#/coach/prompt"><div class="grow"><div class="t">הנחיות למאמן</div><div class="sub sm">${c.prompt ? 'מותאמות אישית' : 'ההנחיות המקוריות'}</div></div><span class="chev">${svg(I.fwd, 20)}</span></a></div>
     <div class="stack-sm" style="margin-top:10px"><button class="btn btn-ghost btn-block" data-a="cPing">בדיקת חיבור למאמן</button>${S.coach.ping ? `<div class="sub sm">${esc(S.coach.ping)}</div>` : ''}</div>`;
+  return h + nav('coach');
 }
 function coachStep(k, d) {
   const c = S.settings.coach;
@@ -4089,6 +4146,7 @@ document.addEventListener('click', e => {
   const el = e.target.closest('[data-a]');
   if (el && A[el.dataset.a]) { e.preventDefault(); A[el.dataset.a](el, e); return; }
   if (e.target.id === 'modal') closeModal();
+  if (e.target.id === 'drawer') closeDrawer();
 });
 document.addEventListener('input', e => {
   const t = e.target;
@@ -4163,10 +4221,10 @@ window.addEventListener('orientationchange', () => setTimeout(settleViewport, 30
 window.addEventListener('pageshow', () => { settleViewport(); if (S.user) flush(); });
 document.addEventListener('pointerdown', primeAudio, { passive: true });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if (!$('#modal').hidden) closeModal(); else if (!$('#tf').hidden) $('#tf').hidden = true; }
+  if (e.key === 'Escape') { if (!$('#drawer').hidden) closeDrawer(); else if (!$('#modal').hidden) closeModal(); else if (!$('#tf').hidden) $('#tf').hidden = true; }
   if (e.key === 'Enter' && e.target.classList?.contains('sinput')) e.target.blur();
 });
-window.addEventListener('hashchange', () => { S.prevHash = S.curHash; S.curHash = location.hash; render(); window.scrollTo(0, 0); document.body.classList.remove('scrolled'); });
+window.addEventListener('hashchange', () => { closeDrawer(true); S.prevHash = S.curHash; S.curHash = location.hash; render(); window.scrollTo(0, 0); document.body.classList.remove('scrolled'); });
 window.addEventListener('scroll', () => { document.body.classList.toggle('scrolled', window.scrollY > 36); }, { passive: true });
 window.addEventListener('online', () => { updateSync(); flush(); });
 window.addEventListener('offline', updateSync);
