@@ -1293,6 +1293,29 @@ body.live{--above-nav:calc(var(--nav-bottom) + var(--nav-h) + 54px)}
 .sa-h b{color:var(--text)}
 .sa-w{color:var(--muted)}
 @media (prefers-reduced-motion:reduce){.ctab-i,.ctab-i i,.nav a.ctab svg,.nav a.fab.live .fab-c,.nav a.fab.live .fab-t::before{animation:none}.ch-card{transition:opacity .2s}.ch-bar{animation:none;opacity:0}}
+
+/* 4.5: דופק מהשעון */
+.hr-now{display:flex;align-items:baseline;gap:10px;margin-top:12px}
+.hr-ic{color:#FF3B5C;align-self:center;display:inline-flex}
+.hr-v{font:900 68px/1 var(--round);letter-spacing:-2px}
+.hr-u{font-size:18px;font-weight:700;color:var(--muted)}
+.hr-chart{margin-top:12px}
+.hr-chart svg{width:100%;height:auto;display:block;overflow:visible}
+.hr-note{margin-top:12px;font-size:17px;font-weight:700;line-height:1.4}
+.hr-note b{font-family:var(--round);font-weight:900}
+.hr-days{display:flex;justify-content:space-between;gap:10px;margin:4px 0 14px}
+.hr-days .btn{flex:1;min-height:52px;font-size:18px}
+.hr-days .btn[aria-disabled="true"]{opacity:.35;pointer-events:none}
+.hr-row{display:grid;grid-template-columns:1fr repeat(3,auto);gap:14px;align-items:baseline;padding:14px 2px;border-top:1px solid var(--sep);font-size:16px;font-weight:700;color:var(--muted)}
+.hr-row:first-of-type{border-top:0}
+.hr-row .tm{font:900 22px var(--round);color:var(--text)}
+.hr-row b{font:900 22px var(--round);color:var(--text);margin-inline-start:4px}
+.hr-bars{display:flex;align-items:flex-end;gap:6px;height:150px;margin-top:16px}
+.hr-bars .c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%;min-width:0}
+.hr-bars .b{width:100%;max-width:26px;border-radius:8px 8px 4px 4px;background:#FF3B5C;opacity:.85}
+.hr-bars .c.td .b{opacity:1}
+.hr-bars .n{font:800 13px var(--round);color:var(--text)}
+.hr-bars .d{font-size:12px;font-weight:700;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -1347,7 +1370,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '4.4';
+const APP_VERSION = '4.5';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -1452,6 +1475,7 @@ const I = {
   close:'<path d="M6 6l12 12M18 6L6 18"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/>',
   cloud:'<path d="M7 18h10a4 4 0 0 0 .6-8A6 6 0 0 0 6 9.5 4.3 4.3 0 0 0 7 18z"/><path d="M12 11v6M9.5 14.5L12 17l2.5-2.5"/>',
+  heart:'<path d="M12 20s-7.5-4.6-9.3-9.4A5 5 0 0 1 12 6.7a5 5 0 0 1 9.3 3.9C19.5 15.4 12 20 12 20z"/>',
   flame:'<path d="M12 3c.8 3 5 5.2 5 10.2A5 5 0 0 1 7 13.2c0-2 .9-3.5 2-4.6.2 1.8 1 2.9 2.2 3.2-.4-3.1-.2-5.9.8-8.8z"/>'
 };
 function svg(p, s = 24, w = 2) {
@@ -1722,7 +1746,7 @@ async function fetchAll() {
     S.queue.forEach(applyLocal);
     S.loaded = true;
     applyTheme(); saveCache(); maybeResume(); render();
-    refreshPhotos(); coachAfterLoad();
+    refreshPhotos(); coachAfterLoad(); loadHealth(); needHr(today(), true);
   } catch (e) {
     log('טעינת נתונים נכשלה:', errInfo(e));
     if (navigator.onLine) toast(e.code === '42501' ? 'אין הרשאה לטבלאות. צריך להריץ שוב את קובץ ה SQL' : 'טעינת הנתונים מהשרת נכשלה', 5000);
@@ -1749,6 +1773,154 @@ async function fetchDay(date) {
   if (!b.error && b.data) S.days[date] = b.data;
   S.dayLoading[date] = false;
   render();
+}
+
+
+/* ---------- 4.5: דופק מהשעון. מגיע מ Apple Health דרך הקיצור סנכרון כוח ---------- */
+S.hr = {}; S.hrAt = {}; S.hrLoading = {}; S.hrDaily = []; S.hrSessions = []; S.hrOk = null;
+const HR_C = '#FF3B5C';
+const hhmm = ms => { const d = new Date(ms); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+function needHr(date, force) {
+  if (!S.user || S.hrLoading[date]) return;
+  const at = S.hrAt[date] || 0;
+  if (!force && at && (date !== today() || Date.now() - at < 120000)) return;
+  fetchHrDay(date);
+}
+async function fetchHrDay(date) {
+  S.hrLoading[date] = true; S.hrAt[date] = Date.now();
+  try {
+    const a = parseYmd(date).toISOString(), b = parseYmd(addDays(date, 1)).toISOString();
+    const rows = await fetchPaged('health_hr', q => q.gte('ts', a).lt('ts', b), ['ts']);
+    S.hr[date] = rows.map(r => ({ t: Date.parse(r.ts), v: Number(r.bpm) })).filter(p => p.v > 0);
+    S.hrOk = true;
+  } catch (e) {
+    log('טעינת דופק נכשלה:', errInfo(e));
+    if (S.hrOk == null) S.hrOk = false;
+    if (!S.hr[date]) S.hr[date] = [];
+  }
+  S.hrLoading[date] = false;
+  render();
+}
+async function loadHealth() {
+  if (!S.user) return;
+  const since = addDays(today(), -30);
+  const [d, s] = await Promise.all([
+    sb.from('health_hr_daily').select('*').gte('day', since).order('day'),
+    sb.from('health_sessions').select('*').gte('day', since).order('started_at')
+  ]);
+  if (d.error || s.error) { log('סיכומי דופק לא נטענו:', errInfo(d.error || s.error)); return; }
+  S.hrDaily = d.data || []; S.hrSessions = s.data || []; S.hrOk = true;
+  render();
+}
+function hrStats(pts) {
+  if (!pts.length) return null;
+  let mn = Infinity, mx = -Infinity, sum = 0;
+  for (const p of pts) { if (p.v < mn) mn = p.v; if (p.v > mx) mx = p.v; sum += p.v; }
+  return { min: mn, max: mx, avg: Math.round(sum / pts.length), n: pts.length };
+}
+const hrIn = (pts, a, b) => pts.filter(p => p.t >= a && p.t <= b);
+function workoutWindow(date) {
+  const d = S.days[date];
+  if (!d || !d.started_at) return null;
+  const a = Date.parse(d.started_at);
+  const b = d.finished_at ? Date.parse(d.finished_at) : date === today() ? Date.now() : a + 90 * 60000;
+  return b > a ? [a, b] : null;
+}
+function hrChart(pts, win) {
+  if (pts.length < 2) return '';
+  const W = 340, H = 170, R = 8, L = 34, T = 14, B = 26;
+  let ds = pts;
+  if (pts.length > 360) {
+    const k = Math.ceil(pts.length / 360); ds = [];
+    for (let i = 0; i < pts.length; i += k) { const g = pts.slice(i, i + k); ds.push({ t: g[0].t, v: g.reduce((x, p) => x + p.v, 0) / g.length }); }
+  }
+  const t0 = pts[0].t, t1 = Math.max(pts[pts.length - 1].t, t0 + 3600e3);
+  const vs = ds.map(p => p.v);
+  const lo = Math.floor((Math.min(...vs) - 4) / 10) * 10, hi = Math.ceil((Math.max(...vs) + 4) / 10) * 10;
+  /* הזמן זורם מימין לשמאל, כמו בשאר הגרפים באפליקציה */
+  const x = t => W - R - (t - t0) / (t1 - t0) * (W - R - L), y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+  let path = '', prev = null;
+  for (const p of ds) { path += `${prev && p.t - prev.t <= 20 * 60000 ? 'L' : 'M'}${x(p.t).toFixed(1)} ${y(p.v).toFixed(1)}`; prev = p; }
+  let shade = '';
+  if (win && win[1] > t0 && win[0] < t1) {
+    const xa = x(Math.min(win[1], t1)), xb = x(Math.max(win[0], t0));
+    shade = `<rect x="${xa.toFixed(1)}" y="${T}" width="${Math.max(2, xb - xa).toFixed(1)}" height="${H - T - B}" rx="6" fill="var(--accent-tint)"/>`
+      + `<text x="${((xa + xb) / 2).toFixed(1)}" y="${T + 16}" text-anchor="middle" font-size="13" font-weight="800" fill="var(--accent-text)">כוח</text>`;
+  }
+  const grid = [hi, Math.round((hi + lo) / 2), lo].map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--sep)" stroke-width="1" stroke-dasharray="3 5"/>`
+    + `<text x="${L - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end" font-size="12" font-weight="700" fill="var(--muted)" style="font-family:var(--round)">${v}</text>`).join('');
+  const hrs = (t1 - t0) / 3600e3, step = Math.max(1, Math.ceil(hrs / 5)) * 3600e3;
+  const first = new Date(t0); first.setMinutes(0, 0, 0);
+  let ticks = '';
+  for (let t = first.getTime() + 3600e3; t <= t1; t += step) ticks += `<text x="${x(t).toFixed(1)}" y="${H - 6}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--muted)" style="font-family:var(--round)">${hhmm(t)}</text>`;
+  const last = ds[ds.length - 1];
+  return `<div class="hr-chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="דופק לאורך היום">${shade}${grid}${ticks}<path d="${path}" fill="none" stroke="${HR_C}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${x(last.t).toFixed(1)}" cy="${y(last.v).toFixed(1)}" r="5.5" fill="${HR_C}" stroke="var(--surface)" stroke-width="2.5"/></svg></div>`;
+}
+const hrTrio = st => `<div class="sp4-s"><div class="sp4-m"><span class="l">הנמוך</span><span class="v num">${st.min}</span></div><div class="sp4-m"><span class="l">ממוצע</span><span class="v num">${st.avg}</span></div><div class="sp4-m"><span class="l">הגבוה</span><span class="v num">${st.max}</span></div></div>`;
+function heartCard() {
+  const t = today();
+  needHr(t);
+  if (S.hrOk === false) return '';
+  const pts = S.hr[t] || [];
+  const head = `<div class="dash-h"><h2>דופק</h2><a class="link" href="#/heart">פירוט</a></div>`;
+  if (!pts.length) {
+    return `<section class="card" aria-label="דופק">${head}<div class="sub" style="margin-top:8px">${S.hrLoading[t] && !S.hr[t] ? 'טוען' : 'עוד אין נתוני דופק מהיום. הם מגיעים מהשעון דרך הקיצור סנכרון כוח.'}</div></section>`;
+  }
+  const last = pts[pts.length - 1], st = hrStats(pts), win = workoutWindow(t), w = win ? hrStats(hrIn(pts, win[0], win[1])) : null;
+  const mins = Math.round((Date.now() - last.t) / 60000);
+  const ago = mins < 2 ? 'ממש עכשיו' : mins < 60 ? `לפני ${mins} דקות` : `בשעה ${hhmm(last.t)}`;
+  return `<section class="card" aria-label="דופק">${head}
+    <div class="hr-now"><span class="hr-ic">${svg(I.heart, 34, 2.4)}</span><span class="hr-v num">${last.v}</span><span class="hr-u">פעימות לדקה</span></div>
+    <div class="dash-sub">מדידה אחרונה ${ago}</div>
+    ${hrChart(pts, win)}${hrTrio(st)}
+    ${w ? `<div class="hr-note">באימון הכוח היום: ממוצע <b>${w.avg}</b>, הגבוה <b>${w.max}</b></div>` : ''}</section>`;
+}
+function vHeart(date) {
+  const t = today();
+  if (!isDate(date) || date > t) date = t;
+  needHr(date);
+  const pts = S.hr[date] || [], loading = !S.hr[date];
+  const next = date < t ? addDays(date, 1) : null;
+  let h = pageHead('דופק', { back: '#/', backLabel: 'בית', sub: date === t ? 'היום' : fmtDate(date), small: true });
+  h += `<div class="hr-days"><a class="btn btn-gray" href="#/heart/${addDays(date, -1)}">יום קודם</a><a class="btn btn-gray" href="${next ? '#/heart/' + next : '#/heart'}" aria-disabled="${next ? 'false' : 'true'}">יום הבא</a></div>`;
+  if (S.hrOk === false) return h + `<div class="empty">אין גישה לנתוני הדופק. צריך להריץ בתוך Supabase את קובץ ה SQL של הדופק.</div>` + nav('home');
+  if (loading) return h + '<div class="empty">טוען</div>' + nav('home');
+  if (!pts.length) return h + '<div class="empty">אין נתוני דופק ליום הזה.</div>' + nav('home');
+
+  const st = hrStats(pts), win = workoutWindow(date);
+  h += `<section class="card" aria-label="דופק לאורך היום"><div class="dash-h"><h2>לאורך היום</h2></div>
+    <div class="dash-sub">${st.n} מדידות, משעה ${hhmm(pts[0].t)} עד ${hhmm(pts[pts.length - 1].t)}</div>
+    ${hrChart(pts, win)}${hrTrio(st)}</section>`;
+
+  if (win) {
+    const w = hrStats(hrIn(pts, win[0], win[1])), min = Math.round((win[1] - win[0]) / 60000);
+    h += `<section class="card" aria-label="אימון כוח"><div class="dash-h"><h2>אימון כוח</h2></div>
+      <div class="dash-sub">משעה ${hhmm(win[0])} עד ${hhmm(win[1])}, ${min} דקות</div>
+      ${w ? hrTrio(w) : '<div class="sub" style="margin-top:8px">אין מדידות דופק מזמן האימון.</div>'}</section>`;
+  }
+
+  const ses = S.hrSessions.filter(x => x.day === date);
+  if (ses.length) {
+    h += `<section class="card" aria-label="מקטעי מאמץ"><div class="dash-h"><h2>מקטעי מאמץ</h2></div>
+      <div class="dash-sub">רצפים שבהם הדופק היה מעל 100</div>
+      ${ses.map(x => `<div class="hr-row"><span class="tm ltr">${hhmm(Date.parse(x.started_at))}</span><span>דקות<b>${Math.round(x.minutes)}</b></span><span>ממוצע<b>${x.avg_bpm}</b></span><span>הגבוה<b>${x.max_bpm}</b></span></div>`).join('')}</section>`;
+  }
+
+  const days = Array.from({ length: 14 }, (_, i) => addDays(t, i - 13));
+  const byDay = Object.fromEntries(S.hrDaily.map(x => [x.day, x]));
+  const vals = days.map(d => byDay[d] ? Number(byDay[d].min_bpm) : null), nums = vals.filter(v => v != null);
+  if (nums.length > 1) {
+    const lo = Math.min(...nums) - 5, hi = Math.max(...nums);
+    const cols = days.map((d, i) => {
+      const v = vals[i];
+      const hgt = v == null ? 0 : 18 + (v - lo) / Math.max(1, hi - lo) * 82;
+      return `<a class="c${d === date ? ' td' : ''}" href="#/heart/${d}" style="text-decoration:none">${v == null ? '' : `<span class="n">${v}</span>`}<span class="b" style="height:${hgt.toFixed(0)}%${v == null ? ';background:var(--fill)' : ''}"></span><span class="d ltr">${shortDate(d)}</span></a>`;
+    }).join('');
+    h += `<section class="card" aria-label="הדופק הנמוך ביום"><div class="dash-h"><h2>הדופק הנמוך ביום</h2></div>
+      <div class="dash-sub">14 ימים אחרונים. ירידה לאורך זמן היא בדרך כלל סימן לשיפור בכושר</div>
+      <div class="hr-bars">${cols}</div></section>`;
+  }
+  return h + nav('home');
 }
 
 /* ---------- ui primitives ---------- */
@@ -2277,7 +2449,7 @@ function vToday() {
       <div class="sub">צלם כל מכשיר, תן לו שם, בחר אזור בגוף וקבע משקל פתיחה. אחרי זה האימון כבר מסודר.</div>
       <a class="btn btn-primary btn-block" href="#/edit/new">הוסף מכשיר ראשון</a></section>`;
   }
-  h += weekCard() + spinCard() + statTiles() + progressSection();
+  h += weekCard() + heartCard() + spinCard() + statTiles() + progressSection();
   return h + nav('home');
 }
 function machineRow(m, t) {
@@ -3172,6 +3344,7 @@ function render() {
     case 'ride': h = vRide(r.a); break;
     case 'settings': h = vSettings(r.a); break;
     case 'coach': h = vCoach(r.a, r.b); break;
+    case 'heart': h = vHeart(r.a); break;
     default: h = vToday();
   }
   app.innerHTML = h;
