@@ -1198,6 +1198,99 @@ a.hl-r:active{background:var(--fill)}
 .dr-foot{margin-top:auto;padding:18px 10px 0;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);align-items:flex-start}
 body.dr-open{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.drawer,.dr-panel{transition:none}}
+
+/* 4.3: כפתור המאמן */
+.nav a.ctab{position:relative}
+.ctab-i{position:relative;width:38px;height:30px;border-radius:12px;display:grid;place-items:center;color:#17130A;
+  background:linear-gradient(135deg,#FFE27A 0%,#FCC100 38%,#FF8A3D 72%,#FF5FA2 100%);background-size:200% 200%;
+  box-shadow:0 4px 14px rgba(255,138,61,.35),inset 0 1px 0 rgba(255,255,255,.55);overflow:hidden;animation:ctabg 6s ease-in-out infinite}
+.nav a.ctab svg{width:22px;height:22px;animation:ctabs 6s ease-in-out infinite}
+.ctab-i i{position:absolute;inset:-40% auto -40% -60%;width:40%;transform:skewX(-20deg);background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));animation:ctabsh 6s ease-in-out infinite}
+.nav a.ctab span:last-child{background:linear-gradient(90deg,#FFE27A,#FF8A3D);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav a.ctab.on{background:rgba(255,138,61,.14)!important}
+.nav a.ctab.on .ctab-i{box-shadow:0 0 0 2px rgba(255,226,122,.5),0 6px 20px rgba(255,138,61,.55)}
+.nav a.ctab.busy .ctab-i{animation-duration:1.6s}
+.nav a.ctab.busy .ctab-i i{animation-duration:1.6s}
+@keyframes ctabg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes ctabs{0%,80%,100%{transform:none}86%{transform:rotate(45deg) scale(1.18)}92%{transform:rotate(90deg) scale(1)}}
+@keyframes ctabsh{0%,70%{left:-60%}90%,100%{left:140%}}
+
+/* 4.3: אימון פעיל, כפתור גדול ושעון בולט */
+.nav a.fab.live{padding-bottom:3px}
+.nav a.fab.live .fab-w{width:92px;height:92px;top:-55px}
+body.live{--above-nav:calc(var(--nav-bottom) + var(--nav-h) + 54px)}
+.nav a.fab.live .fab-r{width:92px;height:92px}
+.nav a.fab.live .fab-c{width:72px;height:72px;animation:livepulse 2.2s ease-in-out infinite}
+.nav a.fab.live .fab-c svg{width:40px;height:40px}
+.nav a.fab.live .fab-t{display:inline-flex;align-items:center;gap:5px;padding:2px 9px 2px 8px;border-radius:999px;background:var(--accent);color:var(--on-accent);font:900 16px/1.2 var(--round);letter-spacing:.02em;box-shadow:0 4px 14px rgba(252,193,0,.35)}
+.nav a.fab.live .fab-t::before{content:"";width:7px;height:7px;border-radius:50%;background:#FF3B30;animation:livedot 1.2s ease-in-out infinite}
+@keyframes livepulse{0%,100%{box-shadow:0 0 0 3px rgba(255,90,95,.9),0 0 0 3px rgba(255,90,95,.35),0 8px 24px rgba(252,193,0,.3)}50%{box-shadow:0 0 0 3px rgba(255,90,95,.9),0 0 0 12px rgba(255,90,95,0),0 8px 24px rgba(252,193,0,.3)}}
+@keyframes livedot{50%{opacity:.25}}
+
+/* 4.3: חשבון בתפריט הצד */
+.dr-foot{gap:10px;align-items:stretch}
+.dr-acc{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:var(--fill)}
+.dr-acc .grow{display:flex;flex-direction:column;min-width:0}
+.dr-acc small{font-size:13px;color:var(--muted)}
+.dr-acc .ltr{font-size:15px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.dr-foot .btn{min-height:50px}
+.dr-ver{font-size:12px;color:var(--faint);text-align:center}
+
+/* 4.3: הודעות עידוד */
+.cheer{position:fixed;z-index:68;top:calc(var(--st) + 74px);left:0;right:0;display:flex;justify-content:center;padding:0 16px;pointer-events:none}
+.cheer[hidden]{display:none}
+.ch-card{pointer-events:auto;position:relative;overflow:hidden;width:min(560px,100%);display:flex;align-items:center;gap:14px;padding:18px 18px 20px;border-radius:24px;
+  background:linear-gradient(160deg,rgba(46,40,22,.98),rgba(24,24,28,.98) 60%);box-shadow:0 18px 50px rgba(0,0,0,.55),inset 0 0 0 1px rgba(252,193,0,.35);
+  opacity:0;transform:translateY(-16px) scale(.94);transition:opacity .22s,transform .32s cubic-bezier(.2,1.3,.4,1)}
+.cheer.show .ch-card{opacity:1;transform:none}
+.ch-card .grow{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ch-card small{font-size:14px;font-weight:800;color:var(--accent)}
+.ch-card b{font-size:21px;font-weight:800;line-height:1.3;color:var(--text)}
+.ch-badge{width:48px;height:48px;border-radius:16px;flex-shrink:0;display:grid;place-items:center;color:#17130A;background:linear-gradient(135deg,#FFE27A,#FCC100 45%,#FF8A3D)}
+.ch-pr .ch-badge{background:linear-gradient(135deg,#FFF3B0,#FCC100 40%,#FF5FA2)}
+.ch-pr{box-shadow:0 18px 50px rgba(0,0,0,.55),inset 0 0 0 1.5px rgba(255,95,162,.6)}
+.ch-bar{position:absolute;right:0;bottom:0;height:3px;width:100%;background:var(--accent);transform-origin:right;animation:chbar linear forwards}
+@keyframes chbar{to{transform:scaleX(0)}}
+
+/* 4.3: גיבוי בסוף אימון */
+.bk-top{display:flex;flex-direction:column;align-items:center;gap:12px;margin:4px 0 14px;text-align:center}
+.bk-ic{width:70px;height:70px;border-radius:22px;display:grid;place-items:center;background:var(--accent-tint);color:var(--accent)}
+.bk-cheer{font-size:17px;font-weight:700;color:var(--accent);line-height:1.35;max-width:340px}
+
+/* 4.3: תוכנית שבועית במאמן */
+.cplan2 .cpw{margin:2px 4px 10px}
+.cplan2 .cpd{padding:0;margin-top:10px;background:var(--surface);border-radius:20px;overflow:hidden}
+.cplan2 .cpd.past{opacity:.6}
+.cplan2 .cpd-h{list-style:none;display:flex;align-items:center;flex-wrap:nowrap;gap:14px;padding:14px 16px;cursor:pointer;min-height:72px}
+.cplan2 .cpd-h::-webkit-details-marker{display:none}
+.cpd-day{width:54px;height:54px;border-radius:16px;background:var(--fill);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.cplan2 .cpd-day b{font-size:17px;font-weight:900;color:var(--text)}
+.cplan2 .cpd-day small{font-size:12px;font-weight:700;color:var(--muted)}
+.cpd.today .cpd-day{background:var(--accent)}
+.cplan2 .cpd.today .cpd-day b,.cplan2 .cpd.today .cpd-day small{color:var(--on-accent)}
+.cpd-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cplan2 .cpd-t b{font-size:19px;font-weight:800}
+.cplan2 .cpd-t small{font-size:14px;font-weight:600;color:var(--muted)}
+.cpd-c{color:var(--muted);display:flex;transition:transform .2s}
+.cpd[open] .cpd-c{transform:rotate(180deg)}
+.cpd-b{padding:0 16px 8px}
+.cplan2 .cpd-n{margin:0 0 6px}
+.cplan2 .cpi{align-items:flex-start;padding:12px 0;font-size:17px}
+.cplan2 .cpi .dot{margin-top:8px}
+.cpi-n{font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cpi-n a{color:var(--text);text-decoration:none}
+.cpi-n em{font-style:normal;font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--accent-tint);color:var(--accent)}
+.cpi-m{font-size:15px;font-weight:700;color:var(--text);opacity:.85;margin-top:2px}
+.cpi-m .num{color:var(--accent)}
+.cplan2 .cpi small{margin-top:3px}
+.cpx{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 12px;border-radius:999px;border:0;background:var(--fill);color:var(--accent);font:inherit;font-size:14px;font-weight:800;flex-shrink:0;cursor:pointer}
+.cpx:active{background:var(--fill2)}
+.swap-ans{margin-top:12px;padding:14px;border-radius:18px;background:var(--fill);display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.4}
+.swap-ans .spin{margin-left:8px}
+.sa-h{display:flex;align-items:center;gap:8px;color:var(--accent);font-weight:700}
+.sa-h b{color:var(--text)}
+.sa-w{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.ctab-i,.ctab-i i,.nav a.ctab svg,.nav a.fab.live .fab-c,.nav a.fab.live .fab-t::before{animation:none}.ch-card{transition:opacity .2s}.ch-bar{animation:none;opacity:0}}
 </style>
 </head>
 <body>
@@ -1208,6 +1301,7 @@ body.dr-open{overflow:hidden}
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div id="modal" class="modal" hidden></div>
 <div id="drawer" class="drawer" hidden></div>
+<div id="cheer" class="cheer" hidden></div>
 
 <div id="tb" class="tb" hidden>
   <button type="button" class="tb-main" data-a="tFull" aria-label="הצג טיימר במסך מלא">
@@ -1251,7 +1345,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '4.2';
+const APP_VERSION = '4.3';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -1354,6 +1448,8 @@ const I = {
   menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
   data:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',
   close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/>',
+  cloud:'<path d="M7 18h10a4 4 0 0 0 .6-8A6 6 0 0 0 6 9.5 4.3 4.3 0 0 0 7 18z"/><path d="M12 11v6M9.5 14.5L12 17l2.5-2.5"/>',
   flame:'<path d="M12 3c.8 3 5 5.2 5 10.2A5 5 0 0 1 7 13.2c0-2 .9-3.5 2-4.6.2 1.8 1 2.9 2.2 3.2-.4-3.1-.2-5.9.8-8.8z"/>'
 };
 function svg(p, s = 24, w = 2) {
@@ -1675,8 +1771,9 @@ function nav(active) {
   }
   const dy = S.days[t] || {}, live = !!(dy.started_at && !dy.finished_at);
   if (live) aria += ', אימון פעיל';
+  document.body.classList.toggle('live', live);
   const tab = (k, h, ic, l) => `<a href="${h}" class="${k === active ? 'on' : ''}" ${k === active ? 'aria-current="page"' : ''}>${svg(ic, 30, 2)}<span>${l}</span></a>`;
-  return `<nav class="nav" aria-label="ניווט ראשי">${tab('home', '#/', I.home, 'בית')}${tab('machines', '#/machines', I.grid, 'מכשירים')}<a href="#/workout" class="fab ${active === 'workout' ? 'on' : ''}${live ? ' live' : ''}" aria-label="${aria}" ${active === 'workout' ? 'aria-current="page"' : ''}><span class="fab-w">${ring}<span class="fab-c">${svg(I.dumbbell, 34, 2.6)}</span></span>${live ? `<span class="fab-t" id="fabClock">${fmtClock(Date.now() - Date.parse(dy.started_at))}</span>` : '<span>אימון</span>'}</a>${tab('history', '#/history', I.history, 'היסטוריה')}${tab('coach', '#/coach', I.spark, 'מאמן')}</nav>`;
+  return `<nav class="nav" aria-label="ניווט ראשי">${tab('home', '#/', I.home, 'בית')}${tab('machines', '#/machines', I.grid, 'מכשירים')}<a href="#/workout" class="fab ${active === 'workout' ? 'on' : ''}${live ? ' live' : ''}" aria-label="${aria}" ${active === 'workout' ? 'aria-current="page"' : ''}><span class="fab-w">${ring}<span class="fab-c">${svg(I.dumbbell, 34, 2.6)}</span></span>${live ? `<span class="fab-t" id="fabClock">${fmtClock(Date.now() - Date.parse(dy.started_at))}</span>` : '<span>אימון</span>'}</a>${tab('history', '#/history', I.history, 'היסטוריה')}<a href="#/coach" class="ctab${active === 'coach' ? ' on' : ''}${S.coach?.busy ? ' busy' : ''}" ${active === 'coach' ? 'aria-current="page"' : ''}><span class="ctab-i">${svg(I.spark, 22, 2.4)}<i aria-hidden="true"></i></span><span>מאמן</span></a></nav>`;
 }
 function pageHead(title, opts = {}) {
   const back = opts.back ? `<a class="nb-back" href="${opts.back}">${svg(I.back, 28, 2.6)}<span>${opts.backLabel || 'חזרה'}</span></a>`
@@ -2980,7 +3077,9 @@ function drawerHtml() {
   return `<div class="dr-panel" role="dialog" aria-modal="true" aria-label="תפריט">
     <div class="dr-head"><b>תפריט</b><button type="button" class="nb-icon" data-a="menuClose" aria-label="סגירת התפריט">${svg(I.close, 26, 2.4)}</button></div>
     <nav class="dr-list" aria-label="הגדרות">${MENU.map(([k, l, ic]) => `<a class="dr-item${cur === k ? ' on' : ''}" href="#/settings${k ? '/' + k : ''}" ${cur === k ? 'aria-current="page"' : ''}><span class="dr-ic">${svg(I[ic], 24, 2.2)}</span><span class="grow">${l}</span><span class="chev">${svg(I.fwd, 20)}</span></a>${k ? '' : '<div class="dr-sep" role="separator"></div>'}`).join('')}</nav>
-    <div class="dr-foot"><span class="ltr">${esc(S.user?.email || '')}</span><span>גרסה ${esc(APP_VERSION)}</span></div></div>`;
+    <div class="dr-foot"><div class="dr-acc"><span class="dr-ic">${svg(I.user, 22, 2.2)}</span><span class="grow"><small>מחובר בתור</small><span class="ltr">${esc(S.user?.email || '')}</span></span></div>
+      <button type="button" class="btn btn-danger btn-block" data-a="signOut">התנתקות</button>
+      <span class="dr-ver">גרסה ${esc(APP_VERSION)}</span></div></div>`;
 }
 let drawerFrom = null;
 function openDrawer(btn) {
@@ -3010,12 +3109,12 @@ function vSettings(sec) {
     <div class="srow2"><div class="grow">הצעה להעלאת משקל<div class="sub sm">חזרות בכל הסטים, למכשיר בלי טווח חזרות</div></div>${mini('repTop', st.repTop || 12, 'חזרות להעלאת משקל')}</div>
     ${tg('warmup', 'הצעת סטי חימום', 'לשונית חימום במסך המכשיר', st.warmup !== false)}
     ${tg('rirTrack', 'מעקב RIR', S.rirCol === false ? 'כדי להפעיל צריך להריץ פעם אחת את פקודת SQL של גרסה 2.6' : 'כמה חזרות נשארו במיכל, בכל סט', st.rirTrack !== false)}
-    ${tg('propagate', 'שינוי בסט עובר לסטים הבאים', 'משקל או חזרות, רק בסטים שעוד לא בוצעו', st.propagate !== false)}</div>
+    ${tg('propagate', 'שינוי בסט עובר לסטים הבאים', 'משקל או חזרות, רק בסטים שעוד לא בוצעו', st.propagate !== false)}
+    ${tg('cheer', 'הודעות עידוד', 'אחרי כל סט ובסיום מכשיר', st.cheer !== false)}
+    ${tg('backupAsk', 'הצעה לגיבוי בסוף אימון', 'קובץ JSON מלא אחרי שמירת האימון', st.backupAsk !== false)}</div>
     <p class="sub sm">טווח חזרות ויעד RIR קובעים לכל מכשיר בנפרד, במסך עריכת המכשיר.</p>`;
     h += `<div class="section-title"><span>מסך</span></div><div class="list">
     ${tg('wakeLock', 'המסך נשאר דלוק באימון', 'תלוי בתמיכת הדפדפן', st.wakeLock)}</div>`;
-    h += `<div class="section-title"><span>חשבון</span></div><div class="stack-sm"><div class="sub ltr" style="align-self:flex-end">${esc(S.user?.email || '')}</div>
-    <button class="btn btn-danger btn-block" data-a="signOut">התנתקות</button></div>`;
   } else if (sec === 'rest') {
     h += `<div class="list">${AREAS.map(a => `<div class="srow2"><span class="dot" style="background:${a.c}"></span><div class="grow">${a.n}${st.restByArea[a.k] ? '<div class="sub sm">מותאם</div>' : ''}</div>${mini('restA.' + a.k, fmtDur(areaRest(a.k)), 'מנוחה ' + a.n)}</div>`).join('')}</div>
     <p class="sub sm">אפשר גם לקבוע מנוחה למכשיר מסוים, במסך עריכת המכשיר. כשהמאמן פעיל, המנוחה לפי סוג התרגיל נקבעת ב<a href="#/coach/settings">הגדרות המאמן</a>.</p>`;
@@ -3184,6 +3283,41 @@ async function fetchEverything() {
   return { machines, sets, workout_days, rides };
 }
 
+
+/* ---------- הודעות עידוד ---------- */
+const CHEER = {
+  set: ["עוד חזרה אחת והמשקולת תתחיל לבקש ממך סליחה.","הברזל לא משקר. ואתה כרגע אומר לו את האמת בפנים.","הכאב של היום הוא החולצה הצמודה של מחר.","אם זה היה קל, כולם היו עושים את זה. תמשיך לדחוף!","תגיד לשרירים שלך שיפסיקו להתבכיין, זה רק חימום.","אין קיצורי דרך לפסגה, אבל יש אחלה משקלים בדרך.","כוח המשיכה ניסה למשוך אותך למטה, והפסדת לו רק בסט האחרון. תן בראש!","אתה לא עייף, השרירים שלך פשוט נטענים מחדש.","כל טיפת זיעה היא דמעה של שומן שעוזב את הגוף.","אל תספור את החזרות, תגרום לחזרות להיספר.","המוח מוותר הרבה לפני שהגוף באמת עייף. אל תקשיב לו עכשיו.","הרמת את זה כאילו זה שקית של קניות מהסופר. תוסיף משקל!","ברוך הבא למועדון של אלה שלא מוותרים לעצמם.","תן לברזל להרגיש מי הבוס בחדר הזה.","אימון טוב נמדד בכמה קשה היה לך ללחוץ על הכפתור באפליקציה בסוף הסט.","הגוף משיג את מה שהראש מאמין בו. תאמין שאתה מפלצת.","אם אתה עדיין יכול לחייך, כנראה שלא שמת מספיק משקל.","הצלחה נבנית סט אחרי סט, יום אחרי יום.","אתה חזק יותר מכל תירוץ שהמצאת הבוקר.","פיצצת! השרירים שלך הולכים לקלל אותך מחר בבוקר, וזה סימן מעולה.","אל תפסיק כשכואב, תפסיק כשסיימת.","העתיד שלך מודה לך על הסט הזה.","משקל כבד בונים עם אופי כבד. יש לך את זה!","תרים את המשקולת כאילו מישהו מנסה לגנוב לך את המכשיר.","מכונה! פשוט מכונה של עבודה קשה.","לא באת לכאן כדי להיות בינוני. תן עוד פוש!","המשקולות האלו לא ירימו את עצמן. עבודה מדהימה!","כל חזרה מקרבת אותך לגרסה הכי חזקה של עצמך.","אם הידיים רועדות, זה אומר שהן מוחאות לך כפיים מבפנים.","המשמעת שלך מנצחת את העצלנות כל פעם מחדש.","זה לא נהיה קל יותר, אתה פשוט נהיה חזק יותר.","תעשה את זה בשביל הרגע שתסתכל במראה ותגיד וואו.","כוח אמיתי נמדד בחזרה האחרונה, כשכבר אין אוויר.","הפכת זיעה לכוח טהור. כל הכבוד!","המוט מתכופף? סימן שאתה עושה משהו נכון.","עוד סט אחד והביתה. תשאיר הכל על הרצפה!","אין דבר כזה אימון גרוע, יש רק אימון שלא קרה. ואתה כאן!","תנשום עמוק, תאחוז חזק, ותראה לברזל מאיפה משתין הדג.","ההתמדה שלך היא כוח העל האמיתי שלך.","תיזהר לא לקרוע את החולצה מהפאמפ הזה.","כל קילו שהוספת היום הוא עוד לבנה בחומה שלך.","אל תסתכל על השעון, תסתכל על המטרה.","אתה בלתי ניתן לעצירה היום!","גם צעד קטן קדימה הוא עדיין התקדמות. המשך כך!","אם זה לא מאתגר אותך, זה לא משנה אותך.","תן למוזיקה באוזניים להרים אותך, ולשרירים לעשות את השאר.","החולשה עוזבת את הגוף דרך נקבוביות הזיעה.","איזה ביצוע! אפילו המאמן בחדר כושר הסתכל בהערכה.","תזכור למה התחלת, ותמשיך בכל הכוח.","הגבול היחיד הוא זה שאתה מציב לעצמך בראש.","עוד חזרה אחת בשביל האגו, ועוד אחת בשביל הנשמה.","פירקת את האימון הזה לגורמים!","הגוף שלך הוא המקדש שלך, והיום בנית לו אחלה יסודות.","אל תוריד רגל מהגז, אתה בשיא המומנטום.","הצלחה היא סכום של מאמצים קטנים שחוזרים על עצמם.","המראה לא משקרת: העבודה הקשה משתלמת.","תרים כבד, תחיה חזק.","כרגע שרפת את כל התירוצים של השבוע.","איזו עוצמה! המשקולות מבקשות הפסקת אש.","כישרון מביא אותך לדלת, התמדה מכניסה אותך פנימה.","אתה לא מתחרה באף אחד בחדר הזה, רק במי שהיית אתמול.","תן הכל עכשיו כדי לנוח כמו מלך אחר כך.","הסט הזה היה ברמה של ליגת האלופות.","כשקשה, שם מתחיל האימון האמיתי.","אל תפחד מהכישלון בחזרה האחרונה, תפחד מלא לנסות.","בום! עוד משימה הושלמה בהצלחה.","השרירים שלך גדלים ממש ברגע זה. תרגיש את זה!","כל הכבוד על המיקוד ועל הנחישות.","תזכור: שייק חלבון טעים הרבה יותר אחרי אימון כזה.","הפכת את הבלתי אפשרי לשגרה שלך.","עוד טיפה מאמץ, התוצאה שווה את הכל.","אין קסמים, יש רק עבודה קשה. ואתה קוסם!","שמור על טכניקה נקייה ועל ראש מורם.","כל סט שאתה מסיים הוא ניצחון קטן על עצמך.","אתה בונה כאן גרסה משודרגת ובלתי שבירה.","תן לברזל לדבר במקומך.","הרגע הזה שבו אתה רוצה לוותר? זה בדיוק הרגע להמשיך.","איזה קצב! איזו אנרגיה! תמשיך לשרוף את הרחבה.","הגוף זוכר כל חזרה, גם כשנדמה לך שלא רואים עדיין.","אל תסתפק בפחות מהמקסימום שלך.","כוח רצון חזק יותר מכל שריר בגוף.","תן לחזרה הבאה להיות הכי טובה שלך היום.","הדרך להצלחה רצופה במשקולות כבדות.","אתה ההשראה של עצמך. תמשיך להפתיע!","שום דבר לא יעצור אותך אם לא תעצור את עצמך.","תרגיש את הכוח זורם לך בוורידים.","עבודה שקטה מביאה תוצאות רועשות.","אתגרתי את עצמך, ועמדת בזה כמו גדול.","אל תחכה למוטיבציה, תייצר אותה עם המשקולת.","פנטסטי! השרירים שלך אומרים תודה (בדרכם הכואבת).","כל אימון הוא השקעה שמחזירה ריבית מטורפת."],
+  pr: ["שברת שיא! המוט רשמית מפחד ממך.", "שיא אישי חדש! תן לעצמך טפיחה על השכם (אם אתה מצליח להרים את היד)."],
+  fin: ["כבוד! עוד אימון נכנס לבנק ההצלחות שלך.", "סיימת אימון שהרוב אפילו לא מעזים להתחיל.", "ניצחת את הספה, ניצחת את העייפות, וניצחת את האימון.", "הצלחת! עכשיו לך תאכל משהו טוב, הרווחת את זה ביושר.", "סגרת פינה! עוד וי ענק ביומן האימונים.", "סיימת כמו אלוף! נתראה באימון הבא.", "מאה אחוז מאמץ, מאה אחוז הצלחה. שאפו ענק!"]
+};
+const CHK = 'koach-cheer-v1';
+function pickCheer(kind) {
+  const pool = CHEER[kind] || CHEER.set;
+  let bag = {}; try { bag = JSON.parse(localStorage.getItem(CHK) || '{}'); } catch (e) {}
+  let left = (bag[kind] || []).filter(i => i < pool.length);
+  if (!left.length) { left = pool.map((_, i) => i); for (let i = left.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [left[i], left[j]] = [left[j], left[i]]; } }
+  const i = left.pop(); bag[kind] = left;
+  try { localStorage.setItem(CHK, JSON.stringify(bag)); } catch (e) {}
+  return pool[i];
+}
+let cheerT = null;
+function cheer(kind, label) {
+  if (S.settings.cheer === false) return;
+  const el = $('#cheer'); if (!el) return;
+  const ms = 4200;
+  el.innerHTML = `<div class="ch-card ch-${kind}" role="status"><span class="ch-badge">${svg(kind === 'pr' ? I.trophy : I.spark, 24, 2.4)}</span><div class="grow"><small>${esc(label)}</small><b>${esc(pickCheer(kind))}</b></div><i class="ch-bar" style="animation-duration:${ms}ms"></i></div>`;
+  el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  clearTimeout(cheerT); cheerT = setTimeout(hideCheer, ms);
+}
+function hideCheer() { const el = $('#cheer'); if (!el || el.hidden) return; el.classList.remove('show'); clearTimeout(cheerT); cheerT = setTimeout(() => { el.hidden = true; el.innerHTML = ''; }, 260); }
+function backupSheet() {
+  openModal(`<div class="bk-top"><span class="bk-ic">${svg(I.cloud, 34, 2.2)}</span><div class="bk-cheer">${esc(pickCheer('fin'))}</div></div>
+    <h2 style="text-align:center">האימון נשמר. לגבות?</h2>
+    <p class="sub" style="text-align:center;margin:-6px 0 18px">קובץ JSON מלא עם כל המכשירים, הסטים והרכיבות.</p>
+    <div class="stack-sm"><button class="btn btn-primary btn-big btn-block" data-a="backupNow">${svg(I.cloud, 24, 2.4)}לגבות עכשיו</button>
+    <button class="btn btn-ghost btn-block" data-a="closeModal">לא עכשיו</button></div>`);
+}
+
 /* ---------- actions ---------- */
 function findSet(id) { return S.sets.find(x => x.id === id) || Object.values(S.daySets).flat().find(x => x.id === id) || null; }
 /* סטים של ימים ישנים נשמרים בנפרד, מעדכנים גם שם */
@@ -3215,6 +3349,12 @@ function logSet(m, w, r, rir) {
   setTimeout(revealSetCard, 60);
   if (ssBack) { toast('חוזרים ל ' + (machineById(ssBack)?.name || 'מכשיר'), 2200); go('#/m/' + ssBack); }
   if (pain) setTimeout(() => painSheet(m), 250);
+  else if (!ssBack) {
+    const n = S.undo.n, pl = plannedOf(m);
+    if (isPr) cheer('pr', `שיא חדש ב${m.name}: ${fmtW(w)} ק״ג`);
+    else if (n === pl) cheer('set', `סיימת את ${m.name}`);
+    else cheer('set', `סט ${n} נרשם${pl ? ` מתוך ${pl}` : ''}`);
+  }
 }
 /* אחרי סט: גוללים כך שכרטיס הסט הבא כולו גלוי מעל הכפתור והטיימר */
 function revealSetCard() {
@@ -3429,7 +3569,8 @@ const A = {
     const iv = id => { const v = num($('#' + id).value); return v == null ? null : Math.round(v); };
     const la = lastSetAt(t), end = S.finEnd === 'last' && la ? new Date(la) : new Date();
     enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: t, started_at: day.started_at || new Date().toISOString(), finished_at: end.toISOString(), avg_hr: iv('whr'), max_hr: iv('whrm'), watch_kcal: iv('wkc') } });
-    closeModal(); stopTimer(); toast('האימון נשמר'); go('#/');
+    closeModal(); stopTimer(); go('#/');
+    if (S.settings.backupAsk !== false) setTimeout(() => backupSheet(), 350); else toast('האימון נשמר');
     setTimeout(() => coachSummary(t), 600);
   },
   step(el) {
@@ -3668,6 +3809,15 @@ const A = {
     S.timer.notified = false; localStorage.setItem(TK, JSON.stringify(S.timer)); tick();
   },
   tSkip() { stopTimer(); },
+  async backupNow(el) {
+    el.disabled = true; el.innerHTML = '<span class="spin"></span>מכין קובץ';
+    try {
+      await flush();
+      const all = await fetchEverything();
+      download(new Blob([JSON.stringify({ exported_at: new Date().toISOString(), settings: S.settings, ...all }, null, 2)], { type: 'application/json' }), `koach-backup-${today()}.json`);
+      closeModal(); toast('הגיבוי ירד');
+    } catch (e) { el.disabled = false; el.textContent = 'לנסות שוב'; toast('הגיבוי נכשל. בדוק חיבור לאינטרנט', 4000); }
+  },
   async exportJson(el) {
     el.disabled = true; el.textContent = 'מכין קובץ';
     try { const all = await fetchEverything(); download(new Blob([JSON.stringify({ exported_at: new Date().toISOString(), settings: S.settings, ...all }, null, 2)], { type: 'application/json' }), `koach-backup-${today()}.json`); toast('הגיבוי ירד'); }
@@ -3687,6 +3837,7 @@ const A = {
   },
   refresh() { toast('מרענן'); flush().then(fetchAll); },
   signOut() {
+    closeDrawer(true);
     openModal(`<h2>להתנתק?</h2>${S.queue.length ? `<p class="err">יש ${S.queue.length} פעולות שעוד לא נשמרו בשרת. התנתקות עכשיו תמחק אותן.</p>` : '<p class="sub">הנתונים שמורים בשרת. בפעם הבאה תצטרך להיכנס עם אימייל וסיסמה.</p>'}
       <div class="stack-sm"><button class="btn btn-danger btn-block" data-a="signOutYes">התנתק</button><button class="btn btn-ghost btn-block" data-a="closeModal">ביטול</button></div>`);
   },
@@ -3812,7 +3963,27 @@ function ssAfterLog(m) {
 /* ---------- תוכנית שבועית בתוך האימון ---------- */
 function cpDay(t = today()) {
   const P = S.coach.plan; if (!P || !P.data || P.week_start !== weekStartOf(t)) return null;
-  return (P.data.days || []).find(x => x.date === t) || null;
+  const d = (P.data.days || []).find(x => x.date === t);
+  return d ? { ...d, items: planItems(d) } : null;
+}
+/* החלפות מכשירים בתוכנית: נשמרות בהגדרות לפי תאריך, מעל התוכנית של המאמן */
+function planItems(d) {
+  const sw = (S.settings.coach.swaps || {})[d.date] || {};
+  return (d.items || []).map(i => sw[i.machine_id] && machineById(sw[i.machine_id]) ? { ...i, machine_id: sw[i.machine_id], orig: i.machine_id } : i);
+}
+function setSwap(date, from, to) {
+  const c = S.settings.coach, all = c.swaps || (c.swaps = {}), cut = addDays(weekStartOf(today()), -7);
+  for (const k of Object.keys(all)) if (k < cut) delete all[k];
+  const sw = all[date] || (all[date] = {});
+  if (!to || to === from) delete sw[from]; else sw[from] = to;
+  if (!Object.keys(sw).length) delete all[date];
+  saveSettings();
+}
+function swapCands(date, mid) {
+  const d = cpDay(date), m = machineById(mid); if (!d || !m) return [];
+  const used = d.items.map(i => i.machine_id), k = kindOf(m);
+  return sortMachines(S.machines.filter(x => !x.archived && x.area === m.area && !used.includes(x.id)))
+    .sort((a, b) => (kindOf(b) === k) - (kindOf(a) === k));
 }
 function cpToday(t = today()) {
   if (!coachOn() || S.settings.coach.usePlan === false) return null;
@@ -3964,16 +4135,33 @@ function coachPlanHtml() {
   const P = S.coach.plan, t = today();
   if (S.coach.busy === 'plan') return `<section class="card cplan"><div class="cbusy"><span class="spin"></span>המאמן בונה את התוכנית. זה לוקח עד דקה.</div></section>`;
   if (!P || !P.data) return `<section class="card cplan stack-sm"><div class="sub">עוד אין תוכנית לשבוע הזה.${S.coach.err ? ` <span class="cerr">${esc(S.coach.err)}</span>` : ''}</div><button class="btn btn-primary btn-block" data-a="cPlan">בנה תוכנית לשבוע</button></section>`;
-  const days = (P.data.days || []).map(d => {
-    const isT = d.date === t, past = d.date < t, dn = DAY_NAMES[parseYmd(d.date).getDay()];
-    const items = past ? '' : (d.items || []).map(i => { const m = machineById(i.machine_id); if (!m) return '';
-      const inner = `<span class="dot" style="background:${areaColor(m.area)}"></span><span class="grow">${esc(m.name)}${i.why ? `<small>${esc(i.why)}</small>` : ''}</span><span class="ltr num cpn">${i.sets}</span>`;
-      return isT ? `<a class="cpi" href="#/m/${m.id}">${inner}</a>` : `<div class="cpi">${inner}</div>`; }).join('');
-    return `<div class="cpd${isT ? ' today' : ''}${past ? ' past' : ''}"><div class="cpd-h"><b>יום ${dn}${isT ? ', היום' : ''}</b><span>אימון ${esc(TPL_NAME[d.template] || d.name || '')}, כ&nbsp;${d.est} דקות</span></div>${d.note ? `<div class="cpd-n">${esc(d.note)}</div>` : ''}${items}</div>`;
+  const all = P.data.days || [], openD = (all.find(d => d.date >= t && (d.items || []).length) || {}).date;
+  const days = all.map(d0 => {
+    const d = { ...d0, items: planItems(d0) }, isT = d.date === t, past = d.date < t, dn = DAY_NAMES[parseYmd(d.date).getDay()];
+    const its = d.items.filter(i => machineById(i.machine_id)), nSets = its.reduce((x, i) => x + (Number(i.sets) || 0), 0);
+    const items = its.map(i => { const m = machineById(i.machine_id), tg = coachTarget(m, d.date);
+      const name = isT ? `<a href="#/m/${m.id}">${esc(m.name)}</a>` : esc(m.name);
+      return `<div class="cpi"><span class="dot" style="background:${areaColor(m.area)}"></span><div class="grow"><div class="cpi-n">${name}${i.orig ? '<em>הוחלף</em>' : ''}</div>
+        <div class="cpi-m"><span class="ltr num">${i.sets}</span> סטים, <span class="ltr num">${tg.lo}</span> עד <span class="ltr num">${tg.hi}</span> חזרות${tg.w > 0 ? `, <span class="ltr num">${fmtW(tg.w)}</span> ק״ג` : ''}</div>
+        ${i.why && !i.orig ? `<small>${esc(i.why)}</small>` : ''}</div>
+        ${past ? '' : `<button type="button" class="cpx" data-a="cSwap" data-d="${d.date}" data-mid="${m.id}" data-orig="${i.orig || m.id}" aria-label="החלפת ${esc(m.name)}">${svg(I.sort, 18, 2.4)}<span>החלף</span></button>`}</div>`; }).join('');
+    const sum = its.length ? `${its.length} מכשירים, ${nSets} סטים, כ&nbsp;${d.est} דקות` : 'בלי מכשירים';
+    return `<details class="cpd${isT ? ' today' : ''}${past ? ' past' : ''}" ${d.date === openD ? 'open' : ''}><summary class="cpd-h"><span class="cpd-day"><b>${dn}</b><small>${isT ? 'היום' : `<span class="ltr">${shortDate(d.date)}</span>`}</small></span>
+      <span class="grow cpd-t"><b>אימון ${esc(TPL_NAME[d.template] || d.name || '')}</b><small>${sum}</small></span><span class="cpd-c">${svg(I.down, 22, 2.4)}</span></summary>
+      <div class="cpd-b">${d.note ? `<div class="cpd-n">${esc(d.note)}</div>` : ''}${items || '<div class="sub sm">אין מכשירים ביום הזה.</div>'}</div></details>`;
   }).join('');
-  return `<section class="card cplan">${planStaleHtml(P)}${P.data.week_note ? `<div class="cpw">${esc(P.data.week_note)}</div>` : ''}${days || '<div class="sub">אין ימי אימון בחלוקה השבועית.</div>'}
+  return `<section class="cplan2">${planStaleHtml(P)}${P.data.week_note ? `<div class="cpw">${esc(P.data.week_note)}</div>` : ''}${days || '<div class="sub">אין ימי אימון בחלוקה השבועית.</div>'}
     ${P.data.fixed ? `<div class="sub sm" style="margin-top:10px">האפליקציה תיקנה ${P.data.fixed} פרטים בתוכנית כדי לעמוד במינימום הסטים.</div>` : ''}
     <button class="btn btn-ghost btn-block" style="margin-top:14px" data-a="cPlan" data-f="1">בנה מחדש</button></section>`;
+}
+function swapSheet(date, mid, orig) {
+  const m = machineById(mid), dn = DAY_NAMES[parseYmd(date).getDay()], c = swapCands(date, mid);
+  const row = x => `<button type="button" class="lrow" data-a="cSwapDo" data-d="${date}" data-from="${orig}" data-to="${x.id}"><div class="thumb">${photoHtml(x)}</div><div class="grow"><div class="t">${esc(x.name)}</div><div class="sub sm">${kindOf(x) === 'c' ? 'מורכב' : kindOf(x) === 'i' ? 'מבודד' : areaName(x.area)}${x.id === orig ? ', המכשיר המקורי' : ''}</div></div></button>`;
+  openModal(`<h2>החלפת מכשיר</h2><div class="sub" style="margin:-8px 0 16px">יום ${dn}, במקום ${esc(m.name)}</div>
+    ${c.length ? `${coachOn() && S.coach.tables !== false ? `<button type="button" class="btn btn-tinted btn-block" data-a="cSwapAsk" data-d="${date}" data-mid="${mid}" data-orig="${orig}">${svg(I.spark, 22, 2.4)}בקש מהמאמן להחליף</button><div id="swapAns"></div>` : ''}
+    <div class="section-title"><span>או לבחור לבד, ${areaName(m.area)}</span></div><div class="list">${c.map(row).join('')}</div>`
+    : `<div class="sub">אין עוד מכשירים פעילים באזור ${areaName(m.area)} שלא נמצאים כבר באימון הזה.</div>`}
+    <button class="btn btn-ghost btn-block" style="margin-top:14px" data-a="closeModal">ביטול</button>`);
 }
 function coachChatHtml(ctx) {
   const m = ctx && ctx.machine_id ? machineById(ctx.machine_id) : null, an = ctx && ctx.area ? areaName(ctx.area) : null;
@@ -4085,7 +4273,34 @@ Object.assign(A, {
     const v = String(el.dataset.v), on = inp.value !== v; inp.value = on ? v : '';
     document.querySelectorAll('#rfeels .chip').forEach(b => { const x = on && b.dataset.v === v; b.classList.toggle('on', x); b.setAttribute('aria-pressed', x); });
   },
-  cPlan(el) { coachBuildPlan(!!el.dataset.f); },
+  cPlan(el) { if (el.dataset.f) { const sw = S.settings.coach.swaps; if (sw) { (S.coach.plan?.data?.days || []).forEach(d => { delete sw[d.date]; }); saveSettings(); } } coachBuildPlan(!!el.dataset.f); },
+  cSwap(el) { swapSheet(el.dataset.d, el.dataset.mid, el.dataset.orig); },
+  cSwapDo(el) {
+    const m = machineById(el.dataset.to); setSwap(el.dataset.d, el.dataset.from, el.dataset.to);
+    closeModal(); toast(m ? `הוחלף ל ${m.name}` : 'הוחלף'); render();
+  },
+  async cSwapAsk(el) {
+    const date = el.dataset.d, mid = el.dataset.mid, orig = el.dataset.orig, m = machineById(mid), c = swapCands(date, mid), box = $('#swapAns');
+    if (!m || !c.length || !box) return;
+    el.disabled = true; box.innerHTML = '<div class="swap-ans"><span class="spin"></span>המאמן בוחר מכשיר</div>';
+    const d = cpDay(date), dn = DAY_NAMES[parseYmd(date).getDay()];
+    const q = `תחליף לי בבקשה את ${m.name} באימון של יום ${dn} (אימון ${TPL_NAME[d?.template] || ''}). אפשרויות: ${c.map(x => x.name).join(', ')}. בשורה הראשונה כתוב רק את שם המכשיר שבחרת, בדיוק כמו ברשימה, ובשורה השנייה משפט אחד למה.`;
+    try {
+      const r = await coachCall('chat', { message: q, ctx: { machine_id: mid, note: 'בקשת החלפת מכשיר בתוכנית השבועית' } });
+      if (r.user) S.coach.msgs.push(r.user); if (r.message) S.coach.msgs.push(r.message); coachSave();
+      const txt = String(r.message?.content || ''), first = txt.split('\n').find(l => l.trim()) || '';
+      const hit = c.filter(x => first.includes(x.name)).sort((a, b) => b.name.length - a.name.length)[0]
+        || c.map(x => ({ x, i: txt.indexOf(x.name) })).filter(o => o.i >= 0).sort((a, b) => a.i - b.i)[0]?.x;
+      const why = txt.split('\n').filter(l => l.trim() && l !== first).join('\n') || txt;
+      const b2 = $('#swapAns'); if (!b2) return;
+      b2.innerHTML = hit ? `<div class="swap-ans"><div class="sa-h">${svg(I.spark, 20, 2.4)}<span class="grow">המאמן ממליץ: <b>${esc(hit.name)}</b></span></div><div class="sa-w">${coachTxt(why)}</div>
+        <button type="button" class="btn btn-primary btn-block" data-a="cSwapDo" data-d="${date}" data-from="${orig}" data-to="${hit.id}">להחליף ל ${esc(hit.name)}</button></div>`
+        : `<div class="swap-ans"><div class="sa-w">${coachTxt(txt || 'המאמן לא בחר מכשיר מהרשימה.')}</div><div class="sub sm">אפשר לבחור מהרשימה.</div></div>`;
+    } catch (e) {
+      const b2 = $('#swapAns'); if (b2) b2.innerHTML = `<div class="swap-ans cerr">${esc(coachErrText(e))}</div>`;
+      el.disabled = false;
+    }
+  },
   cAsk(el) {
     const q = $('#cq'); if (!q) return; const v = q.value; q.value = ''; delete q.dataset.dirty;
     coachAsk(v, el.dataset.mid ? { machine_id: el.dataset.mid } : el.dataset.area ? { area: el.dataset.area } : null);
@@ -4147,6 +4362,7 @@ document.addEventListener('click', e => {
   if (el && A[el.dataset.a]) { e.preventDefault(); A[el.dataset.a](el, e); return; }
   if (e.target.id === 'modal') closeModal();
   if (e.target.id === 'drawer') closeDrawer();
+  if (e.target.closest('#cheer')) hideCheer();
 });
 document.addEventListener('input', e => {
   const t = e.target;
@@ -4163,7 +4379,7 @@ document.addEventListener('change', async e => {
       const td = today(), dd = S.days[td];
       if (String(parseYmd(td).getDay()) === t.dataset.dow && dd && dd.template) { enqueue({ table: 'workout_days', op: 'upsert', row: { user_id: S.user.id, workout_date: td, template: null } }); toast('השינוי חל גם על היום'); }
     }
-    else if (['wakeLock', 'sound', 'autoTimer', 'warmup', 'rirTrack', 'propagate'].includes(k)) S.settings[k] = t.checked;
+    else if (['wakeLock', 'sound', 'autoTimer', 'warmup', 'rirTrack', 'propagate', 'cheer', 'backupAsk'].includes(k)) S.settings[k] = t.checked;
     else if (k.startsWith('coach.')) S.settings.coach[k.slice(6)] = t.checked;
     saveSettings(); render(); return;
   }
