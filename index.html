@@ -1236,20 +1236,22 @@ body.live{--above-nav:calc(var(--nav-bottom) + var(--nav-h) + 54px)}
 .dr-foot .btn{min-height:50px}
 .dr-ver{font-size:12px;color:var(--faint);text-align:center}
 
-/* 4.3: הודעות עידוד */
-.cheer{position:fixed;z-index:68;top:calc(var(--st) + 74px);left:0;right:0;display:flex;justify-content:center;padding:0 16px;pointer-events:none}
+/* 4.4: הודעות עידוד, במרכז המסך */
+.cheer{position:fixed;z-index:68;inset:0;display:flex;align-items:center;justify-content:center;padding:0 22px;pointer-events:none}
 .cheer[hidden]{display:none}
-.ch-card{pointer-events:auto;position:relative;overflow:hidden;width:min(560px,100%);display:flex;align-items:center;gap:14px;padding:18px 18px 20px;border-radius:24px;
-  background:linear-gradient(160deg,rgba(46,40,22,.98),rgba(24,24,28,.98) 60%);box-shadow:0 18px 50px rgba(0,0,0,.55),inset 0 0 0 1px rgba(252,193,0,.35);
-  opacity:0;transform:translateY(-16px) scale(.94);transition:opacity .22s,transform .32s cubic-bezier(.2,1.3,.4,1)}
+.cheer::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 50%,rgba(0,0,0,.6),rgba(0,0,0,0));opacity:0;transition:opacity .25s}
+.cheer.show::before{opacity:1}
+.ch-card{pointer-events:auto;position:relative;overflow:hidden;width:min(480px,100%);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:26px 24px 30px;border-radius:30px;
+  background:linear-gradient(170deg,#3A3015 0%,#1E1D20 55%,#18181B 100%);
+  box-shadow:0 24px 70px rgba(0,0,0,.7),0 0 0 1.5px rgba(252,193,0,.55),0 0 50px rgba(252,193,0,.22);
+  opacity:0;transform:scale(.82);transition:opacity .2s,transform .38s cubic-bezier(.2,1.4,.4,1)}
 .cheer.show .ch-card{opacity:1;transform:none}
-.ch-card .grow{display:flex;flex-direction:column;gap:4px;min-width:0}
-.ch-card small{font-size:14px;font-weight:800;color:var(--accent)}
-.ch-card b{font-size:21px;font-weight:800;line-height:1.3;color:var(--text)}
-.ch-badge{width:48px;height:48px;border-radius:16px;flex-shrink:0;display:grid;place-items:center;color:#17130A;background:linear-gradient(135deg,#FFE27A,#FCC100 45%,#FF8A3D)}
-.ch-pr .ch-badge{background:linear-gradient(135deg,#FFF3B0,#FCC100 40%,#FF5FA2)}
-.ch-pr{box-shadow:0 18px 50px rgba(0,0,0,.55),inset 0 0 0 1.5px rgba(255,95,162,.6)}
-.ch-bar{position:absolute;right:0;bottom:0;height:3px;width:100%;background:var(--accent);transform-origin:right;animation:chbar linear forwards}
+.ch-card small{font-size:15px;font-weight:800;color:var(--accent);padding:4px 12px;border-radius:999px;background:var(--accent-tint)}
+.ch-card b{font-size:28px;font-weight:900;line-height:1.28;color:#fff;text-wrap:balance}
+.ch-pr{background:linear-gradient(170deg,#3D1A2C 0%,#1E1D20 55%,#18181B 100%);box-shadow:0 24px 70px rgba(0,0,0,.7),0 0 0 1.5px rgba(255,95,162,.7),0 0 50px rgba(255,95,162,.25)}
+.ch-pr small{color:#FF8CC0;background:rgba(255,95,162,.16)}
+.ch-bar{position:absolute;right:0;bottom:0;height:4px;width:100%;background:var(--accent);transform-origin:right;animation:chbar linear forwards}
+.ch-pr .ch-bar{background:#FF5FA2}
 @keyframes chbar{to{transform:scaleX(0)}}
 
 /* 4.3: גיבוי בסוף אימון */
@@ -1345,7 +1347,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '4.3';
+const APP_VERSION = '4.4';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -3304,8 +3306,8 @@ let cheerT = null;
 function cheer(kind, label) {
   if (S.settings.cheer === false) return;
   const el = $('#cheer'); if (!el) return;
-  const ms = 4200;
-  el.innerHTML = `<div class="ch-card ch-${kind}" role="status"><span class="ch-badge">${svg(kind === 'pr' ? I.trophy : I.spark, 24, 2.4)}</span><div class="grow"><small>${esc(label)}</small><b>${esc(pickCheer(kind))}</b></div><i class="ch-bar" style="animation-duration:${ms}ms"></i></div>`;
+  const ms = 4500;
+  el.innerHTML = `<div class="ch-card ch-${kind}" role="status"><small>${esc(label)}</small><b>${esc(pickCheer(kind))}</b><i class="ch-bar" style="animation-duration:${ms}ms"></i></div>`;
   el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
   clearTimeout(cheerT); cheerT = setTimeout(hideCheer, ms);
 }
@@ -3636,6 +3638,8 @@ const A = {
   },
   busy(el) {
     const id = el.dataset.id, m = machineById(id); if (!m) return;
+    const cpd = cpToday(), cpi = cpd && cpd.items.find(i => i.machine_id === id);
+    if (cpi) { busyPlanSheet(m, cpd, cpi.orig || id); return; }
     const t = today(), cnt = {}; setsOn(t).forEach(s => { cnt[s.machine_id] = (cnt[s.machine_id] || 0) + 1; });
     const isDone = x => (cnt[x.id] || 0) >= plannedOf(x), busy = busyIds();
     const alts = sortMachines(S.machines.filter(x => !x.archived && x.area === m.area && x.id !== id)).sort((a, b) => (isDone(a) - isDone(b)) || (busy.includes(a.id) - busy.includes(b.id)));
@@ -3648,6 +3652,10 @@ const A = {
       <div class="stack-sm" style="margin-top:16px"><button class="btn btn-ghost btn-block" data-a="busyEnd" data-id="${id}">רק העבר לסוף הרשימה</button><button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
   },
   swapTo(el) { markBusy(el.dataset.id); closeModal(); go('#/m/' + el.dataset.to); },
+  busySwap(el) {
+    const to = machineById(el.dataset.to); if (!to) return;
+    setSwap(today(), el.dataset.from, to.id); closeModal(); toast(`הוחלף להיום: ${to.name}`); go('#/m/' + to.id);
+  },
   busyEnd(el) {
     const id = el.dataset.id, m = machineById(id); if (!m) return;
     markBusy(id); closeModal();
@@ -4163,6 +4171,23 @@ function swapSheet(date, mid, orig) {
     : `<div class="sub">אין עוד מכשירים פעילים באזור ${areaName(m.area)} שלא נמצאים כבר באימון הזה.</div>`}
     <button class="btn btn-ghost btn-block" style="margin-top:14px" data-a="closeModal">ביטול</button>`);
 }
+/* מכשיר תפוס כשיש תוכנית: קודם מכשיר אחר מהתוכנית, אחרת החלפה להיום */
+function busyPlanSheet(m, d, orig) {
+  const t = today(), cnt = {}; setsOn(t).forEach(s => { cnt[s.machine_id] = (cnt[s.machine_id] || 0) + 1; });
+  const busy = busyIds(), left = x => (cnt[x.id] || 0) < plannedOf(x);
+  const inPlan = d.items.map(i => machineById(i.machine_id)).filter(x => x && x.id !== m.id && x.area === m.area && left(x));
+  const outPlan = swapCands(t, m.id);
+  const sub = x => { const tg = coachTarget(x, t), n = cnt[x.id] || 0; return `${busy.includes(x.id) ? '<span style="color:var(--warn);font-weight:700">תפוס</span>, ' : ''}${n ? `${n} מתוך ${plannedOf(x)} סטים, ` : ''}יעד ${tg.w > 0 ? `${ltr(fmtW(tg.w))} ק״ג, ` : ''}${tg.lo} עד ${tg.hi} חזרות`; };
+  const row = (x, a) => `<button type="button" class="lrow" data-a="${a}" data-id="${m.id}" data-from="${orig}" data-to="${x.id}"><div class="thumb">${photoHtml(x)}</div><div class="grow"><div class="t">${esc(x.name)}</div><div class="sub sm">${sub(x)}</div></div><span class="chev">${svg(I.fwd, 22)}</span></button>`;
+  const ask = coachOn() && S.coach.tables !== false && outPlan.length;
+  openModal(`<h2>${esc(m.name)} תפוס</h2>
+    ${inPlan.length ? `<div class="section-title" style="margin-top:0"><span>קודם מכשיר אחר מהתוכנית</span></div><div class="sub sm" style="margin:-4px 0 10px">${esc(m.name)} יחכה לסוף האזור, עם אותם סטים.</div><div class="list">${inPlan.map(x => row(x, 'swapTo')).join('')}</div>` : ''}
+    ${outPlan.length ? `<div class="section-title"${inPlan.length ? '' : ' style="margin-top:0"'}><span>החלפה להיום</span></div><div class="sub sm" style="margin:-4px 0 10px">המכשיר החדש מקבל את ${plannedOf(m)} הסטים של ${esc(m.name)} בתוכנית של היום.</div>
+      ${ask ? `<button type="button" class="btn btn-tinted btn-block" data-a="cSwapAsk" data-d="${t}" data-mid="${m.id}" data-orig="${orig}" data-go="1">${svg(I.spark, 22, 2.4)}בקש מהמאמן מחליף</button><div id="swapAns"></div><div style="height:10px"></div>` : ''}
+      <div class="list">${outPlan.map(x => row(x, 'busySwap')).join('')}</div>` : ''}
+    ${!inPlan.length && !outPlan.length ? `<div class="sub">אין עוד מכשירים פנויים באזור ${areaName(m.area)}.</div>` : ''}
+    <div class="stack-sm" style="margin-top:16px"><button class="btn btn-ghost btn-block" data-a="busyEnd" data-id="${m.id}">רק להעביר לסוף הרשימה</button><button class="link" style="align-self:center" data-a="closeModal">ביטול</button></div>`);
+}
 function coachChatHtml(ctx) {
   const m = ctx && ctx.machine_id ? machineById(ctx.machine_id) : null, an = ctx && ctx.area ? areaName(ctx.area) : null;
   const sugg = m ? [`איך התקדמתי ב${m.name}?`, `למה המשקל ב${m.name} לא עולה?`, `מה להחליף אם ${m.name} תפוס?`]
@@ -4277,14 +4302,15 @@ Object.assign(A, {
   cSwap(el) { swapSheet(el.dataset.d, el.dataset.mid, el.dataset.orig); },
   cSwapDo(el) {
     const m = machineById(el.dataset.to); setSwap(el.dataset.d, el.dataset.from, el.dataset.to);
-    closeModal(); toast(m ? `הוחלף ל ${m.name}` : 'הוחלף'); render();
+    closeModal(); toast(m ? `הוחלף ל ${m.name}` : 'הוחלף');
+    if (el.dataset.go && m) go('#/m/' + m.id); else render();
   },
   async cSwapAsk(el) {
     const date = el.dataset.d, mid = el.dataset.mid, orig = el.dataset.orig, m = machineById(mid), c = swapCands(date, mid), box = $('#swapAns');
     if (!m || !c.length || !box) return;
     el.disabled = true; box.innerHTML = '<div class="swap-ans"><span class="spin"></span>המאמן בוחר מכשיר</div>';
     const d = cpDay(date), dn = DAY_NAMES[parseYmd(date).getDay()];
-    const q = `תחליף לי בבקשה את ${m.name} באימון של יום ${dn} (אימון ${TPL_NAME[d?.template] || ''}). אפשרויות: ${c.map(x => x.name).join(', ')}. בשורה הראשונה כתוב רק את שם המכשיר שבחרת, בדיוק כמו ברשימה, ובשורה השנייה משפט אחד למה.`;
+    const q = `${el.dataset.go ? `${m.name} תפוס עכשיו. ` : ''}תחליף לי בבקשה את ${m.name} באימון של ${el.dataset.go ? 'היום' : `יום ${dn}`} (אימון ${TPL_NAME[d?.template] || ''}). אפשרויות: ${c.map(x => x.name).join(', ')}. בשורה הראשונה כתוב רק את שם המכשיר שבחרת, בדיוק כמו ברשימה, ובשורה השנייה משפט אחד למה.`;
     try {
       const r = await coachCall('chat', { message: q, ctx: { machine_id: mid, note: 'בקשת החלפת מכשיר בתוכנית השבועית' } });
       if (r.user) S.coach.msgs.push(r.user); if (r.message) S.coach.msgs.push(r.message); coachSave();
@@ -4294,7 +4320,7 @@ Object.assign(A, {
       const why = txt.split('\n').filter(l => l.trim() && l !== first).join('\n') || txt;
       const b2 = $('#swapAns'); if (!b2) return;
       b2.innerHTML = hit ? `<div class="swap-ans"><div class="sa-h">${svg(I.spark, 20, 2.4)}<span class="grow">המאמן ממליץ: <b>${esc(hit.name)}</b></span></div><div class="sa-w">${coachTxt(why)}</div>
-        <button type="button" class="btn btn-primary btn-block" data-a="cSwapDo" data-d="${date}" data-from="${orig}" data-to="${hit.id}">להחליף ל ${esc(hit.name)}</button></div>`
+        <button type="button" class="btn btn-primary btn-block" data-a="cSwapDo" data-d="${date}" data-from="${orig}" data-to="${hit.id}" ${el.dataset.go ? 'data-go="1"' : ''}>להחליף ל ${esc(hit.name)}</button></div>`
         : `<div class="swap-ans"><div class="sa-w">${coachTxt(txt || 'המאמן לא בחר מכשיר מהרשימה.')}</div><div class="sub sm">אפשר לבחור מהרשימה.</div></div>`;
     } catch (e) {
       const b2 = $('#swapAns'); if (b2) b2.innerHTML = `<div class="swap-ans cerr">${esc(coachErrText(e))}</div>`;
