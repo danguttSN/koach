@@ -1175,6 +1175,7 @@ a.hl-r:active{background:var(--fill)}
 .cprompt{min-height:340px;line-height:1.5;padding:16px;font-size:18px;resize:vertical}
 .seg.sm2{display:flex;border-radius:14px;padding:3px;flex-shrink:0}
 .seg.sm2 button{min-height:44px;padding:0 14px;border:0;border-radius:11px;background:transparent;font-size:16px;font-weight:800;color:var(--text)}
+.cstale{margin:0 0 12px;padding:12px 14px;border-radius:14px;background:var(--accent-tint);color:var(--accent);font-size:16px;font-weight:700;line-height:1.4}
 .cpoff{color:var(--muted);font-weight:700}
 </style>
 </head>
@@ -1228,7 +1229,7 @@ const CONFIG = {
 };
 /* ===================================================================== */
 
-const APP_VERSION = '4.0';
+const APP_VERSION = '4.1';
 const BUCKET = 'machine-photos';
 
 /* ---------- יומן תקלות ---------- */
@@ -2641,6 +2642,7 @@ function repsBox() {
 }
 function restLabel() {
   const E = S.edit; if (!E) return '';
+  if (!E.rest && !S.settings.restByArea?.[E.area] && coachOn() && (E.kind || E.area === 'abs')) return `<span class="ltr">${fmtDur((E.kind || 'i') === 'c' ? S.settings.coach.restC : S.settings.coach.restI)}</span><small>לפי סוג התרגיל</small>`;
   return E.rest ? `<span class="ltr">${fmtDur(E.rest)}</span><small>למכשיר הזה</small>` : `<span class="ltr">${fmtDur(E.area ? areaRest(E.area) : S.settings.rest)}</span><small>לפי האזור</small>`;
 }
 function vEdit(id, prefArea) {
@@ -2651,7 +2653,7 @@ function vEdit(id, prefArea) {
     const eid = isNew ? uuid() : id;
     const r0 = S.settings.machineReps?.[eid] || null;
     S.edit = { key, id: eid, isNew, area: m0?.area || (AREA[prefArea] ? prefArea : null), step: m0?.weight_step || 5, blob: null, preview: null, rest: S.settings.machineRest?.[eid] || null,
-      reps: r0 && r0.lo && r0.hi ? { lo: r0.lo, hi: r0.hi } : null, rir: r0?.rir ?? null };
+      reps: r0 && r0.lo && r0.hi ? { lo: r0.lo, hi: r0.hi } : null, rir: r0?.rir ?? null, kind: S.settings.machineKind?.[eid] || null };
   }
   const E = S.edit;
   const m = isNew ? { name: '', min_weight: 0, weight_step: 5, default_sets: 3, note: '' } : machineById(id);
@@ -2668,6 +2670,7 @@ function vEdit(id, prefArea) {
     <div class="field"><span class="flabel">אזור בגוף</span>
       <div class="row" style="flex-wrap:wrap;gap:8px" role="radiogroup" aria-label="אזור בגוף">${AREAS.map(a => `<button type="button" role="radio" class="chip ${E.area === a.k ? 'on' : ''}" data-a="farea" data-k="${a.k}" aria-checked="${E.area === a.k}"><span class="dot" style="background:${a.c}"></span>${a.n}</button>`).join('')}</div>
       <div class="sub sm" id="fhint">${tplHint(E.area)}</div></div>
+    ${kindField(E)}
     <section class="card stack">
       ${stepper('fmin', 'משקל פתיחה, ק״ג', m.min_weight, E.step)}
       <div class="sub sm" style="text-align:center">לפעם הראשונה על המכשיר. אחר כך כל אימון מתחיל מהמשקל של הפעם הקודמת</div></section>
@@ -2678,7 +2681,7 @@ function vEdit(id, prefArea) {
       <input id="fsets" class="input num" style="width:70px;text-align:center;font-size:20px;font-weight:700" inputmode="numeric" dir="ltr" value="${m.default_sets}">
       <button type="button" data-a="step" data-t="fsets" data-st="1" data-d="-1" aria-label="הפחת סט">${svg(I.minus, 20, 2.4)}</button></div></div>
     <div class="field"><span class="flabel">טווח חזרות יעד</span><div id="frepsbox" class="repsbox">${repsBox()}</div>
-      <div class="sub sm">הצעה להעלות משקל מופיעה כשמגיעים לקצה העליון בכל הסטים. בלי טווח: לפי ההגדרות, ${S.settings.repTop || 12} חזרות.</div></div>
+      <div class="sub sm">הצעה להעלות משקל מופיעה כשמגיעים לקצה העליון בכל הסטים. בלי טווח: ${coachOn() ? 'לפי סוג התרגיל' : `לפי ההגדרות, ${S.settings.repTop || 12} חזרות`}.</div></div>
     <div class="field"><span class="flabel">יעד RIR, חזרות שנשארו במיכל</span>
       <div class="seg" role="radiogroup" aria-label="יעד RIR">${[null, 0, 1, 2, 3].map(v => `<button type="button" role="radio" class="${E.rir === v ? 'on' : ''}" data-a="frir" data-v="${v ?? ''}" aria-checked="${E.rir === v}">${v == null ? 'ללא' : v}</button>`).join('')}</div></div>
     <div class="field"><label for="fsetup">כוונון המכשיר</label><input class="input" id="fsetup" value="${esc(isNew ? '' : setupOf(m))}" placeholder="לדוגמה: מושב 4, משענת 2, אחיזה רחבה" autocomplete="off" enterkeyhint="done">
@@ -3491,6 +3494,7 @@ const A = {
     document.querySelectorAll('[data-a="farea"]').forEach(b => { const on = b.dataset.k === S.edit.area; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
     $('#fhint').textContent = tplHint(S.edit.area);
     const rv = $('#frestv'); if (rv) rv.innerHTML = restLabel();
+    const kh = $('#fkindh'); if (kh) { kh.textContent = kindHint(S.edit); document.querySelectorAll('[data-a="fkind"]').forEach(b => { const on = kindOn(S.edit, b.dataset.v); b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); }
   },
   frest(el) {
     const E = S.edit; if (!E) return;
@@ -3549,6 +3553,7 @@ const A = {
       if (nr) mp[E.id] = nr; else delete mp[E.id];
       saveSettings();
     }
+    { const mk = S.settings.machineKind || (S.settings.machineKind = {}); if ((mk[E.id] || null) !== (E.kind || null)) { if (E.kind) mk[E.id] = E.kind; else delete mk[E.id]; saveSettings(); } }
     S.edit = null; toast('המכשיר נשמר');
     const back = S.prevHash && !S.prevHash.startsWith('#/edit') ? S.prevHash : '#/machines';
     go(back);
@@ -3914,7 +3919,7 @@ function coachPlanHtml() {
       return isT ? `<a class="cpi" href="#/m/${m.id}">${inner}</a>` : `<div class="cpi">${inner}</div>`; }).join('');
     return `<div class="cpd${isT ? ' today' : ''}${past ? ' past' : ''}"><div class="cpd-h"><b>יום ${dn}${isT ? ', היום' : ''}</b><span>אימון ${esc(TPL_NAME[d.template] || d.name || '')}, כ&nbsp;${d.est} דקות</span></div>${d.note ? `<div class="cpd-n">${esc(d.note)}</div>` : ''}${items}</div>`;
   }).join('');
-  return `<section class="card cplan">${P.data.week_note ? `<div class="cpw">${esc(P.data.week_note)}</div>` : ''}${days || '<div class="sub">אין ימי אימון בחלוקה השבועית.</div>'}
+  return `<section class="card cplan">${planStaleHtml(P)}${P.data.week_note ? `<div class="cpw">${esc(P.data.week_note)}</div>` : ''}${days || '<div class="sub">אין ימי אימון בחלוקה השבועית.</div>'}
     ${P.data.fixed ? `<div class="sub sm" style="margin-top:10px">האפליקציה תיקנה ${P.data.fixed} פרטים בתוכנית כדי לעמוד במינימום הסטים.</div>` : ''}
     <button class="btn btn-ghost btn-block" style="margin-top:14px" data-a="cPlan" data-f="1">בנה מחדש</button></section>`;
 }
@@ -3934,7 +3939,6 @@ function coachChatHtml(ctx) {
 }
 function vCoach(a, b) {
   if (a === 'prompt') return vCoachPrompt();
-  if (a === 'kinds') return vCoachKinds();
   const ctx = a === 'm' && machineById(b) ? { machine_id: b } : a === 'a' && AREA[b] ? { area: b } : null;
   if (ctx) {
     const title = ctx.machine_id ? esc(machineById(b).name) : areaName(b);
@@ -3968,18 +3972,6 @@ function vCoachPrompt() {
     <button class="btn btn-ghost btn-block" data-a="cPromptReset">חזרה להנחיות המקוריות</button></div>`;
   return h + nav('settings');
 }
-function vCoachKinds() {
-  let h = pageHead('סוג תרגיל לכל מכשיר', { back: '#/settings', backLabel: 'הגדרות', small: true });
-  h += `<div class="sub" style="margin-bottom:8px">מורכב: 6 עד 10 חזרות, מנוחה ${fmtDur(S.settings.coach.restC)}. מבודד: 10 עד 15 חזרות, מנוחה ${fmtDur(S.settings.coach.restI)}. טווח חזרות או מנוחה שקבעת במכשיר עצמו קודמים לזה. מכשירי בטן מבודדים כברירת מחדל.</div>`;
-  AREAS.forEach(a => {
-    const l = sortMachines(S.machines.filter(m => !m.archived && m.area === a.k)); if (!l.length) return;
-    h += `<div class="section-title"><span><span class="dot" style="background:${a.c};display:inline-block;margin-left:8px"></span>${a.n}</span></div><div class="list">${l.map(m => {
-      const k = kindOf(m), own = rangeOf(m);
-      return `<div class="srow2 ckind"><div class="grow">${esc(m.name)}${own ? `<div class="sub sm">טווח מותאם ${own.lo} עד ${own.hi}</div>` : ''}</div><div class="seg sm2" role="radiogroup" aria-label="סוג תרגיל ${esc(m.name)}">${[['c', 'מורכב'], ['i', 'מבודד']].map(([v, lb]) => `<button type="button" role="radio" class="${k === v ? 'on' : ''}" aria-checked="${k === v}" data-a="kindSet" data-id="${m.id}" data-v="${v}">${lb}</button>`).join('')}</div></div>`;
-    }).join('')}</div>`;
-  });
-  return h + nav('settings');
-}
 function coachSettingsHtml(mini, tg) {
   const c = S.settings.coach;
   return `<div class="section-title"><span>המאמן</span></div><div class="list">
@@ -3990,7 +3982,6 @@ function coachSettingsHtml(mini, tg) {
     <div class="srow2"><div class="grow">מנוחה בתרגיל מורכב</div>${mini('cRestC', fmtDur(c.restC), 'מנוחה בתרגיל מורכב')}</div>
     <div class="srow2"><div class="grow">מנוחה בתרגיל מבודד</div>${mini('cRestI', fmtDur(c.restI), 'מנוחה בתרגיל מבודד')}</div>
     <div class="srow2"><div class="grow">יעד ספינינג התחלתי<div class="sub sm">וואט ממוצע, עולה ב ${c.spin.step} כל שבועיים</div></div>${mini('spinBase', c.spin.base, 'יעד ספינינג')}</div>
-    <a class="lrow" href="#/coach/kinds"><div class="grow"><div class="t">סוג תרגיל לכל מכשיר</div><div class="sub sm">מורכב או מבודד, קובע טווח חזרות ומנוחה</div></div><span class="chev">${svg(I.fwd, 20)}</span></a>
     <a class="lrow" href="#/coach/prompt"><div class="grow"><div class="t">הנחיות למאמן</div><div class="sub sm">${c.prompt ? 'מותאמות אישית' : 'ההנחיות המקוריות'}</div></div><span class="chev">${svg(I.fwd, 20)}</span></a></div>
     <div class="stack-sm" style="margin-top:10px"><button class="btn btn-ghost btn-block" data-a="cPing">בדיקת חיבור למאמן</button>${S.coach.ping ? `<div class="sub sm">${esc(S.coach.ping)}</div>` : ''}</div>`;
 }
@@ -4001,6 +3992,26 @@ function coachStep(k, d) {
   else if (k === 'spinBase') c.spin.base = Math.min(400, Math.max(50, c.spin.base + d * 5));
   else return false;
   return true;
+}
+
+/* ---------- סוג התרגיל בעריכת מכשיר ---------- */
+const kindOn = (E, v) => E.kind ? E.kind === v : (E.area === 'abs' && v === 'i');
+function kindHint(E) {
+  const k = E.kind || (E.area === 'abs' ? 'i' : null), c = S.settings.coach;
+  if (k === 'c') return `6 עד 10 חזרות, מנוחה ${fmtDur(c.restC)}. טווח חזרות או מנוחה שתקבע כאן למטה קודמים לזה.`;
+  if (k === 'i') return `10 עד 15 חזרות, מנוחה ${fmtDur(c.restI)}. טווח חזרות או מנוחה שתקבע כאן למטה קודמים לזה.`;
+  return 'מורכב: זזים שני מפרקים או יותר, כמו בלחיצות, חתירות ופולי. מבודד: זז מפרק אחד, כמו בפרפר, כפיפות, פשיטות והרחקות.';
+}
+function kindField(E) {
+  if (!coachOn()) return '';
+  return `<div class="field"><span class="flabel">סוג תרגיל</span>
+    <div class="seg" role="radiogroup" aria-label="סוג תרגיל">${[['c', 'מורכב'], ['i', 'מבודד']].map(([v, l]) => `<button type="button" role="radio" class="${kindOn(E, v) ? 'on' : ''}" data-a="fkind" data-v="${v}" aria-checked="${kindOn(E, v)}">${l}</button>`).join('')}</div>
+    <div class="sub sm" id="fkindh">${kindHint(E)}</div></div>`;
+}
+function planStaleHtml(P) {
+  if (!P || !P.created_at) return '';
+  const n = S.machines.filter(m => !m.archived && (!m.created_at || m.created_at > P.created_at)).length;
+  return n ? `<div class="cstale">${n === 1 ? 'נוסף מכשיר' : `נוספו ${n} מכשירים`} אחרי שהתוכנית נבנתה. כדי שהמאמן ישקול ${n === 1 ? 'אותו' : 'אותם'}, לוחצים על בנה מחדש.</div>` : '';
 }
 
 /* ---------- פעולות ---------- */
@@ -4041,10 +4052,12 @@ Object.assign(A, {
     catch (e) { S.coach.ping = coachErrText(e); }
     render();
   },
-  kindSet(el) {
-    const mk = S.settings.machineKind || (S.settings.machineKind = {}), id = el.dataset.id, v = el.dataset.v;
-    if (mk[id] === v) delete mk[id]; else mk[id] = v;
-    saveSettings(); render();
+  fkind(el) {
+    const E = S.edit; if (!E) return;
+    E.kind = E.kind === el.dataset.v ? null : el.dataset.v;
+    document.querySelectorAll('[data-a="fkind"]').forEach(b => { const on = kindOn(E, b.dataset.v); b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+    const rv = $('#frestv'); if (rv) rv.innerHTML = restLabel();
+    const kh = $('#fkindh'); if (kh) kh.textContent = kindHint(E);
   }
 });
 
